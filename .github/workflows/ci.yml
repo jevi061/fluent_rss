@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: ci-ios
+name: ci
 
 # Controls when the workflow will run
 on:
@@ -33,13 +33,24 @@ jobs:
         run: flutter pub get
       # build ios ipa 
       - name: build ipa
-        run: flutter build ipa --release --no-codesign
+        run: |
+          flutter build ios --release --no-codesign
+          cd build/ios/iphoneos
+          mkdir Payload
+          ln -s ../Runner.app
+          cd ..
+          zip -r app.ipa Payload
+      # build android apk
+      - name build apk
+        run: flutter build apk --release
       # collect artifact
-      - name: collect ipa
+      - name: collect build files
         uses: actions/upload-artifact@v2
         with: 
-          name: fluent_rss.ipa
+          name: builds
           # path to ipa file
-          path: build/ios/ipa/*.ipa
+          path: |
+            build/ios/iphoneos/*.ipa
+            build/app/outputs/flutter-apk/*.apk
 
 
