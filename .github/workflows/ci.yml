@@ -35,8 +35,8 @@ jobs:
       - name: build ipa
         run: |
           flutter build ios --release --no-codesign
-          cd build/ios/iphoneos
-          mkdir Payload
+          mkdir build/ios/iphoneos/Payload
+          cd build/ios/iphoneos/Payload
           ln -s ../Runner.app
           cd ..
           zip -r app.ipa Payload
