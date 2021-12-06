@@ -41,7 +41,7 @@ jobs:
           cd ..
           zip -r app.ipa Payload
       # build android apk
-      - name build apk
+      - name: build apk
         run: flutter build apk --release
       # collect artifact
       - name: collect build files
