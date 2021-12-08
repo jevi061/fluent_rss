@@ -22,7 +22,9 @@ class OPMLParser {
             description: e.description ?? "",
             type: e.type ?? "",
             version: e.version ?? "",
-            icon: path.join(e.htmlUrl ?? '', 'favicon.ico')));
+            iconUrl: path.join(e.htmlUrl ?? '', 'favicon.ico'),
+            lastCheck: DateTime.now().millisecondsSinceEpoch,
+            directory: ''));
       } else {
         e.nesteditems?.forEach((nested) {
           channels.add(Channel(
@@ -31,7 +33,9 @@ class OPMLParser {
               description: nested.description ?? "",
               type: nested.type ?? "",
               version: nested.version ?? "",
-              icon: path.join(nested.htmlUrl ?? '', 'favicon.ico')));
+              iconUrl: path.join(nested.htmlUrl ?? '', 'favicon.ico'),
+              lastCheck: DateTime.now().millisecondsSinceEpoch,
+              directory: e.title ?? ""));
         });
       }
     });

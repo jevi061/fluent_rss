@@ -36,6 +36,8 @@ class TableDefinitionConstants {
             description text,
             type text,
             version text,
-            icon text
+            iconUrl text,
+            lastCheck integer,
+            directory text
           ) """;
 }

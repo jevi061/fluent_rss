@@ -1,5 +1,7 @@
 import 'package:fluent_rss/business/bloc/article_bloc.dart';
 import 'package:fluent_rss/business/bloc/channel_bloc.dart';
+import 'package:fluent_rss/business/event/article_event.dart';
+import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/state/article_state.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
 import 'package:fluent_rss/ui/widgets/article_tile.dart';
@@ -16,12 +18,21 @@ class ArticleScreen extends StatelessWidget {
     return BlocBuilder<ArticleBloc, ArticleState>(
         builder: (BuildContext context, ArticleState state) {
       return Scaffold(
-          appBar: AppBar(title: Text(state.channel)),
-          body: ListView.builder(
+        appBar: AppBar(title: Text(state.channel.title)),
+        body: RefreshIndicator(
+          child: ListView.builder(
               itemCount: state.articles.length,
               itemBuilder: (context, index) => ArticleTile(
                     article: state.articles[index],
-                  )));
+                  )),
+          onRefresh: () async {
+            var bloc = context.read<ArticleBloc>()
+              ..add(ArticleChannelRefreshed(channel: state.channel));
+            var newState = await bloc.stream.first;
+            context.read<ChannelBloc>().add(ChannelRefreshed(newState.channel));
+          },
+        ),
+      );
     });
   }
 }

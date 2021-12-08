@@ -14,7 +14,7 @@ class ReadingScreen extends StatefulWidget {
 }
 
 class _ReadScreenState extends State<ReadingScreen> {
-  double loadProgress = 0;
+  double loadProgress = 10;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ReadingBloc, ReadingState>(

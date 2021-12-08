@@ -18,9 +18,9 @@ class ChannelRepository {
     channelProvider.batchInsert(data);
   }
 
-  Future<List<Channel>?> fetchChannels() async {
+  Future<List<Channel>> fetchChannels() async {
     List<Map<String, dynamic>>? data = await channelProvider.query();
     Logger().d('fetch channels result $data');
-    return data?.map((e) => Channel.fromMap(e)).toList();
+    return data?.map((e) => Channel.fromMap(e)).toList() ?? [];
   }
 }

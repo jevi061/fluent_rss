@@ -1,5 +1,6 @@
 import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
+import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/ui/screens/article_screen.dart';
 import 'package:fluent_rss/ui/screens/reading_screen.dart';
 import 'package:fluent_rss/ui/widgets/channel_searcher.dart';
@@ -21,14 +22,15 @@ class ChannelScreen extends StatelessWidget {
         ),
         body: BlocBuilder<ChannelBloc, ChannelState>(
             builder: (BuildContext context, ChannelState state) {
-          if (state.channels.isEmpty) {
+          ChannelReadyState newState = state as ChannelReadyState;
+          if (newState.channels.isEmpty) {
             return Text('Waiting...');
           } else {
             return ListView.builder(
-                itemCount: state.channels.length,
-                itemBuilder: (context, index) => ChannelTile(
-                      channel: state.channels[index],
-                    ));
+                itemCount: newState.channels.length,
+                itemBuilder: (context, index) {
+                  return ChannelTile(channel: newState.channels[index]);
+                });
           }
         }));
   }

@@ -5,14 +5,18 @@ class Channel {
   String description;
   String type;
   String version;
-  String icon;
+  String iconUrl;
+  int lastCheck;
+  String directory;
   Channel(
       {required this.title,
       required this.link,
       required this.description,
       required this.type,
       required this.version,
-      required this.icon});
+      required this.iconUrl,
+      required this.lastCheck,
+      required this.directory});
   Map<String, dynamic> toMap() {
     return {
       'link': link,
@@ -20,7 +24,9 @@ class Channel {
       'description': description,
       'type': type,
       'version': version,
-      'icon': icon
+      'iconUrl': iconUrl,
+      'lastCheck': lastCheck,
+      'directory': directory
     };
   }
 
@@ -30,5 +36,7 @@ class Channel {
         description = data['description'] ?? "",
         type = data['type'] ?? "",
         version = data['version'] ?? "",
-        icon = data['icon'] ?? "";
+        iconUrl = data['iconUrl'] ?? "",
+        lastCheck = data['lastCheck'] ?? "",
+        directory = data['directory'];
 }

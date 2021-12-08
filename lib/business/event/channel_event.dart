@@ -24,3 +24,10 @@ class ChannelOpened extends ChannelEvent {
   @override
   List<Object?> get props => [channel];
 }
+
+class ChannelRefreshed extends ChannelEvent {
+  Channel channel;
+  ChannelRefreshed(this.channel);
+  @override
+  List<Object?> get props => [channel];
+}

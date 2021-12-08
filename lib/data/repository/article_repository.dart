@@ -26,6 +26,10 @@ class ArticleRepository {
     List<Map<String, dynamic>>? data = await channelProvider.query();
     List<Channel> channels =
         data?.map((e) => Channel.fromMap(e)).toList() ?? [];
+    var utc = DateTime.now().millisecondsSinceEpoch;
+    channels = channels
+        .where((element) => utc - element.lastCheck > 24 * 3600)
+        .toList();
     var parser = FeedParser();
     for (Channel channel in channels) {
       if (channel.type == "rss") {
@@ -36,6 +40,22 @@ class ArticleRepository {
         await addArticles(parsedArticles);
       }
     }
+  }
+
+  Future<List<Article>> syncArticlesByChannel(Channel channel) async {
+    var parser = FeedParser();
+    List<Article> parsedArticles = [];
+    if (channel.type == "rss") {
+      parsedArticles = await parser.parseRSS(channel.link);
+      await addArticles(parsedArticles);
+    } else if (channel.type == "atom") {
+      parsedArticles = await parser.parseAtom(channel.link);
+      await addArticles(parsedArticles);
+    }
+    Logger().d("parsed articles:${parsedArticles.length}");
+    await channelProvider.updateSyncTime(
+        channel.link, DateTime.now().millisecondsSinceEpoch);
+    return parsedArticles;
   }
 
   Future<List<Article>> queryByLink(String link) async {
