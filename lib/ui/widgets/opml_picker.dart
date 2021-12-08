@@ -29,8 +29,7 @@ class OPMLPicker extends StatelessWidget {
               .read<ChannelBloc>()
               .channelRepository
               .addChannels(parsedChannels);
-          context.read<ChannelBloc>().add(ChannelUpdated());
-          context.read<ArticleBloc>().add(ArticleChannelUpdated());
+          context.read<ChannelBloc>().add(ChannelUpdated(parsedChannels));
         },
         icon: const Icon(Icons.add));
   }

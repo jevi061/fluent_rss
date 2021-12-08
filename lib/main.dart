@@ -37,8 +37,9 @@ void main() {
       BlocProvider<ChannelBloc>(
           lazy: false,
           create: (BuildContext context) => ChannelBloc(
-              channelRepository:
-                  ChannelRepository(channelProvider: channelProvider))
+              channelRepository: ChannelRepository(
+                  channelProvider: channelProvider,
+                  articleProvider: articleProvider))
             ..add(ChannelStarted())),
       BlocProvider<ArticleBloc>(
           lazy: false,

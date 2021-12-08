@@ -8,10 +8,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 
 class ArticleRepository {
-  ArticleProvider articleProvider;
   ChannelProvider channelProvider;
+  ArticleProvider articleProvider;
   ArticleRepository(
-      {required this.channelProvider, required this.articleProvider});
+      {required this.articleProvider, required this.channelProvider});
 
   Future<void> addArticle(Article article) async {
     articleProvider.insert(article.toMap());
@@ -23,22 +23,25 @@ class ArticleRepository {
   }
 
   Future<void> syncArticles() async {
-    List<Map<String, dynamic>>? data = await channelProvider.query();
+    var data = await channelProvider.query();
     List<Channel> channels =
         data?.map((e) => Channel.fromMap(e)).toList() ?? [];
+
     var utc = DateTime.now().millisecondsSinceEpoch;
     channels = channels
         .where((element) => utc - element.lastCheck > 24 * 3600)
         .toList();
     var parser = FeedParser();
+    List<Article> parsedArticles = [];
     for (Channel channel in channels) {
       if (channel.type == "rss") {
-        List<Article> parsedArticles = await parser.parseRSS(channel.link);
-        await addArticles(parsedArticles);
+        parsedArticles = await parser.parseRSS(channel.link);
       } else if (channel.type == "atom") {
-        List<Article> parsedArticles = await parser.parseAtom(channel.link);
-        await addArticles(parsedArticles);
+        parsedArticles = await parser.parseAtom(channel.link);
       }
+      List<Map<String, dynamic>> data =
+          parsedArticles.map((e) => e.toMap()).toList();
+      articleProvider.batchInsert(data);
     }
   }
 

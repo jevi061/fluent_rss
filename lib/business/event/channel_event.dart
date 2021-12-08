@@ -9,8 +9,10 @@ class ChannelReady extends ChannelEvent {
 }
 
 class ChannelUpdated extends ChannelEvent {
+  List<Channel> channels;
+  ChannelUpdated(this.channels);
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [channels];
 }
 
 class ChannelStarted extends ChannelEvent {
