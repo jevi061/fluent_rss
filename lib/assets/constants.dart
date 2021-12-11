@@ -1,3 +1,9 @@
+class FeedConstants {
+  static const String iconName = 'favicon.ico';
+  static const String RSS = 'rss';
+  static const String Atom = 'atom';
+}
+
 class DatabaseConstants {
   static const String database = "fluent_rss.db";
   static const int version = 1;
@@ -36,4 +42,13 @@ class TableDefinitionConstants {
             lastCheck integer,
             directory text
           ) """;
+  static const String channelStatusTable =
+      """ create table if not exists channelStatus(
+          channelLink text primary key,
+          lastCheck integer,
+          unreadCount integer,
+          totalCount integer,
+          foreign key (channelLink) references channel (link)
+          )
+      """;
 }

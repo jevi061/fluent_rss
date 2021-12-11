@@ -14,11 +14,13 @@ class ArticleProvider {
     int starred = data['starred'];
     data.remove('read');
     data.remove('starred');
-    db?.insert(TableNameConstants.article, data,
+    Batch? batch = db?.batch();
+    batch?.insert(TableNameConstants.article, data,
         conflictAlgorithm: ConflictAlgorithm.ignore);
     var status =
         ArticleStatus(articleId: data['uuid'], read: read, starred: starred);
-    db?.insert(TableNameConstants.articleStatus, status.toMap());
+    batch?.insert(TableNameConstants.articleStatus, status.toMap());
+    await batch?.commit();
   }
 
   Future<void> batchInsert(List<Map<String, dynamic>> data) async {
@@ -37,12 +39,12 @@ class ArticleProvider {
           ArticleStatus(articleId: row['uuid'], read: read, starred: starred);
       batch?.insert(TableNameConstants.articleStatus, status.toMap());
     }
-    batch?.commit();
+    await batch?.commit();
   }
 
   Future<List<Map<String, dynamic>>?> queryAll() async {
     Database? db = await dbProvider.database;
-    return db?.rawQuery(
+    return await db?.rawQuery(
         '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
         from article as a inner join articleStatus as s 
         on a.uuid = s.articleId''');
@@ -51,7 +53,7 @@ class ArticleProvider {
   Future<List<Map<String, dynamic>>?> queryByChannelLink(String link) async {
     Database? db = await dbProvider.database;
     Logger().d('query articles from:$link');
-    return db?.rawQuery(
+    return await db?.rawQuery(
         '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
         from article as a inner join articleStatus as s 
         on a.uuid = s.articleId
@@ -60,7 +62,7 @@ class ArticleProvider {
 
   Future<List<Map<String, dynamic>>?> queryTimeAfter(int timestamp) async {
     Database? db = await dbProvider.database;
-    return db?.rawQuery(
+    return await db?.rawQuery(
         '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
         from article as a inner join articleStatus as s 
         on a.uuid = s.articleId
@@ -69,7 +71,7 @@ class ArticleProvider {
 
   Future<List<Map<String, dynamic>>?> queryByRead(int read) async {
     Database? db = await dbProvider.database;
-    return db?.rawQuery(
+    return await db?.rawQuery(
         '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
         from article as a inner join articleStatus as s 
         on a.uuid = s.articleId
@@ -78,7 +80,7 @@ class ArticleProvider {
 
   Future<List<Map<String, dynamic>>?> queryByStar(int starred) async {
     Database? db = await dbProvider.database;
-    return db?.rawQuery(
+    return await db?.rawQuery(
         '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
         from article as a inner join articleStatus as s 
         on a.uuid = s.articleId

@@ -6,8 +6,10 @@ class Channel {
   String type;
   String version;
   String iconUrl;
-  int lastCheck;
   String directory;
+  int lastCheck;
+  int unreadCount;
+  int totalCount;
   Channel(
       {required this.title,
       required this.link,
@@ -16,7 +18,9 @@ class Channel {
       required this.version,
       required this.iconUrl,
       required this.lastCheck,
-      required this.directory});
+      required this.directory,
+      required this.unreadCount,
+      required this.totalCount});
   Map<String, dynamic> toMap() {
     return {
       'link': link,
@@ -26,7 +30,9 @@ class Channel {
       'version': version,
       'iconUrl': iconUrl,
       'lastCheck': lastCheck,
-      'directory': directory
+      'directory': directory,
+      'unreadCount': unreadCount,
+      'totalCount': totalCount
     };
   }
 
@@ -38,5 +44,7 @@ class Channel {
         version = data['version'] ?? "",
         iconUrl = data['iconUrl'] ?? "",
         lastCheck = data['lastCheck'] ?? "",
-        directory = data['directory'];
+        directory = data['directory'],
+        unreadCount = data['unreadCount'],
+        totalCount = data['totalCount'];
 }

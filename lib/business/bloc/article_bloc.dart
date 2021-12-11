@@ -26,7 +26,9 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
                 version: "version",
                 iconUrl: "iconUrl",
                 lastCheck: 0,
-                directory: "directory"),
+                directory: "directory",
+                unreadCount: 0,
+                totalCount: 0),
             articles: [])) {
     on<ArticleStarted>(_onArticleStarted);
     on<ArticleRequested>(_onArticleRequested);

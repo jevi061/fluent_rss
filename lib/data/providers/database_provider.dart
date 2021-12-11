@@ -22,6 +22,7 @@ class DatabaseProvider {
       db.execute('PRAGMA foreign_keys = ON');
     }, onCreate: (db, version) {
       db.execute(TableDefinitionConstants.channelTable);
+      db.execute(TableDefinitionConstants.channelStatusTable);
       db.execute(TableDefinitionConstants.articleTable);
       db.execute(TableDefinitionConstants.articleStatusTable);
     }, version: DatabaseConstants.version);
