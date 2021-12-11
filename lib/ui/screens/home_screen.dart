@@ -1,3 +1,4 @@
+import 'package:fluent_rss/theme/global_theme.dart';
 import 'package:fluent_rss/ui/screens/history_screen.dart';
 import 'package:fluent_rss/ui/screens/reading_screen.dart';
 import 'package:fluent_rss/ui/screens/today_screen.dart';
@@ -18,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: GlobalTheme.light,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
             settings: settings,
