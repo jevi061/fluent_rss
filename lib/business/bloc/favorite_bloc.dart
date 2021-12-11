@@ -23,22 +23,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 
 class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
-  FavoriteRepository favoriteRepository;
-  FavoriteBloc({required this.favoriteRepository})
+  ArticleRepository articleRepository;
+  FavoriteBloc({required this.articleRepository})
       : super(FavoriteState.ready(articles: [])) {
     on<FavoriteUpdated>(_onFavoriteUpdated);
     on<FavoriteStarted>(_onFavoriteStarted);
   }
   Future<void> _onFavoriteUpdated(
       FavoriteUpdated event, Emitter<FavoriteState> emitter) async {
-    await favoriteRepository.addFavorite(event.article);
-    var list = await favoriteRepository.queryAll();
+    await articleRepository.updateStarStatus(event.article.uuid, 1);
+    var list = await articleRepository.queryByStar(1);
     emitter(FavoriteState.ready(articles: list));
   }
 
   Future<void> _onFavoriteStarted(
       FavoriteStarted event, Emitter<FavoriteState> emitter) async {
-    var list = await favoriteRepository.queryAll();
+    var list = await articleRepository.queryByStar(1);
     emitter(FavoriteState.ready(articles: list));
   }
 }

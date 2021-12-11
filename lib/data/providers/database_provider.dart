@@ -17,12 +17,13 @@ class DatabaseProvider {
   Future<sql.Database> createDatabase() async {
     final dbPath = await sql.getDatabasesPath();
     Logger().d('db path is:$dbPath');
-    return await sql.openDatabase(path.join(dbPath, "rss.db"),
-        onCreate: (db, version) {
+    return await sql.openDatabase(path.join(dbPath, DatabaseConstants.database),
+        onConfigure: (db) {
+      db.execute('PRAGMA foreign_keys = ON');
+    }, onCreate: (db, version) {
       db.execute(TableDefinitionConstants.channelTable);
       db.execute(TableDefinitionConstants.articleTable);
-      db.execute(TableDefinitionConstants.favoriteTable);
-      db.execute(TableDefinitionConstants.historyTable);
-    }, version: 10);
+      db.execute(TableDefinitionConstants.articleStatusTable);
+    }, version: DatabaseConstants.version);
   }
 }

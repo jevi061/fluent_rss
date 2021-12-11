@@ -32,9 +32,16 @@ class ArticleTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                article.title,
-                style: TextStyle(fontSize: 20),
+              Row(
+                children: [
+                  if (article.read == 0) ...[Icon(Icons.circle)],
+                  Expanded(
+                      child: Text(
+                    article.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 20),
+                  ))
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

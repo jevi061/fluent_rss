@@ -29,7 +29,9 @@ class FeedParser {
           uuid: element.guid ?? "",
           title: element.title ?? "",
           subtitle: element.description ?? "",
-          published: pubDate.millisecondsSinceEpoch);
+          published: pubDate.millisecondsSinceEpoch,
+          starred: 0,
+          read: 0);
       articles.add(article);
     });
     return articles;
@@ -53,7 +55,9 @@ class FeedParser {
           uuid: element.id ?? "",
           title: element.title ?? "",
           subtitle: element.summary ?? "",
-          published: pubDate.millisecondsSinceEpoch);
+          published: pubDate.millisecondsSinceEpoch,
+          starred: 0,
+          read: 0);
       articles.add(article);
     });
     return articles;
@@ -70,7 +74,9 @@ class FeedParser {
           uuid: element.id ?? "",
           title: element.title ?? "",
           subtitle: element.summary ?? "",
-          published: pubDate.millisecondsSinceEpoch);
+          published: pubDate.millisecondsSinceEpoch,
+          starred: 0,
+          read: 0);
       articles.add(article);
     });
     return articles;

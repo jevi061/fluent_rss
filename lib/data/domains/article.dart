@@ -1,3 +1,5 @@
+import 'article_status.dart';
+
 class Article {
   String uuid;
   // channel link
@@ -6,13 +8,17 @@ class Article {
   String title;
   int published;
   String subtitle;
+  int read;
+  int starred;
   Article(
       {required this.uuid,
       required this.channel,
       required this.title,
       required this.link,
       required this.published,
-      required this.subtitle});
+      required this.subtitle,
+      required this.read,
+      required this.starred});
 
   Map<String, dynamic> toMap() {
     return {
@@ -21,7 +27,9 @@ class Article {
       'channel': channel,
       'title': title,
       'subtitle': subtitle,
-      'published': published
+      'published': published,
+      'starred': starred,
+      'read': read
     };
   }
 
@@ -31,5 +39,7 @@ class Article {
         title = data['title'],
         link = data['link'],
         subtitle = data['subtitle'],
-        published = data['published'];
+        published = data['published'],
+        starred = data['starred'],
+        read = data['read'];
 }

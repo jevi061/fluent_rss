@@ -20,22 +20,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
-  HistoryRepository historyRepository;
-  HistoryBloc({required this.historyRepository})
+  ArticleRepository articleRepository;
+  HistoryBloc({required this.articleRepository})
       : super(HistoryState.ready(articles: [])) {
     on<HistoryUpdated>(_onHistoryUpdated);
     on<HistoryStarted>(_onHistoryStarted);
   }
   Future<void> _onHistoryUpdated(
       HistoryUpdated event, Emitter<HistoryState> emitter) async {
-    await historyRepository.addHistory(event.article);
-    var list = await historyRepository.queryAll();
+    await articleRepository.updateReadStatus(event.article.uuid, 1);
+    var list = await articleRepository.queryByRead(1);
     emitter(HistoryState.ready(articles: list));
   }
 
   Future<void> _onHistoryStarted(
       HistoryStarted event, Emitter<HistoryState> emitter) async {
-    var list = await historyRepository.queryAll();
+    var list = await articleRepository.queryByRead(1);
     emitter(HistoryState.ready(articles: list));
   }
 }

@@ -37,6 +37,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
   Future<void> _onArticleStarted(
       ArticleEvent event, Emitter<ArticleState> emitter) async {
     await articleRepository.syncArticles();
+
     // emitter(ArticleState.ready(channel: "", articles: []));
   }
 
@@ -49,10 +50,9 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
 
   Future<void> _onArticleChannelRefreshed(
       ArticleChannelRefreshed event, Emitter<ArticleState> emitter) async {
+    await articleRepository.syncArticlesByChannel(event.channel);
     List<Article> articles =
-        await articleRepository.syncArticlesByChannel(event.channel);
-
-    Logger().d("on article channel refreshed");
+        await articleRepository.queryByLink(event.channel.link);
     emitter(ArticleState.ready(channel: event.channel, articles: articles));
   }
 }

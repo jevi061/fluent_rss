@@ -1,12 +1,17 @@
+class DatabaseConstants {
+  static const String database = "fluent_rss.db";
+  static const int version = 1;
+}
+
 class TableNameConstants {
-  static const article = "article";
-  static const history = "history";
-  static const favorite = "favorite";
-  static const channel = "channel";
+  static const String article = "article";
+  static const String articleStatus = "articleStatus";
+  static const String channel = "channel";
+  static const String channelStatus = "channelStatus";
 }
 
 class TableDefinitionConstants {
-  static const articleTable = """create table if not exists article(
+  static const String articleTable = """create table if not exists article(
         uuid text primary key,
         link text ,
         channel text ,
@@ -14,23 +19,14 @@ class TableDefinitionConstants {
         subtitle text,
         published integer
       )  """;
-  static const historyTable = """ create table if not exists history(
-        uuid text primary key,
-        link text ,
-        channel text ,
-        title text,
-        subtitle text,
-        published integer
-      ) """;
-  static const favoriteTable = """create table if not exists favorite(
-        uuid text primary key,
-        link text ,
-        channel text ,
-        title text,
-        subtitle text,
-        published integer
+  static const String articleStatusTable =
+      """create table if not exists articleStatus(
+        articleId text primary key,
+        read integer ,
+        starred integer,
+        foreign key (articleId) references article (uuid)
       )  """;
-  static const channelTable = """create table if not exists channel(
+  static const String channelTable = """create table if not exists channel(
             link text primary key,
             title text,
             description text,
