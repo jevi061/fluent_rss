@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
-import 'package:fluent_rss/data/repository/article_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import "package:collection/collection.dart";
 
 class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
   ChannelRepository channelRepository;
@@ -17,6 +15,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     on<ChannelOpened>(_onChannelOpened);
     on<ChannelRefreshed>(_onChannelRefreshed);
     on<ChannelDeleted>(_onChannelDeleted);
+    on<ChannelAdded>(_onChannelAdded);
   }
 
   Future<void> _onChannelStarted(
@@ -45,6 +44,13 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
   void _onChannelDeleted(
       ChannelDeleted event, Emitter<ChannelState> emitter) async {
     await channelRepository.removeChannel(event.channel.link);
+    List<Channel> channels = await channelRepository.fetchChannels();
+    emitter(ChannelReadyState(channels: channels));
+  }
+
+  void _onChannelAdded(
+      ChannelAdded event, Emitter<ChannelState> emitter) async {
+    await channelRepository.addChannel(event.channel);
     List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
   }

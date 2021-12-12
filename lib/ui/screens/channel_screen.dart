@@ -1,10 +1,10 @@
 import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
-import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/ui/screens/article_screen.dart';
 import 'package:fluent_rss/ui/screens/reading_screen.dart';
 import 'package:fluent_rss/ui/widgets/channel_searcher.dart';
 import 'package:fluent_rss/ui/widgets/channel_tile.dart';
+import 'package:fluent_rss/ui/widgets/menu.dart';
 import 'package:fluent_rss/ui/widgets/opml_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,10 @@ class ChannelScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Fluent RSS"),
-          actions: [ChannelSearcher(), OPMLPicker()],
+          actions: [
+            ChannelSearcher(),
+            Menu(),
+          ],
         ),
         body: BlocBuilder<ChannelBloc, ChannelState>(
             builder: (BuildContext context, ChannelState state) {

@@ -13,14 +13,14 @@ class ChannelRepository {
   ChannelRepository(
       {required this.channelProvider, required this.articleProvider});
 
-  void addChannel(Channel channel) async {
-    channelProvider.insert(channel.toMap());
+  Future<void> addChannel(Channel channel) async {
+    await channelProvider.insert(channel.toMap());
   }
 
   Future<void> addChannels(List<Channel> chs) async {
     List<Map<String, dynamic>> data = chs.map((e) => e.toMap()).toList();
     Logger().d('channel provider:$channelProvider');
-    channelProvider.batchInsert(data);
+    await channelProvider.batchInsert(data);
   }
 
   Future<List<Channel>> fetchChannels() async {
