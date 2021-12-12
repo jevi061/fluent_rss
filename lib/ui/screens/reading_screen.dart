@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:share/share.dart';
 
 class ReadingScreen extends StatefulWidget {
   ReadingScreen({Key? key}) : super(key: key);
@@ -89,7 +90,12 @@ class _ReadScreenState extends State<ReadingScreen> {
                   icon: state.article?.starred == 0
                       ? Icon(Icons.star_border)
                       : Icon(Icons.star)),
-              IconButton(onPressed: () {}, icon: Icon(Icons.share))
+              IconButton(
+                  onPressed: () {
+                    Share.share(
+                        state.article!.title + '\n' + state.article!.link);
+                  },
+                  icon: Icon(Icons.share))
             ],
           ),
         ),
