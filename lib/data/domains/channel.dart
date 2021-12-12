@@ -43,8 +43,8 @@ class Channel {
         type = data['type'] ?? "",
         version = data['version'] ?? "",
         iconUrl = data['iconUrl'] ?? "",
-        lastCheck = data['lastCheck'] ?? "",
+        lastCheck = data['lastCheck'] ?? 0,
         directory = data['directory'],
-        unreadCount = data['unreadCount'],
-        totalCount = data['totalCount'];
+        unreadCount = data['unreadCount'] ?? 0,
+        totalCount = data['totalCount'] ?? 0;
 }

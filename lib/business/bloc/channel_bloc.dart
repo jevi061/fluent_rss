@@ -54,6 +54,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     await channelRepository.addChannel(event.channel);
     List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
+    channelRepository.syncChannelArticles([event.channel]);
   }
 
   void _onChannelImported(
