@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ReadingScreen extends StatefulWidget {
   ReadingScreen({Key? key}) : super(key: key);
@@ -95,7 +96,12 @@ class _ReadScreenState extends State<ReadingScreen> {
                     Share.share(
                         state.article!.title + '\n' + state.article!.link);
                   },
-                  icon: Icon(Icons.share))
+                  icon: Icon(Icons.share)),
+              IconButton(
+                  onPressed: () {
+                    launch(state.article!.link);
+                  },
+                  icon: Icon(Icons.open_in_browser))
             ],
           ),
         ),
