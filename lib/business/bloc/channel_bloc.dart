@@ -16,6 +16,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     on<ChannelRefreshed>(_onChannelRefreshed);
     on<ChannelDeleted>(_onChannelDeleted);
     on<ChannelAdded>(_onChannelAdded);
+    on<ChannelImported>(_onChannelImported);
   }
 
   Future<void> _onChannelStarted(
@@ -53,5 +54,13 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     await channelRepository.addChannel(event.channel);
     List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
+  }
+
+  void _onChannelImported(
+      ChannelImported event, Emitter<ChannelState> emitter) async {
+    await channelRepository.addChannels(event.channels);
+    List<Channel> channels = await channelRepository.fetchChannels();
+    emitter(ChannelReadyState(channels: channels));
+    channelRepository.syncChannelArticles(event.channels);
   }
 }

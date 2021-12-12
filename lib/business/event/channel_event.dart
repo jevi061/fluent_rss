@@ -46,3 +46,10 @@ class ChannelAdded extends ChannelEvent {
   @override
   List<Object?> get props => [channel];
 }
+
+class ChannelImported extends ChannelEvent {
+  List<Channel> channels;
+  ChannelImported(this.channels);
+  @override
+  List<Object?> get props => [channels];
+}

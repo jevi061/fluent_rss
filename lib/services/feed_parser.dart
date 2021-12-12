@@ -18,6 +18,7 @@ class FeedParser {
     }
     Uri uri = Uri.parse(link);
     var iconUrl = path.join(uri.origin, FeedConstants.iconName);
+    var lastCheck = DateTime.now().millisecondsSinceEpoch;
     try {
       var feed = RssFeed.parse(response.data);
       return Channel(
@@ -27,7 +28,7 @@ class FeedParser {
           type: FeedConstants.RSS,
           version: '0',
           iconUrl: iconUrl,
-          lastCheck: 0,
+          lastCheck: lastCheck,
           directory: '',
           unreadCount: 0,
           totalCount: 0);
@@ -40,7 +41,7 @@ class FeedParser {
           type: FeedConstants.Atom,
           version: '0',
           iconUrl: iconUrl,
-          lastCheck: 0,
+          lastCheck: lastCheck,
           directory: '',
           unreadCount: 0,
           totalCount: 0);

@@ -20,10 +20,7 @@ class ChannelScreen extends StatelessWidget {
         builder: (BuildContext context, ChannelState state) {
       ChannelReadyState newState = state as ChannelReadyState;
       return Scaffold(
-          appBar: AppBar(title: const Text("Fluent RSS"), actions: [
-            ChannelSearcher(),
-            Menu(),
-          ]),
+          appBar: AppBar(title: const Text("Fluent RSS"), actions: [Menu()]),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               showSearch(
@@ -33,7 +30,9 @@ class ChannelScreen extends StatelessWidget {
             child: Icon(Icons.search),
           ),
           body: newState.channels.isEmpty
-              ? Text('Waiting...')
+              ? const Center(
+                  child: Text('Add or import channel from top menu'),
+                )
               : Scrollbar(
                   child: ListView.builder(
                       itemCount: newState.channels.length,
