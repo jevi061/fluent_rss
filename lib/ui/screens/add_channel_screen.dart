@@ -57,6 +57,9 @@ class _AddChannelScreenState extends State<AddChannelScreen> {
                           backgroundImage:
                               CachedNetworkImageProvider(channel!.iconUrl),
                         ),
+                        SizedBox(
+                          width: 10,
+                        ),
                         Expanded(child: Text(channel!.title)),
                         IconButton(
                             onPressed: () {
