@@ -14,7 +14,7 @@ import 'package:logger/logger.dart';
 import 'app_bloc.dart';
 
 class ReadingBloc extends Bloc<ReadingEvent, ReadingState> {
-  ReadingBloc() : super(ReadingState(article: null)) {
+  ReadingBloc() : super(ReadingState()) {
     on<ReadingStarted>(_onReadingStarted);
   }
 

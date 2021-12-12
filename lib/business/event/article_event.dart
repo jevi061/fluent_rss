@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 
 abstract class ArticleEvent extends Equatable {}
@@ -9,10 +10,10 @@ class ArticleStarted extends ArticleEvent {
 }
 
 class ArticleRequested extends ArticleEvent {
-  Channel channel;
-  ArticleRequested({required this.channel});
+  String channelLink;
+  ArticleRequested({required this.channelLink});
   @override
-  List<Object?> get props => [channel];
+  List<Object?> get props => [channelLink];
 }
 
 class ArticleChannelUpdated extends ArticleEvent {
@@ -21,8 +22,22 @@ class ArticleChannelUpdated extends ArticleEvent {
 }
 
 class ArticleChannelRefreshed extends ArticleEvent {
-  Channel channel;
-  ArticleChannelRefreshed({required this.channel});
+  String channelLink;
+  ArticleChannelRefreshed({required this.channelLink});
   @override
-  List<Object?> get props => [channel];
+  List<Object?> get props => [channelLink];
+}
+
+class ArticleStarred extends ArticleEvent {
+  Article article;
+  ArticleStarred(this.article);
+  @override
+  List<Object?> get props => [];
+}
+
+class ArticleRead extends ArticleEvent {
+  Article article;
+  ArticleRead(this.article);
+  @override
+  List<Object?> get props => [];
 }

@@ -1,11 +1,14 @@
+import 'package:fluent_rss/business/bloc/article_bloc.dart';
 import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/bloc/favorite_bloc.dart';
 import 'package:fluent_rss/business/bloc/history_bloc.dart';
 import 'package:fluent_rss/business/bloc/reading_bloc.dart';
 import 'package:fluent_rss/business/event/app_event.dart';
+import 'package:fluent_rss/business/event/article_event.dart';
 import 'package:fluent_rss/business/event/favorite_event.dart';
 import 'package:fluent_rss/business/event/history_event.dart';
 import 'package:fluent_rss/business/event/reading_event.dart';
+import 'package:fluent_rss/business/state/article_state.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,45 +28,59 @@ class ArticleTile extends StatelessWidget {
         onTap: () {
           context.read<ReadingBloc>().add(ReadingStarted(article: article));
           context.read<HistoryBloc>().add(HistoryUpdated(article: article));
+          context.read<ArticleBloc>().add(ArticleRead(article));
           Navigator.of(context).pushNamed('/reading');
         },
-        child: Container(
-          padding: EdgeInsets.only(left: 16, right: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        child: Stack(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (article.read == 0) ...[Icon(Icons.circle)],
                   Expanded(
-                      child: Text(
-                    article.title,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 20),
-                  ))
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(formattedDate),
-                  Spacer(),
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        article.title,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Text(formattedDate),
+                    ],
+                  )),
                   IconButton(
-                    icon: Icon(Icons.bookmark),
+                    icon: article.starred == 0
+                        ? const Icon(
+                            Icons.star_outline,
+                          )
+                        : const Icon(Icons.star),
                     onPressed: () {
+                      article.starred == 0
+                          ? article.starred = 1
+                          : article.starred = 0;
+                      context.read<ArticleBloc>().add(ArticleStarred(article));
                       context
                           .read<FavoriteBloc>()
                           .add(FavoriteUpdated(article: article));
+                      context
+                          .read<HistoryBloc>()
+                          .add(HistoryUpdated(article: article));
                     },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.favorite),
-                    onPressed: () {},
                   )
                 ],
-              )
-            ],
-          ),
+              ),
+            ),
+            if (article.read == 0) ...[
+              const Positioned(
+                  child: Icon(
+                Icons.circle,
+                color: Colors.blue,
+                size: 10,
+              ))
+            ]
+          ],
         ),
       ),
     );

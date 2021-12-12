@@ -72,4 +72,24 @@ class ChannelProvider {
         from channel as c inner join channelStatus as s 
         on c.link = s.channelLink''');
   }
+
+  Future<Map<String, dynamic>> queryByLink(String link) async {
+    Database? db = await dbProvider.database;
+    var list = await db?.query(TableNameConstants.channel,
+        columns: [
+          'link',
+          'title',
+          'description',
+          'iconUrl',
+          'directory',
+          'type',
+          'version'
+        ],
+        where: 'link = ?',
+        whereArgs: [link]);
+    if (list != null) {
+      return list.first;
+    }
+    return Map.fromEntries([]);
+  }
 }

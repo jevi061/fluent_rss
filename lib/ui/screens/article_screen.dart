@@ -4,6 +4,7 @@ import 'package:fluent_rss/business/event/article_event.dart';
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/state/article_state.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
+import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/ui/widgets/article_tile.dart';
 import 'package:fluent_rss/ui/widgets/channel_tile.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,10 +16,11 @@ class ArticleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Channel channel = ModalRoute.of(context)?.settings.arguments as Channel;
     return BlocBuilder<ArticleBloc, ArticleState>(
         builder: (BuildContext context, ArticleState state) {
       return Scaffold(
-        appBar: AppBar(title: Text(state.channel.title)),
+        appBar: AppBar(title: Text(channel.title)),
         body: RefreshIndicator(
           child: ListView.builder(
               itemCount: state.articles.length,
@@ -27,9 +29,9 @@ class ArticleScreen extends StatelessWidget {
                   )),
           onRefresh: () async {
             var bloc = context.read<ArticleBloc>()
-              ..add(ArticleChannelRefreshed(channel: state.channel));
+              ..add(ArticleChannelRefreshed(channelLink: channel.link));
             var newState = await bloc.stream.first;
-            context.read<ChannelBloc>().add(ChannelRefreshed(newState.channel));
+            context.read<ChannelBloc>().add(ChannelRefreshed());
           },
         ),
       );

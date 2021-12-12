@@ -53,7 +53,9 @@ class ArticleRepository {
     }
   }
 
-  Future<void> syncArticlesByChannel(Channel channel) async {
+  Future<void> syncArticlesByChannel(String channelLink) async {
+    var channelData = await channelProvider.queryByLink(channelLink);
+    Channel channel = Channel.fromMap(channelData);
     var parser = FeedParser();
     List<Article> parsedArticles = [];
     if (channel.type == "rss") {

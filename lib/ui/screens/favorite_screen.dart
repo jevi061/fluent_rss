@@ -20,7 +20,7 @@ class FavoriteScreen extends StatelessWidget {
     return BlocBuilder<FavoriteBloc, FavoriteState>(
         builder: (BuildContext context, FavoriteState state) {
       return Scaffold(
-          appBar: AppBar(title: Text("Favorites")),
+          appBar: AppBar(title: const Text("Favorites")),
           body: ListView.builder(
               itemCount: state.articles.length,
               itemBuilder: (context, index) => ArticleTile(

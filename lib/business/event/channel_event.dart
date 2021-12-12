@@ -28,8 +28,7 @@ class ChannelOpened extends ChannelEvent {
 }
 
 class ChannelRefreshed extends ChannelEvent {
-  Channel channel;
-  ChannelRefreshed(this.channel);
+  ChannelRefreshed();
   @override
-  List<Object?> get props => [channel];
+  List<Object?> get props => [];
 }
