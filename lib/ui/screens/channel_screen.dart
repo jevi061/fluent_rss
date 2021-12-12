@@ -1,5 +1,6 @@
 import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
+import 'package:fluent_rss/ui/widgets/channel_delegate.dart';
 import 'package:fluent_rss/ui/screens/article_screen.dart';
 import 'package:fluent_rss/ui/screens/reading_screen.dart';
 import 'package:fluent_rss/ui/widgets/channel_searcher.dart';
@@ -15,28 +16,31 @@ class ChannelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Fluent RSS"),
-          actions: [
+    return BlocBuilder<ChannelBloc, ChannelState>(
+        builder: (BuildContext context, ChannelState state) {
+      ChannelReadyState newState = state as ChannelReadyState;
+      return Scaffold(
+          appBar: AppBar(title: const Text("Fluent RSS"), actions: [
             ChannelSearcher(),
             Menu(),
-          ],
-        ),
-        body: BlocBuilder<ChannelBloc, ChannelState>(
-            builder: (BuildContext context, ChannelState state) {
-          ChannelReadyState newState = state as ChannelReadyState;
-          if (newState.channels.isEmpty) {
-            return Text('Waiting...');
-          } else {
-            return Scrollbar(
-                child: ListView.builder(
-                    itemCount: newState.channels.length,
-                    itemBuilder: (context, index) {
-                      return ChannelTile(channel: newState.channels[index]);
-                    }));
-          }
-        }));
+          ]),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              showSearch(
+                  context: context,
+                  delegate: ChannelSearchDelegate(newState.channels));
+            },
+            child: Icon(Icons.search),
+          ),
+          body: newState.channels.isEmpty
+              ? Text('Waiting...')
+              : Scrollbar(
+                  child: ListView.builder(
+                      itemCount: newState.channels.length,
+                      itemBuilder: (context, index) {
+                        return ChannelTile(channel: newState.channels[index]);
+                      })));
+    });
   }
 }
 
