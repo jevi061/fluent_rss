@@ -17,21 +17,6 @@ class TableNameConstants {
 }
 
 class TableDefinitionConstants {
-  static const String articleTable = """create table if not exists article(
-        uuid text primary key,
-        link text ,
-        channel text ,
-        title text,
-        subtitle text,
-        published integer
-      )  """;
-  static const String articleStatusTable =
-      """create table if not exists articleStatus(
-        articleId text primary key,
-        read integer ,
-        starred integer,
-        foreign key (articleId) references article (uuid)
-      )  """;
   static const String channelTable = """create table if not exists channel(
             link text primary key,
             title text,
@@ -51,4 +36,20 @@ class TableDefinitionConstants {
           foreign key (channelLink) references channel (link)
           )
       """;
+  static const String articleTable = """create table if not exists article(
+        uuid text primary key,
+        link text ,
+        channel text ,
+        title text,
+        subtitle text,
+        published integer,
+        foreign key (channel) references channel (link)
+      )  """;
+  static const String articleStatusTable =
+      """create table if not exists articleStatus(
+        articleId text primary key,
+        read integer ,
+        starred integer,
+        foreign key (articleId) references article (uuid)
+      )  """;
 }
