@@ -26,11 +26,12 @@ class ChannelScreen extends StatelessWidget {
           if (newState.channels.isEmpty) {
             return Text('Waiting...');
           } else {
-            return ListView.builder(
-                itemCount: newState.channels.length,
-                itemBuilder: (context, index) {
-                  return ChannelTile(channel: newState.channels[index]);
-                });
+            return Scrollbar(
+                child: ListView.builder(
+                    itemCount: newState.channels.length,
+                    itemBuilder: (context, index) {
+                      return ChannelTile(channel: newState.channels[index]);
+                    }));
           }
         }));
   }
