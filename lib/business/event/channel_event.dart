@@ -32,3 +32,10 @@ class ChannelRefreshed extends ChannelEvent {
   @override
   List<Object?> get props => [];
 }
+
+class ChannelDeleted extends ChannelEvent {
+  Channel channel;
+  ChannelDeleted(this.channel);
+  @override
+  List<Object?> get props => [channel];
+}

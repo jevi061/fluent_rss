@@ -33,7 +33,8 @@ class TableDefinitionConstants {
           lastCheck integer,
           unreadCount integer,
           totalCount integer,
-          foreign key (channelLink) references channel (link)
+          foreign key (channelLink) references channel (link) 
+          ON DELETE CASCADE
           )
       """;
   static const String articleTable = """create table if not exists article(
@@ -44,6 +45,7 @@ class TableDefinitionConstants {
         subtitle text,
         published integer,
         foreign key (channel) references channel (link)
+        ON DELETE CASCADE
       )  """;
   static const String articleStatusTable =
       """create table if not exists articleStatus(
@@ -51,5 +53,6 @@ class TableDefinitionConstants {
         read integer ,
         starred integer,
         foreign key (articleId) references article (uuid)
+        ON DELETE CASCADE
       )  """;
 }

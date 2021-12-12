@@ -92,4 +92,10 @@ class ChannelProvider {
     }
     return Map.fromEntries([]);
   }
+
+  Future<void> deleteByLink(String link) async {
+    Database? db = await dbProvider.database;
+    await db?.delete(TableNameConstants.channel,
+        where: 'link=?', whereArgs: [link]);
+  }
 }

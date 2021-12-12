@@ -64,4 +64,8 @@ class ChannelRepository {
       articleProvider.batchInsert(data);
     }
   }
+
+  Future<void> removeChannel(String link) async {
+    await channelProvider.deleteByLink(link);
+  }
 }

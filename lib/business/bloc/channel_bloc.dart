@@ -16,6 +16,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     on<ChannelUpdated>(_onChannelUpdated);
     on<ChannelOpened>(_onChannelOpened);
     on<ChannelRefreshed>(_onChannelRefreshed);
+    on<ChannelDeleted>(_onChannelDeleted);
   }
 
   Future<void> _onChannelStarted(
@@ -38,6 +39,13 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     List<Channel> channels = await channelRepository.fetchChannels();
     // Map<String, List<Channel>> groupedChannels =
     //     groupBy(channels, (Channel ch) => ch.directory);
+    emitter(ChannelReadyState(channels: channels));
+  }
+
+  void _onChannelDeleted(
+      ChannelDeleted event, Emitter<ChannelState> emitter) async {
+    await channelRepository.removeChannel(event.channel.link);
+    List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
   }
 }
