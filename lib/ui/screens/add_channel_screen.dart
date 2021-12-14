@@ -50,7 +50,7 @@ class _AddChannelScreenState extends State<AddChannelScreen> {
                 Card(
                   margin: EdgeInsets.only(top: 20),
                   child: Container(
-                    padding: EdgeInsets.only(left: 10, right: 0),
+                    padding: EdgeInsets.all(16),
                     child: Row(
                       children: [
                         CircleAvatar(
@@ -60,7 +60,11 @@ class _AddChannelScreenState extends State<AddChannelScreen> {
                         SizedBox(
                           width: 10,
                         ),
-                        Expanded(child: Text(channel!.title)),
+                        Expanded(
+                            child: Text(
+                          channel!.title,
+                          style: TextStyle(fontSize: 20),
+                        )),
                         IconButton(
                             onPressed: () {
                               BlocProvider.of<ChannelBloc>(context)
@@ -71,7 +75,7 @@ class _AddChannelScreenState extends State<AddChannelScreen> {
                       ],
                     ),
                   ),
-                )
+                ),
               ]
             ],
           )),
