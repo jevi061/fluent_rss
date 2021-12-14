@@ -34,7 +34,7 @@ class ArticleTile extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              padding: const EdgeInsets.only(left: 16, right: 16),
+              padding: const EdgeInsets.all(16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -46,8 +46,15 @@ class ArticleTile extends StatelessWidget {
                         article.title,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 20),
+                        maxLines: 2,
                       ),
-                      Text(formattedDate),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        formattedDate,
+                        style: TextStyle(color: Colors.grey),
+                      ),
                     ],
                   )),
                   IconButton(
@@ -74,11 +81,13 @@ class ArticleTile extends StatelessWidget {
             ),
             if (article.read == 0) ...[
               const Positioned(
+                  left: 10,
+                  top: 16,
                   child: Icon(
-                Icons.circle,
-                color: Colors.blue,
-                size: 10,
-              ))
+                    Icons.circle,
+                    color: Colors.blue,
+                    size: 10,
+                  ))
             ]
           ],
         ),
