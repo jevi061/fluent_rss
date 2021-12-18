@@ -1,4 +1,3 @@
-import 'package:fluent_rss/business/log/logger.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/domains/article_status.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
@@ -6,7 +5,6 @@ import 'package:fluent_rss/data/providers/article_provider.dart';
 import 'package:fluent_rss/data/providers/article_status_provider.dart';
 import 'package:fluent_rss/data/providers/channel_provider.dart';
 import 'package:fluent_rss/services/feed_parser.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 
 class ArticleRepository {

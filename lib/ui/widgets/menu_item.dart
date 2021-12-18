@@ -42,6 +42,7 @@ class MenuItem extends StatelessWidget {
                   ),
                   Text(
                     subtitle,
+                    style: TextStyle(color: Colors.grey),
                   )
                 ],
               )

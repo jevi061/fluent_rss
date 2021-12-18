@@ -1,8 +1,8 @@
-import 'package:fluent_rss/business/log/logger.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/providers/article_provider.dart';
 import 'package:fluent_rss/data/providers/channel_provider.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/services/feed_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
@@ -19,13 +19,13 @@ class ChannelRepository {
 
   Future<void> addChannels(List<Channel> chs) async {
     List<Map<String, dynamic>> data = chs.map((e) => e.toMap()).toList();
-    Logger().d('channel provider:$channelProvider');
+    AppLogger.instance.d('channel provider:$channelProvider');
     await channelProvider.batchInsert(data);
   }
 
   Future<List<Channel>> fetchChannels() async {
     List<Map<String, dynamic>>? data = await channelProvider.query();
-    Logger().d('fetch channels result $data');
+    AppLogger.instance.d('fetch channels result $data');
     return data?.map((e) => Channel.fromMap(e)).toList() ?? [];
   }
 

@@ -4,6 +4,7 @@ import 'package:fluent_rss/business/bloc/reading_bloc.dart';
 import 'package:fluent_rss/business/event/article_event.dart';
 import 'package:fluent_rss/business/event/favorite_event.dart';
 import 'package:fluent_rss/business/state/reading_state.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +37,7 @@ class _ReadScreenState extends State<ReadingScreen> {
               initialUrl: state.article?.link ?? "",
               onProgress: (int progress) {
                 setState(() {
-                  Logger().d("loading progress:$progress");
+                  AppLogger.instance.d("loading progress:$progress");
                   loadProgress = progress.toDouble();
                 });
               },

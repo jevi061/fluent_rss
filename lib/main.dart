@@ -1,3 +1,4 @@
+import 'package:fluent_rss/business/bloc/add_channel_bloc.dart';
 import 'package:fluent_rss/business/bloc/app_bloc.dart';
 import 'package:fluent_rss/business/bloc/article_bloc.dart';
 import 'package:fluent_rss/business/bloc/channel_bloc.dart';
@@ -61,6 +62,7 @@ void main() {
       BlocProvider<AppBloc>(
           lazy: false,
           create: (BuildContext context) => AppBloc()..add(AppStarted())),
+      BlocProvider(create: (BuildContext context) => AddChannelBloc())
     ],
     child: HomeScreen(),
   );
