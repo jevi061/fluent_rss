@@ -22,6 +22,11 @@ class MenuSheet extends StatelessWidget {
                   value: channelBloc,
                   child: ListView(
                     children: [
+                      Text(
+                        "Fluent RSS",
+                        style: Theme.of(context).textTheme.headline3,
+                        textAlign: TextAlign.center,
+                      ),
                       MenuItem(
                         iconData: Icons.add,
                         title: "Add",
