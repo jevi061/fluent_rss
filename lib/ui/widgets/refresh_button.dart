@@ -3,6 +3,7 @@ import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
 import 'package:fluent_rss/services/app_logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -15,11 +16,14 @@ class RefreshButton extends StatelessWidget {
       AppLogger.instance.d('state type is:${state.runtimeType}');
       if (state is ChannelRefreshingState) {
         AppLogger.instance.d('new progress is:${state.progress}');
-        return SizedBox(
+        return Container(
           width: 20,
-          height: 5,
-          child: LinearProgressIndicator(
-            color: Colors.white,
+          height: 20,
+          child: CircularPercentIndicator(
+            lineWidth: 3,
+            radius: 20,
+            percent: state.progress,
+            progressColor: Colors.white,
           ),
         );
       }

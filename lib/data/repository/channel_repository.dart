@@ -42,9 +42,17 @@ class ChannelRepository {
     await channelProvider.checkReadStatus(channel.link);
   }
 
-  Future<void> refreshChannels(List<Channel> channels) async {
+  // Future<void> refreshChannels(List<Channel> channels) async {
+  //   for (var channel in channels) {
+  //     await refreshChannel(channel);
+  //   }
+  // }
+
+  Stream<double> refreshChannelsWithProgress(List<Channel> channels) async* {
+    int index = 0;
     for (var channel in channels) {
       await refreshChannel(channel);
+      yield index++ / channels.length;
     }
   }
 

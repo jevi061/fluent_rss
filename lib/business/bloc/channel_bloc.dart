@@ -49,16 +49,23 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       ChannelOpened event, Emitter<ChannelState> emitter) async {}
   Future<void> _onPartialChannelRefreshStarted(
       PartialChannelRefreshStarted event, Emitter<ChannelState> emitter) async {
-    emitter(ChannelRefreshingState(progress: 0));
-    await channelRepository.refreshChannels(event.channels);
+    emitter
+        .forEach(channelRepository.refreshChannelsWithProgress(event.channels),
+            onData: (double percent) {
+      AppLogger.instance.d("refresh progress is :$percent");
+      return ChannelRefreshingState(progress: percent);
+    });
     add(ChannelRefreshFinished());
   }
 
   Future<void> _onChannelRefreshStarted(
       ChannelRefreshStarted event, Emitter<ChannelState> emitter) async {
-    emitter(ChannelRefreshingState(progress: 0));
     List<Channel> channels = await channelRepository.fetchChannels();
-    await channelRepository.refreshChannels(channels);
+    emitter.forEach(channelRepository.refreshChannelsWithProgress(channels),
+        onData: (double percent) {
+      AppLogger.instance.d("refresh progress is :$percent");
+      return ChannelRefreshingState(progress: percent);
+    });
     add(ChannelRefreshFinished());
   }
 
