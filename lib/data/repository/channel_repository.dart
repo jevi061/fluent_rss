@@ -39,7 +39,7 @@ class ChannelRepository {
     List<Map<String, dynamic>> data =
         parsedArticles.map((e) => e.toMap()).toList();
     await articleProvider.batchInsert(data);
-    await channelProvider.updateReadStatus(channel.link);
+    await channelProvider.checkReadStatus(channel.link);
   }
 
   Future<void> refreshChannels(List<Channel> channels) async {
@@ -49,6 +49,6 @@ class ChannelRepository {
   }
 
   Future<void> minusOneUnread(String channel) async {
-    channelProvider.minusOneUnread(channel);
+    await channelProvider.minusOneUnread(channel);
   }
 }

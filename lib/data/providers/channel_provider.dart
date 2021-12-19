@@ -94,24 +94,42 @@ class ChannelProvider {
 
   Future<void> updateReadStatus(String link) async {
     Database? db = await dbProvider.database;
-    db?.rawUpdate(""" update channelStatus 
+    await db?.rawUpdate(""" update channelStatus 
     set unreadCount = (
-      select count(*) from 
-      article left join articleStatus
-      on article.uuid = articleStatus.articleId
-      where article.channel = ?
-      and articleStatus.read = 0 )
+          select count(*) from 
+          article left join articleStatus
+          on article.uuid = articleStatus.articleId
+          where article.channel = ?
+          and articleStatus.read = 0 ),
+        totalCount = (
+          select count(*) from 
+          article left join articleStatus
+          on article.uuid = articleStatus.articleId
+          where article.channel = ?
+        )
     where channelLink = ? 
-    """, [link, link]);
-    db?.rawUpdate(""" update channelStatus 
-    set totalCount = (
-      select count(*) from 
-      article left join articleStatus
-      on article.uuid = articleStatus.articleId
-      where article.channel = ?
-      )
+    """, [link, link, link]);
+  }
+
+  Future<void> checkReadStatus(String link) async {
+    Database? db = await dbProvider.database;
+    var lastCheck = DateTime.now().millisecondsSinceEpoch;
+    await db?.rawUpdate(""" update channelStatus 
+    set lastCheck = ?,
+        unreadCount = (
+          select count(*) from 
+          article left join articleStatus
+          on article.uuid = articleStatus.articleId
+          where article.channel = ?
+          and articleStatus.read = 0 ),
+        totalCount = (
+          select count(*) from 
+          article left join articleStatus
+          on article.uuid = articleStatus.articleId
+          where article.channel = ?
+        )
     where channelLink = ? 
-    """, [link, link]);
+    """, [lastCheck, link, link, link]);
   }
 
   Future<void> minusOneUnread(String channel) async {
