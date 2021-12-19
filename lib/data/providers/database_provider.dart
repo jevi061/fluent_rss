@@ -14,10 +14,10 @@ class DatabaseProvider {
     return await createDatabase();
   }
 
-  Future<sql.Database> createDatabase() async {
+  Future<sql.Database?> createDatabase() async {
     final dbPath = await sql.getDatabasesPath();
     Logger().d('db path is:$dbPath');
-    return await sql.openDatabase(path.join(dbPath, DatabaseConstants.database),
+    _db = await sql.openDatabase(path.join(dbPath, DatabaseConstants.database),
         onConfigure: (db) {
       db.execute('PRAGMA foreign_keys = ON');
     }, onCreate: (db, version) {
@@ -26,5 +26,6 @@ class DatabaseProvider {
       db.execute(TableDefinitionConstants.articleTable);
       db.execute(TableDefinitionConstants.articleStatusTable);
     }, version: DatabaseConstants.version);
+    return _db;
   }
 }
