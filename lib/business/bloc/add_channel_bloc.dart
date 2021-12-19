@@ -11,8 +11,7 @@ class AddChannelBloc extends Bloc<AddChannelEvent, AddChannelState> {
   Future<void> _onChannelSubmited(
       ChannelSubmited event, Emitter<AddChannelState> emitter) async {
     emitter(ChannelParsingState());
-    var feedParser = FeedParser();
-    var ch = await feedParser.parseChannel(event.link);
+    var ch = await FeedParser.parseChannel(event.link);
     AppLogger.instance.d('channel title:${ch?.title},icon:${ch?.iconUrl}');
     if (ch == null || ch.link.isEmpty) {
       emitter(AddChannelErrorState('invalid channel url'));

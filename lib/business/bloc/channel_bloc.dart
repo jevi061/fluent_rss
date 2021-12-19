@@ -2,21 +2,29 @@ import 'dart:async';
 
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
+import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
+import 'package:fluent_rss/data/repository/article_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
   ChannelRepository channelRepository;
-  ChannelBloc({required this.channelRepository})
+  ArticleRepository articleRepository;
+  ChannelBloc(
+      {required this.channelRepository, required this.articleRepository})
       : super(ChannelReadyState(channels: [])) {
     on<ChannelStarted>(_onChannelStarted);
     on<ChannelUpdated>(_onChannelUpdated);
     on<ChannelOpened>(_onChannelOpened);
-    on<ChannelRefreshed>(_onChannelRefreshed);
+    on<PartialChannelRefreshStarted>(_onPartialChannelRefreshStarted);
+    on<ChannelRefreshStarted>(_onChannelRefreshStarted);
+    on<ChannelRefreshFinished>(_onChannelRefreshFinished);
     on<ChannelDeleted>(_onChannelDeleted);
     on<ChannelAdded>(_onChannelAdded);
     on<ChannelImported>(_onChannelImported);
+    on<ChannelStatusChanged>(_onChannelStatusChanged);
   }
 
   Future<void> _onChannelStarted(
@@ -25,20 +33,38 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     emitter(ChannelReadyState(channels: channels));
   }
 
+  Future<void> _onChannelStatusChanged(
+      ChannelEvent event, Emitter<ChannelState> emitter) async {
+    List<Channel> channels = await channelRepository.fetchChannels();
+    emitter(ChannelReadyState(channels: channels));
+  }
+
   Future<void> _onChannelUpdated(
       ChannelUpdated event, Emitter<ChannelState> emitter) async {
     List<Channel> channels = await channelRepository.fetchChannels();
-    channelRepository.syncChannelArticles(event.channels);
     emitter(ChannelReadyState(channels: channels));
   }
 
   void _onChannelOpened(
       ChannelOpened event, Emitter<ChannelState> emitter) async {}
-  void _onChannelRefreshed(
-      ChannelRefreshed event, Emitter<ChannelState> emitter) async {
+  Future<void> _onPartialChannelRefreshStarted(
+      PartialChannelRefreshStarted event, Emitter<ChannelState> emitter) async {
+    emitter(ChannelRefreshingState(progress: 0));
+    await channelRepository.refreshChannels(event.channels);
+    add(ChannelRefreshFinished());
+  }
+
+  Future<void> _onChannelRefreshStarted(
+      ChannelRefreshStarted event, Emitter<ChannelState> emitter) async {
+    emitter(ChannelRefreshingState(progress: 0));
     List<Channel> channels = await channelRepository.fetchChannels();
-    // Map<String, List<Channel>> groupedChannels =
-    //     groupBy(channels, (Channel ch) => ch.directory);
+    await channelRepository.refreshChannels(channels);
+    add(ChannelRefreshFinished());
+  }
+
+  Future<void> _onChannelRefreshFinished(
+      ChannelRefreshFinished event, Emitter<ChannelState> emitter) async {
+    List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
   }
 
@@ -54,7 +80,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     await channelRepository.addChannel(event.channel);
     List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
-    channelRepository.syncChannelArticles([event.channel]);
+    add(PartialChannelRefreshStarted([event.channel]));
   }
 
   void _onChannelImported(
@@ -62,6 +88,6 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     await channelRepository.addChannels(event.channels);
     List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
-    channelRepository.syncChannelArticles(event.channels);
+    add(PartialChannelRefreshStarted(event.channels));
   }
 }

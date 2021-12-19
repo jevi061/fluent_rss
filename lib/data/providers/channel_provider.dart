@@ -91,4 +91,34 @@ class ChannelProvider {
     await db?.delete(TableNameConstants.channel,
         where: 'link=?', whereArgs: [link]);
   }
+
+  Future<void> updateReadStatus(String link) async {
+    Database? db = await dbProvider.database;
+    db?.rawUpdate(""" update channelStatus 
+    set unreadCount = (
+      select count(*) from 
+      article left join articleStatus
+      on article.uuid = articleStatus.articleId
+      where article.channel = ?
+      and articleStatus.read = 0 )
+    where channelLink = ? 
+    """, [link, link]);
+    db?.rawUpdate(""" update channelStatus 
+    set totalCount = (
+      select count(*) from 
+      article left join articleStatus
+      on article.uuid = articleStatus.articleId
+      where article.channel = ?
+      )
+    where channelLink = ? 
+    """, [link, link]);
+  }
+
+  Future<void> minusOneUnread(String channel) async {
+    Database? db = await dbProvider.database;
+    await db?.rawUpdate(""" update channelStatus 
+      set unreadCount = unreadCount -1 
+      where channelLink = ?
+    """, [channel]);
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:fluent_rss/assets/constants.dart';
 import 'package:fluent_rss/data/domains/article_status.dart';
 import 'package:fluent_rss/data/providers/database_provider.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 import 'package:sqflite/sqflite.dart';
@@ -26,18 +27,17 @@ class ArticleProvider {
   Future<void> batchInsert(List<Map<String, dynamic>> data) async {
     Database? db = await dbProvider.database;
     Batch? batch = db?.batch();
-    Logger().d('${data.length} article(s) to insert');
     for (var row in data) {
       int read = row['read'];
       int starred = row['starred'];
       row.remove('read');
       row.remove('starred');
-      Logger().d("read:$read,starred:$starred");
       batch?.insert(TableNameConstants.article, row,
           conflictAlgorithm: ConflictAlgorithm.ignore);
       var status =
           ArticleStatus(articleId: row['uuid'], read: read, starred: starred);
-      batch?.insert(TableNameConstants.articleStatus, status.toMap());
+      batch?.insert(TableNameConstants.articleStatus, status.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.ignore);
     }
     await batch?.commit();
   }

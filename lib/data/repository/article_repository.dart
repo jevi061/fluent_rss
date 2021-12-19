@@ -1,9 +1,11 @@
+import 'package:fluent_rss/assets/constants.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/domains/article_status.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/providers/article_provider.dart';
 import 'package:fluent_rss/data/providers/article_status_provider.dart';
 import 'package:fluent_rss/data/providers/channel_provider.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/services/feed_parser.dart';
 import 'package:logger/logger.dart';
 
@@ -28,7 +30,20 @@ class ArticleRepository {
     articleProvider.batchInsert(data);
   }
 
-  Future<void> syncArticles() async {
+  Future<void> refreshArticles(List<Channel> channels) async {
+    for (var channel in channels) {
+      List<Article> parsedArticles =
+          await FeedParser.parseArticles(channel.link);
+      List<Map<String, dynamic>> data =
+          parsedArticles.map((e) => e.toMap()).toList();
+      AppLogger.instance
+          .d('load ${data.length} article(s) from channel:${channel.title}');
+      await articleProvider.batchInsert(data);
+      await channelProvider.updateReadStatus(channel.link);
+    }
+  }
+
+  Future<void> refreshAllArticles() async {
     var data = await channelProvider.query();
     List<Channel> channels =
         data?.map((e) => Channel.fromMap(e)).toList() ?? [];
@@ -37,34 +52,7 @@ class ArticleRepository {
     channels = channels
         .where((element) => utc - element.lastCheck > 24 * 3600)
         .toList();
-    var parser = FeedParser();
-    List<Article> parsedArticles = [];
-    for (Channel channel in channels) {
-      if (channel.type == "rss") {
-        parsedArticles = await parser.parseRSS(channel.link);
-      } else if (channel.type == "atom") {
-        parsedArticles = await parser.parseAtom(channel.link);
-      }
-      List<Map<String, dynamic>> data =
-          parsedArticles.map((e) => e.toMap()).toList();
-      articleProvider.batchInsert(data);
-    }
-  }
-
-  Future<void> syncArticlesByChannel(String channelLink) async {
-    var channelData = await channelProvider.queryByLink(channelLink);
-    Channel channel = Channel.fromMap(channelData);
-    var parser = FeedParser();
-    List<Article> parsedArticles = [];
-    if (channel.type == "rss") {
-      parsedArticles = await parser.parseRSS(channel.link);
-    } else if (channel.type == "atom") {
-      parsedArticles = await parser.parseAtom(channel.link);
-    }
-    await addArticles(parsedArticles);
-    Logger().d("parsed articles:${parsedArticles.length}");
-    await channelProvider.updateSyncTime(
-        channel.link, DateTime.now().millisecondsSinceEpoch);
+    await refreshArticles(channels);
   }
 
   Future<List<Article>> queryByLink(String link) async {

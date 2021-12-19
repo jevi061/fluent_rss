@@ -46,6 +46,7 @@ class ChannelTile extends StatelessWidget {
               Text("last check:${timeago.format(lastCheck)}")
             ],
           ),
+          trailing: Text('${channel.unreadCount}/${channel.totalCount}'),
           onTap: () {
             context
                 .read<ArticleBloc>()

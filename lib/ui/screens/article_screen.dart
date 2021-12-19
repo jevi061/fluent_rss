@@ -29,9 +29,8 @@ class ArticleScreen extends StatelessWidget {
                   )),
           onRefresh: () async {
             var bloc = context.read<ArticleBloc>()
-              ..add(ArticleChannelRefreshed(channelLink: channel.link));
+              ..add(ArticleChannelRefreshed(channel: channel));
             var newState = await bloc.stream.first;
-            context.read<ChannelBloc>().add(ChannelRefreshed());
           },
         ),
       );

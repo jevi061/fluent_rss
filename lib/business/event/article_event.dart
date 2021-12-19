@@ -21,11 +21,25 @@ class ArticleChannelUpdated extends ArticleEvent {
   List<Object?> get props => [];
 }
 
-class ArticleChannelRefreshed extends ArticleEvent {
-  String channelLink;
-  ArticleChannelRefreshed({required this.channelLink});
+class ArticleChannelRefreshStarted extends ArticleEvent {
+  Channel channel;
+  ArticleChannelRefreshStarted({required this.channel});
   @override
-  List<Object?> get props => [channelLink];
+  List<Object?> get props => [channel];
+}
+
+class ArticleChannelRefreshFinished extends ArticleEvent {
+  Channel channel;
+  ArticleChannelRefreshFinished({required this.channel});
+  @override
+  List<Object?> get props => [channel];
+}
+
+class ArticleChannelRefreshed extends ArticleEvent {
+  Channel channel;
+  ArticleChannelRefreshed({required this.channel});
+  @override
+  List<Object?> get props => [channel];
 }
 
 class ArticleStarred extends ArticleEvent {

@@ -4,6 +4,7 @@ import 'package:fluent_rss/ui/widgets/channel_delegate.dart';
 import 'package:fluent_rss/ui/widgets/channel_tile.dart';
 import 'package:fluent_rss/ui/widgets/menu_item.dart';
 import 'package:fluent_rss/ui/widgets/menu_sheet.dart';
+import 'package:fluent_rss/ui/widgets/refresh_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,30 +14,33 @@ class ChannelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChannelBloc, ChannelState>(
-        builder: (BuildContext context, ChannelState state) {
-      ChannelReadyState newState = state as ChannelReadyState;
-      return Scaffold(
-          appBar:
-              AppBar(title: const Text("Fluent RSS"), actions: [MenuSheet()]),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              showSearch(
-                  context: context,
-                  delegate: ChannelSearchDelegate(newState.channels));
-            },
-            child: const Icon(Icons.search),
-          ),
-          body: newState.channels.isEmpty
-              ? const Center(
-                  child: Text('Add or import channel from top menu'),
-                )
-              : Scrollbar(
-                  child: ListView.builder(
-                      itemCount: newState.channels.length,
-                      itemBuilder: (context, index) {
-                        return ChannelTile(channel: newState.channels[index]);
-                      })));
-    });
+    return Scaffold(
+        appBar: AppBar(
+            title: const Text("Fluent RSS"),
+            actions: [RefreshButton(), MenuSheet()]),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showSearch(context: context, delegate: ChannelSearchDelegate([]));
+          },
+          child: const Icon(Icons.search),
+        ),
+        body: BlocBuilder<ChannelBloc, ChannelState>(
+          buildWhen: (previous, current) => current is ChannelReadyState,
+          builder: (context, state) {
+            if (state is ChannelReadyState) {
+              return state.channels.isEmpty
+                  ? const Center(
+                      child: Text('Add or import channel from top menu'),
+                    )
+                  : Scrollbar(
+                      child: ListView.builder(
+                          itemCount: state.channels.length,
+                          itemBuilder: (context, index) {
+                            return ChannelTile(channel: state.channels[index]);
+                          }));
+            }
+            return const Text("something went wrong");
+          },
+        ));
   }
 }

@@ -1,68 +1,21 @@
 import 'package:fluent_rss/assets/constants.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
-import 'package:flutter/foundation.dart';
-import 'package:logger/logger.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:webfeed/domain/atom_feed.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 import 'package:dio/dio.dart';
 import 'package:path/path.dart' as path;
 
-class FeedParser {
-  Future<Channel?> parseChannel(String link) async {
-    Response<dynamic> response;
-    try {
-      response = await Dio().get(link);
-    } catch (e) {
-      return null;
-    }
-    Uri uri = Uri.parse(link);
-    var iconUrl = path.join(uri.origin, FeedConstants.iconName);
-    var lastCheck = DateTime.now().millisecondsSinceEpoch;
-    try {
-      var feed = RssFeed.parse(response.data);
-      return Channel(
-          title: feed.title ?? '',
-          link: link,
-          description: feed.description ?? '',
-          type: FeedConstants.RSS,
-          version: '0',
-          iconUrl: iconUrl,
-          lastCheck: lastCheck,
-          directory: '',
-          unreadCount: 0,
-          totalCount: 0);
-    } catch (e) {
-      var feed = AtomFeed.parse(response.data);
-      return Channel(
-          title: feed.title ?? '',
-          link: link,
-          description: feed.subtitle ?? '',
-          type: FeedConstants.Atom,
-          version: '0',
-          iconUrl: iconUrl,
-          lastCheck: lastCheck,
-          directory: '',
-          unreadCount: 0,
-          totalCount: 0);
-    }
-  }
+const tenSeconds = 10000;
+var dioOptions = BaseOptions(
+    connectTimeout: tenSeconds,
+    receiveTimeout: tenSeconds,
+    sendTimeout: tenSeconds);
 
-  Future<List<Article>> parseRSS(String link) async {
+class FeedParser {
+  static List<Article> _parseRSSFeed(RssFeed feed, String link) {
     List<Article> articles = [];
-    Uri rssUri = Uri.parse(link);
-    Response<dynamic> response;
-    try {
-      response = await Dio().get(link);
-    } catch (e) {
-      return articles;
-    }
-    RssFeed feed;
-    try {
-      feed = RssFeed.parse(response.data);
-    } catch (e) {
-      return parseAtomXml(link, response.data);
-    }
     feed.items?.forEach((element) {
       var now = DateTime.now();
       var pubDate = element.pubDate ?? now;
@@ -85,7 +38,7 @@ class FeedParser {
     Uri rssUri = Uri.parse(link);
     Response<dynamic> response;
     try {
-      response = await Dio().get(link);
+      response = await Dio(dioOptions).get(link);
     } catch (e) {
       return articles;
     }
@@ -106,8 +59,52 @@ class FeedParser {
     return articles;
   }
 
-  Future<List<Article>> parseAtomXml(String link, String xml) async {
-    AtomFeed feed = AtomFeed.parse(xml);
+  static Future<Channel?> parseChannel(String link) async {
+    Response<dynamic> response;
+    try {
+      response = await Dio(dioOptions).get(link);
+    } catch (e) {
+      AppLogger.instance.d('load channel failed with http get:${e.toString()}');
+      return null;
+    }
+    Uri uri = Uri.parse(link);
+    var iconUrl = path.join(uri.origin, FeedConstants.iconName);
+    var lastCheck = DateTime.now().millisecondsSinceEpoch;
+    try {
+      var feed = RssFeed.parse(response.data);
+      return Channel(
+          title: feed.title ?? '',
+          link: link,
+          description: feed.description ?? '',
+          type: FeedConstants.RSS,
+          version: '0',
+          iconUrl: iconUrl,
+          lastCheck: lastCheck,
+          directory: '',
+          unreadCount: 0,
+          totalCount: 0);
+    } catch (e) {
+      AppLogger.instance.d('parse channel rss way:${e.toString()}');
+    }
+    try {
+      var feed = AtomFeed.parse(response.data);
+      return Channel(
+          title: feed.title ?? '',
+          link: link,
+          description: feed.subtitle ?? '',
+          type: FeedConstants.Atom,
+          version: '0',
+          iconUrl: iconUrl,
+          lastCheck: lastCheck,
+          directory: '',
+          unreadCount: 0,
+          totalCount: 0);
+    } catch (e) {
+      AppLogger.instance.d('parse channel atom way:${e.toString()}');
+    }
+  }
+
+  static List<Article> _parseAtomFeed(AtomFeed feed, String link) {
     List<Article> articles = [];
     feed.items?.forEach((element) {
       var pubDate = element.updated ?? DateTime.now();
@@ -122,6 +119,37 @@ class FeedParser {
           read: 0);
       articles.add(article);
     });
+    return articles;
+  }
+
+  static Future<List<Article>> parseArticles(String link) async {
+    List<Article> articles = [];
+    Uri rssUri = Uri.parse(link);
+    Response<dynamic> response;
+    try {
+      response = await Dio(dioOptions).get(link);
+    } catch (e) {
+      AppLogger.instance
+          .d('load channel with http get failed:${e.toString()} ');
+      return articles;
+    }
+    //try rss
+    RssFeed feed;
+    try {
+      feed = RssFeed.parse(response.data);
+      return _parseRSSFeed(feed, link);
+    } catch (e) {
+      AppLogger.instance
+          .d('parse channel articles rss way failed:${e.toString()} ');
+    }
+    AtomFeed atomFeed;
+    try {
+      atomFeed = AtomFeed.parse(response.data);
+      return _parseAtomFeed(atomFeed, link);
+    } catch (e) {
+      AppLogger.instance
+          .d('parse channel articles atom way failed:${e.toString()} ');
+    }
     return articles;
   }
 }

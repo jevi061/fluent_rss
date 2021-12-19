@@ -1,7 +1,9 @@
 import 'package:fluent_rss/business/bloc/article_bloc.dart';
+import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/bloc/favorite_bloc.dart';
 import 'package:fluent_rss/business/bloc/reading_bloc.dart';
 import 'package:fluent_rss/business/event/article_event.dart';
+import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/event/favorite_event.dart';
 import 'package:fluent_rss/business/state/reading_state.dart';
 import 'package:fluent_rss/services/app_logger.dart';
@@ -42,6 +44,7 @@ class _ReadScreenState extends State<ReadingScreen> {
                 });
               },
               onPageFinished: (url) {
+                context.read<ChannelBloc>().add(ChannelStatusChanged());
                 setState(() {
                   loadProgress = 100.0;
                 });

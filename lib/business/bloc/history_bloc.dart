@@ -28,7 +28,6 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   }
   Future<void> _onHistoryUpdated(
       HistoryUpdated event, Emitter<HistoryState> emitter) async {
-    await articleRepository.updateReadStatus(event.article.uuid, 1);
     var list = await articleRepository.queryByRead(1);
     emitter(HistoryState.ready(articles: list));
   }

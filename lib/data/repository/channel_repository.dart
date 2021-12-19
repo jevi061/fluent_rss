@@ -1,3 +1,4 @@
+import 'package:fluent_rss/assets/constants.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/providers/article_provider.dart';
@@ -29,43 +30,25 @@ class ChannelRepository {
     return data?.map((e) => Channel.fromMap(e)).toList() ?? [];
   }
 
-  Future<void> syncChannelArticles(List<Channel> channels) async {
-    var parser = FeedParser();
-    for (var channel in channels) {
-      List<Article> parsedArticles = [];
-      if (channel.type == "rss") {
-        parsedArticles = await parser.parseRSS(channel.link);
-      } else if (channel.type == "atom") {
-        parsedArticles = await parser.parseAtom(channel.link);
-      }
-      List<Map<String, dynamic>> data =
-          parsedArticles.map((e) => e.toMap()).toList();
-      await articleProvider.batchInsert(data);
-    }
-  }
-
-  Future<void> syncArticles() async {
-    List<Channel> channels = await fetchChannels();
-
-    var utc = DateTime.now().millisecondsSinceEpoch;
-    channels = channels
-        .where((element) => utc - element.lastCheck > 24 * 3600)
-        .toList();
-    var parser = FeedParser();
-    List<Article> parsedArticles = [];
-    for (Channel channel in channels) {
-      if (channel.type == "rss") {
-        parsedArticles = await parser.parseRSS(channel.link);
-      } else if (channel.type == "atom") {
-        parsedArticles = await parser.parseAtom(channel.link);
-      }
-      List<Map<String, dynamic>> data =
-          parsedArticles.map((e) => e.toMap()).toList();
-      articleProvider.batchInsert(data);
-    }
-  }
-
   Future<void> removeChannel(String link) async {
     await channelProvider.deleteByLink(link);
+  }
+
+  Future<void> refreshChannel(Channel channel) async {
+    List<Article> parsedArticles = await FeedParser.parseArticles(channel.link);
+    List<Map<String, dynamic>> data =
+        parsedArticles.map((e) => e.toMap()).toList();
+    await articleProvider.batchInsert(data);
+    await channelProvider.updateReadStatus(channel.link);
+  }
+
+  Future<void> refreshChannels(List<Channel> channels) async {
+    for (var channel in channels) {
+      await refreshChannel(channel);
+    }
+  }
+
+  Future<void> minusOneUnread(String channel) async {
+    channelProvider.minusOneUnread(channel);
   }
 }

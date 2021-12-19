@@ -14,7 +14,6 @@ class HistoryProvider {
   Future<void> batchInsert(List<Map<String, dynamic>> data) async {
     Database? db = await dbProvider.database;
     Batch? batch = db?.batch();
-    Logger().d('${data.length} article(s) to insert');
     for (var row in data) {
       batch?.insert('history', row,
           conflictAlgorithm: ConflictAlgorithm.ignore);

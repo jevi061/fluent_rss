@@ -29,19 +29,21 @@ void main() {
       articleStatusProvider: articleStatusProvider,
       channelProvider: channelProvider,
       articleProvider: articleProvider);
+  var channelRepository = ChannelRepository(
+      channelProvider: channelProvider, articleProvider: articleProvider);
   var app = MultiBlocProvider(
     providers: [
       BlocProvider<ChannelBloc>(
           lazy: false,
           create: (BuildContext context) => ChannelBloc(
-              channelRepository: ChannelRepository(
-                  channelProvider: channelProvider,
-                  articleProvider: articleProvider))
+              channelRepository: channelRepository,
+              articleRepository: articleRepository)
             ..add(ChannelStarted())),
       BlocProvider<ArticleBloc>(
           lazy: false,
-          create: (BuildContext context) =>
-              ArticleBloc(articleRepository: articleRepository)),
+          create: (BuildContext context) => ArticleBloc(
+              channelRepository: channelRepository,
+              articleRepository: articleRepository)),
       BlocProvider<TodayBloc>(
           lazy: false,
           create: (BuildContext context) =>
