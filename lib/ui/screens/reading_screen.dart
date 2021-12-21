@@ -44,7 +44,9 @@ class _ReadScreenState extends State<ReadingScreen> {
                 });
               },
               onPageFinished: (url) {
-                context.read<ChannelBloc>().add(ChannelStatusChanged());
+                if (state.article?.read == 0) {
+                  context.read<ChannelBloc>().add(ChannelStatusChanged());
+                }
                 setState(() {
                   loadProgress = 100.0;
                 });
