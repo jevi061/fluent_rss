@@ -50,9 +50,12 @@ class ChannelRepository {
 
   Stream<double> refreshChannelsWithProgress(List<Channel> channels) async* {
     int index = 0;
+    yield 0.02;
     for (var channel in channels) {
       await refreshChannel(channel);
-      yield index++ / channels.length;
+      index = index + 1;
+      var percent = index / channels.length;
+      yield percent;
     }
   }
 
