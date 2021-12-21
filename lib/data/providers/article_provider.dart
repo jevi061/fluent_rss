@@ -57,7 +57,8 @@ class ArticleProvider {
         '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
         from article as a inner join articleStatus as s 
         on a.uuid = s.articleId
-        where a.channel = ?''', [link]);
+        where a.channel = ? 
+        order by a.published desc''', [link]);
   }
 
   Future<List<Map<String, dynamic>>?> queryTimeAfter(int timestamp) async {
@@ -66,7 +67,8 @@ class ArticleProvider {
         '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
         from article as a inner join articleStatus as s 
         on a.uuid = s.articleId
-        where a.published > ?''', [timestamp]);
+        where a.published > ?
+        order by a.published desc''', [timestamp]);
   }
 
   Future<List<Map<String, dynamic>>?> queryByRead(int read) async {
@@ -75,7 +77,8 @@ class ArticleProvider {
         '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
         from article as a inner join articleStatus as s 
         on a.uuid = s.articleId
-        where s.read = ?''', [read]);
+        where s.read = ?
+        order by a.published desc''', [read]);
   }
 
   Future<List<Map<String, dynamic>>?> queryByStar(int starred) async {
@@ -84,6 +87,7 @@ class ArticleProvider {
         '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
         from article as a inner join articleStatus as s 
         on a.uuid = s.articleId
-        where s.starred = ?''', [starred]);
+        where s.starred = ?
+        order by a.published desc''', [starred]);
   }
 }
