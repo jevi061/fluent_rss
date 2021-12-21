@@ -24,7 +24,7 @@ class ChannelScreen extends StatelessWidget {
           },
           child: const Icon(Icons.search),
         ),
-        body: BlocBuilder<ChannelBloc, ChannelState>(
+        body: BlocConsumer<ChannelBloc, ChannelState>(
           buildWhen: (previous, current) => current is ChannelReadyState,
           builder: (context, state) {
             if (state is ChannelReadyState) {
@@ -40,6 +40,12 @@ class ChannelScreen extends StatelessWidget {
                           }));
             }
             return const Text("something went wrong");
+          },
+          listener: (context, state) {
+            if (state is ChannelsExportedState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('export opml finished!')));
+            }
           },
         ));
   }

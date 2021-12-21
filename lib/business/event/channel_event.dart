@@ -77,3 +77,16 @@ class ChannelImported extends ChannelEvent {
   @override
   List<Object?> get props => [channels];
 }
+
+class ChannelsExportStarted extends ChannelEvent {
+  String path;
+  ChannelsExportStarted(this.path);
+  @override
+  List<Object?> get props => [path];
+}
+
+class ChannelsExportFinished extends ChannelEvent {
+  ChannelsExportFinished();
+  @override
+  List<Object?> get props => [];
+}

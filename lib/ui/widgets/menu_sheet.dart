@@ -60,9 +60,19 @@ class MenuSheet extends StatelessWidget {
                         },
                       ),
                       MenuItem(
-                          iconData: Icons.exit_to_app,
-                          title: "Export",
-                          subtitle: "export feeds to OPML"),
+                        iconData: Icons.exit_to_app,
+                        title: "Export",
+                        subtitle: "export feeds to OPML",
+                        onTap: () async {
+                          String? selectedDirectory =
+                              await FilePicker.platform.getDirectoryPath();
+                          if (selectedDirectory != null) {
+                            channelBloc
+                                .add(ChannelsExportStarted(selectedDirectory));
+                            Navigator.pop(context);
+                          }
+                        },
+                      ),
                     ],
                   ),
                 );

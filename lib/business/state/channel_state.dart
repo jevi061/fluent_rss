@@ -23,3 +23,8 @@ class ChannelRefreshingState extends ChannelState {
   @override
   List<Object?> get props => [progress];
 }
+
+class ChannelsExportedState extends ChannelState {
+  @override
+  List<Object?> get props => [];
+}

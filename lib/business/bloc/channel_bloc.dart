@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
@@ -7,6 +8,7 @@ import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/repository/article_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
 import 'package:fluent_rss/services/app_logger.dart';
+import 'package:fluent_rss/services/opml_builder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
@@ -25,6 +27,8 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     on<ChannelAdded>(_onChannelAdded);
     on<ChannelImported>(_onChannelImported);
     on<ChannelStatusChanged>(_onChannelStatusChanged);
+    on<ChannelsExportStarted>(_onChannelsExportStarted);
+    on<ChannelsExportFinished>(_onChannelsExportFinished);
   }
 
   Future<void> _onChannelStarted(
@@ -97,5 +101,20 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
     add(PartialChannelRefreshStarted(event.channels));
+  }
+
+  void _onChannelsExportStarted(
+      ChannelsExportStarted event, Emitter<ChannelState> emitter) async {
+    List<Channel> channels = await channelRepository.fetchChannels();
+    var opml = await OPMLBuilder.buildOPML(channels);
+    var file = File(event.path + "/fluent_rss.opml");
+    file.writeAsString(opml, flush: true);
+    AppLogger.instance.d("export opml to:${file.absolute}");
+    add(ChannelsExportFinished());
+  }
+
+  void _onChannelsExportFinished(
+      ChannelsExportFinished event, Emitter<ChannelState> emitter) async {
+    emitter(ChannelsExportedState());
   }
 }
