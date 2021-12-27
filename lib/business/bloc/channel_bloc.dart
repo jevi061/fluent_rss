@@ -116,11 +116,11 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       "opml",
     );
     AppLogger.instance.d("export opml to:$path");
-    add(ChannelsExportFinished());
+    add(ChannelsExportFinished(path));
   }
 
   void _onChannelsExportFinished(
       ChannelsExportFinished event, Emitter<ChannelState> emitter) async {
-    emitter(ChannelsExportedState());
+    emitter(ChannelsExportedState(event.path));
   }
 }

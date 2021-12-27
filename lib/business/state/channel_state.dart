@@ -25,6 +25,8 @@ class ChannelRefreshingState extends ChannelState {
 }
 
 class ChannelsExportedState extends ChannelState {
+  String path;
+  ChannelsExportedState(this.path);
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [path];
 }

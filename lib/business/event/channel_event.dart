@@ -85,7 +85,8 @@ class ChannelsExportStarted extends ChannelEvent {
 }
 
 class ChannelsExportFinished extends ChannelEvent {
-  ChannelsExportFinished();
+  String path;
+  ChannelsExportFinished(this.path);
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [path];
 }

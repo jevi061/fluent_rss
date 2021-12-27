@@ -2,12 +2,14 @@ import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
 import 'package:fluent_rss/ui/widgets/channel_delegate.dart';
 import 'package:fluent_rss/ui/widgets/channel_tile.dart';
+import 'package:fluent_rss/ui/widgets/export_snacker.dart';
 import 'package:fluent_rss/ui/widgets/menu_item.dart';
 import 'package:fluent_rss/ui/widgets/menu_sheet.dart';
 import 'package:fluent_rss/ui/widgets/refresh_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ChannelScreen extends StatelessWidget {
   ChannelScreen({Key? key}) : super(key: key);
@@ -43,8 +45,17 @@ class ChannelScreen extends StatelessWidget {
           },
           listener: (context, state) {
             if (state is ChannelsExportedState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('export opml finished!')));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("OPML file"),
+                action: SnackBarAction(
+                  label: "share",
+                  onPressed: () async {
+                    await Share.shareFiles(
+                      [state.path + "/fluent_rss.opml"],
+                    );
+                  },
+                ),
+              ));
             }
           },
         ));
