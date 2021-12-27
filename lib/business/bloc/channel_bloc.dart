@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
@@ -10,6 +12,7 @@ import 'package:fluent_rss/data/repository/channel_repository.dart';
 import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/services/opml_builder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:file_saver/file_saver.dart';
 
 class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
   ChannelRepository channelRepository;
@@ -107,9 +110,12 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       ChannelsExportStarted event, Emitter<ChannelState> emitter) async {
     List<Channel> channels = await channelRepository.fetchChannels();
     var opml = await OPMLBuilder.buildOPML(channels);
-    var file = File(event.path + "/fluent_rss.opml");
-    file.writeAsString(opml, flush: true);
-    AppLogger.instance.d("export opml to:${file.absolute}");
+    var path = await FileSaver.instance.saveFile(
+      "fluent_rss",
+      utf8.encode(opml) as Uint8List,
+      "opml",
+    );
+    AppLogger.instance.d("export opml to:$path");
     add(ChannelsExportFinished());
   }
 

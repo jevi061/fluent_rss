@@ -1,14 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:fluent_rss/assets/constants.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:opmlparser/opmlparser.dart';
 import 'package:path/path.dart' as path;
 
 class OPMLParser {
   Future<List<Channel>> parseURL(String path) async {
-    String content = await File(path).readAsString();
-    return parse(content);
+    var content = await File(path).readAsBytes();
+    return parse(utf8.decode(content));
   }
 
   List<Channel> parse(String xml) {

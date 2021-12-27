@@ -8,6 +8,10 @@ import 'package:fluent_rss/ui/widgets/menu_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:io' show Platform;
 
 class MenuSheet extends StatelessWidget {
   @override
@@ -64,11 +68,13 @@ class MenuSheet extends StatelessWidget {
                         title: "Export",
                         subtitle: "export feeds to OPML",
                         onTap: () async {
-                          String? selectedDirectory =
-                              await FilePicker.platform.getDirectoryPath();
-                          if (selectedDirectory != null) {
-                            channelBloc
-                                .add(ChannelsExportStarted(selectedDirectory));
+                          if (Platform.isIOS || Platform.isAndroid) {
+                            bool status = await Permission.storage.isGranted;
+                            if (!status) await Permission.storage.request();
+                          }
+                          bool status = await Permission.storage.isGranted;
+                          if (status) {
+                            channelBloc.add(ChannelsExportStarted());
                             Navigator.pop(context);
                           }
                         },
