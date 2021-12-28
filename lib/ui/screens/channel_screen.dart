@@ -50,9 +50,8 @@ class ChannelScreen extends StatelessWidget {
                 action: SnackBarAction(
                   label: "share",
                   onPressed: () async {
-                    await Share.shareFiles(
-                      [state.path + "/fluent_rss.opml"],
-                    );
+                    await Share.shareFiles([state.path + "/fluent_rss.opml"],
+                        text: "OPML file", mimeTypes: ["text/plain"]);
                   },
                 ),
               ));
