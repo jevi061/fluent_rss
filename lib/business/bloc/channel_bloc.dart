@@ -121,6 +121,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
 
   void _onChannelsExportFinished(
       ChannelsExportFinished event, Emitter<ChannelState> emitter) async {
-    emitter(ChannelsExportedState(event.path));
+    emitter(
+        ChannelsExportedState(path: event.path, exportedAt: DateTime.now()));
   }
 }
