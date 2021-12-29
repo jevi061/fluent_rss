@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class GlobalTheme {
   static ThemeData get light {
     return ThemeData.light().copyWith(
-        iconTheme: IconThemeData(color: Colors.purpleAccent),
-        colorScheme: ColorScheme.light().copyWith(primary: Colors.purple));
+        iconTheme: IconThemeData(color: Color(0xff7540ee)),
+        colorScheme: ColorScheme.light().copyWith(primary: Color(0xff7540ee)));
   }
 }
