@@ -1,13 +1,13 @@
 import 'package:fluent_rss/theme/global_theme.dart';
 import 'package:fluent_rss/ui/screens/history_screen.dart';
 import 'package:fluent_rss/ui/screens/reading_screen.dart';
-import 'package:fluent_rss/ui/screens/today_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'article_screen.dart';
 import 'channel_screen.dart';
 import 'favorite_screen.dart';
+import 'feed_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -31,8 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   return ArticleScreen();
                 case '/reading':
                   return ReadingScreen();
-                case '/today':
-                  return TodayScreen();
+                case '/feed':
+                  return FeedScreen();
                 case '/history':
                   return HistoryScreen();
                 case '/favorites':
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
           body: IndexedStack(
             children: [
               ChannelScreen(),
-              TodayScreen(),
+              FeedScreen(),
               FavoriteScreen(),
               HistoryScreen()
             ],
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
             type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.feed), label: "channel"),
-              BottomNavigationBarItem(icon: Icon(Icons.today), label: "today"),
+              BottomNavigationBarItem(icon: Icon(Icons.today), label: "feeds"),
               BottomNavigationBarItem(
                   icon: Icon(Icons.bookmark), label: "favorites"),
               BottomNavigationBarItem(
