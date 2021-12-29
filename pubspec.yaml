@@ -76,7 +76,7 @@ flutter_app_name:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon/icon.png"
+  image_path: assets/logo/logo.png
 flutter_native_splash:
   background_image: assets/splash/splash.png
 # For information on the generic Dart part of this file, see the
