@@ -23,65 +23,68 @@ class MenuSheet extends StatelessWidget {
               context: context,
               builder: (context) {
                 return BlocProvider.value(
-                  value: channelBloc,
-                  child: ListView(
-                    children: [
-                      Text(
-                        "Fluent RSS",
-                        style: Theme.of(context).textTheme.headline3,
-                        textAlign: TextAlign.center,
+                    value: channelBloc,
+                    child: Theme(
+                      child: ListView(
+                        children: [
+                          Text(
+                            "Fluent RSS",
+                            style: Theme.of(context).textTheme.headline3,
+                            textAlign: TextAlign.center,
+                          ),
+                          MenuItem(
+                            iconData: Icons.add,
+                            title: "Add",
+                            subtitle: "add a rss or an atom feed",
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddChannelScreen()),
+                              );
+                            },
+                          ),
+                          MenuItem(
+                            iconData: Icons.import_contacts,
+                            title: "Import",
+                            subtitle: "import feeds from OPML",
+                            onTap: () async {
+                              Navigator.pop(context);
+                              // get file
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles(
+                                      type: FileType.any, allowMultiple: false);
+                              if (result?.files.isEmpty ?? true) {
+                                return;
+                              }
+                              var path = result?.files.first.path;
+                              var parser = OPMLParser();
+                              List<Channel> parsedChannels =
+                                  await parser.parseURL(path!);
+                              channelBloc.add(ChannelImported(parsedChannels));
+                            },
+                          ),
+                          MenuItem(
+                            iconData: Icons.exit_to_app,
+                            title: "Export",
+                            subtitle: "export feeds to OPML",
+                            onTap: () async {
+                              if (Platform.isIOS || Platform.isAndroid) {
+                                bool status =
+                                    await Permission.storage.isGranted;
+                                if (!status) await Permission.storage.request();
+                              }
+                              bool status = await Permission.storage.isGranted;
+                              if (status) {
+                                channelBloc.add(ChannelsExportStarted());
+                                Navigator.pop(context);
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                      MenuItem(
-                        iconData: Icons.add,
-                        title: "Add",
-                        subtitle: "add a rss or an atom feed",
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddChannelScreen()),
-                          );
-                        },
-                      ),
-                      MenuItem(
-                        iconData: Icons.import_contacts,
-                        title: "Import",
-                        subtitle: "import feeds from OPML",
-                        onTap: () async {
-                          Navigator.pop(context);
-                          // get file
-                          FilePickerResult? result = await FilePicker.platform
-                              .pickFiles(
-                                  type: FileType.any, allowMultiple: false);
-                          if (result?.files.isEmpty ?? true) {
-                            return;
-                          }
-                          var path = result?.files.first.path;
-                          var parser = OPMLParser();
-                          List<Channel> parsedChannels =
-                              await parser.parseURL(path!);
-                          channelBloc.add(ChannelImported(parsedChannels));
-                        },
-                      ),
-                      MenuItem(
-                        iconData: Icons.exit_to_app,
-                        title: "Export",
-                        subtitle: "export feeds to OPML",
-                        onTap: () async {
-                          if (Platform.isIOS || Platform.isAndroid) {
-                            bool status = await Permission.storage.isGranted;
-                            if (!status) await Permission.storage.request();
-                          }
-                          bool status = await Permission.storage.isGranted;
-                          if (status) {
-                            channelBloc.add(ChannelsExportStarted());
-                            Navigator.pop(context);
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                );
+                      data: Theme.of(context),
+                    ));
               });
         },
         icon: const Icon(Icons.more_vert));
