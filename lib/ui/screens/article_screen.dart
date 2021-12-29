@@ -22,15 +22,18 @@ class ArticleScreen extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(title: Text(channel.title)),
         body: RefreshIndicator(
-          child: ListView.builder(
-              itemCount: state.articles.length,
-              itemBuilder: (context, index) => ArticleTile(
-                    article: state.articles[index],
-                  )),
+          child: Scrollbar(
+            controller: ScrollController(),
+            child: ListView.builder(
+                itemCount: state.articles.length,
+                itemBuilder: (context, index) => ArticleTile(
+                      article: state.articles[index],
+                    )),
+          ),
           onRefresh: () async {
-            var bloc = context.read<ArticleBloc>()
-              ..add(ArticleChannelRefreshed(channel: channel));
-            var newState = await bloc.stream.first;
+            context
+                .read<ArticleBloc>()
+                .add(ArticleChannelRefreshed(channel: channel));
           },
         ),
       );

@@ -35,6 +35,7 @@ class ChannelScreen extends StatelessWidget {
                       child: Text('Add or import channel from top menu'),
                     )
                   : Scrollbar(
+                      controller: ScrollController(),
                       child: ListView.builder(
                           itemCount: state.channels.length,
                           itemBuilder: (context, index) {
