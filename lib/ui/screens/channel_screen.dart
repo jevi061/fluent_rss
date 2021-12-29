@@ -51,7 +51,7 @@ class ChannelScreen extends StatelessWidget {
                   label: "share",
                   onPressed: () async {
                     await Share.shareFiles([state.path + "/fluent_rss.opml"],
-                        text: "OPML file", mimeTypes: ["text/plain"]);
+                        mimeTypes: ["application/xml"]);
                   },
                 ),
               ));
