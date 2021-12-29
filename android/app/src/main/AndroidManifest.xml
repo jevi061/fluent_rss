@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.fluent_rss">
    <application
-        android:label="fluent_rss"
+        android:label="Fluent RSS"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true">
         <activity
