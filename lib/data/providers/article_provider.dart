@@ -1,4 +1,5 @@
 import 'package:fluent_rss/assets/constants.dart';
+import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/domains/article_status.dart';
 import 'package:fluent_rss/data/providers/database_provider.dart';
 import 'package:fluent_rss/services/app_logger.dart';
@@ -8,67 +9,57 @@ import 'package:sqflite/sqflite.dart';
 
 class ArticleProvider {
   final DatabaseProvider dbProvider = DatabaseProvider.dbProvider;
+  static const articleColums = [
+    'uuid',
+    'channel',
+    'link',
+    'title',
+    'published',
+    'subtitle'
+  ];
 
-  Future<void> insert(Map<String, dynamic> data) async {
+  Future<void> insert(Article article) async {
     Database? db = await dbProvider.database;
-    int read = data['read'];
-    int starred = data['starred'];
-    data.remove('read');
-    data.remove('starred');
-    Batch? batch = db?.batch();
-    batch?.insert(TableNameConstants.article, data,
+    await db?.insert(TableNameConstants.article, article.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore);
-    var status =
-        ArticleStatus(articleId: data['uuid'], read: read, starred: starred);
-    batch?.insert(TableNameConstants.articleStatus, status.toMap());
-    await batch?.commit();
   }
 
-  Future<void> batchInsert(List<Map<String, dynamic>> data) async {
+  Future<void> batchInsert(List<Article> articles) async {
     Database? db = await dbProvider.database;
     Batch? batch = db?.batch();
-    for (var row in data) {
-      int read = row['read'];
-      int starred = row['starred'];
-      row.remove('read');
-      row.remove('starred');
-      batch?.insert(TableNameConstants.article, row,
-          conflictAlgorithm: ConflictAlgorithm.ignore);
-      var status =
-          ArticleStatus(articleId: row['uuid'], read: read, starred: starred);
-      batch?.insert(TableNameConstants.articleStatus, status.toMap(),
+    for (var article in articles) {
+      batch?.insert(TableNameConstants.article, article.toMap(),
           conflictAlgorithm: ConflictAlgorithm.ignore);
     }
     await batch?.commit();
   }
 
-  Future<List<Map<String, dynamic>>?> queryAll() async {
+  Future<List<Article>> queryAll() async {
     Database? db = await dbProvider.database;
-    return await db?.rawQuery(
-        '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
-        from article as a inner join articleStatus as s 
-        on a.uuid = s.articleId''');
+    // query article core data
+    var list =
+        await db?.query(TableNameConstants.article, columns: articleColums);
+    return list?.map((e) => Article.fromMap(e)).toList() ?? [];
   }
 
-  Future<List<Map<String, dynamic>>?> queryByChannelLink(String link) async {
+  Future<List<Article>> queryByChannelLink(String link) async {
     Database? db = await dbProvider.database;
-    Logger().d('query articles from:$link');
-    return await db?.rawQuery(
-        '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
-        from article as a inner join articleStatus as s 
-        on a.uuid = s.articleId
-        where a.channel = ? 
-        order by a.published desc''', [link]);
+    var list = await db?.query(TableNameConstants.article,
+        columns: articleColums, where: "channel = ?", whereArgs: [link]);
+    if (list == null) {
+      return [];
+    }
+    return list.map((e) => Article.fromMap(e)).toList();
   }
 
-  Future<List<Map<String, dynamic>>?> queryTimeAfter(int timestamp) async {
+  Future<List<Article>> queryTimeAfter(int timestamp) async {
     Database? db = await dbProvider.database;
-    return await db?.rawQuery(
-        '''select a.uuid,a.title,a.subtitle,a.link,a.channel,a.published,s.read,s.starred 
-        from article as a inner join articleStatus as s 
-        on a.uuid = s.articleId
-        where a.published > ?
-        order by a.published desc''', [timestamp]);
+    var list = await db?.query(TableNameConstants.article,
+        columns: articleColums, where: "published > ?", whereArgs: [timestamp]);
+    if (list == null) {
+      return [];
+    }
+    return list.map((e) => Article.fromMap(e)).toList();
   }
 
   Future<List<Map<String, dynamic>>?> queryByRead(int read) async {

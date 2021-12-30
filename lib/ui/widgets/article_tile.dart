@@ -1,20 +1,14 @@
 import 'package:fluent_rss/business/bloc/article_bloc.dart';
-import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/bloc/favorite_bloc.dart';
 import 'package:fluent_rss/business/bloc/feed_bloc.dart';
 import 'package:fluent_rss/business/bloc/history_bloc.dart';
 import 'package:fluent_rss/business/bloc/reading_bloc.dart';
-import 'package:fluent_rss/business/event/app_event.dart';
 import 'package:fluent_rss/business/event/article_event.dart';
-import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/event/favorite_event.dart';
 import 'package:fluent_rss/business/event/feed_event.dart';
 import 'package:fluent_rss/business/event/history_event.dart';
 import 'package:fluent_rss/business/event/reading_event.dart';
-import 'package:fluent_rss/business/state/article_state.dart';
 import 'package:fluent_rss/data/domains/article.dart';
-import 'package:fluent_rss/data/domains/channel.dart';
-import 'package:fluent_rss/services/app_logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,15 +57,15 @@ class ArticleTile extends StatelessWidget {
                     ],
                   )),
                   IconButton(
-                    icon: article.starred == 0
+                    icon: article.status?.starred == 0
                         ? const Icon(
                             Icons.star_outline,
                           )
                         : const Icon(Icons.star),
                     onPressed: () {
-                      article.starred == 0
-                          ? article.starred = 1
-                          : article.starred = 0;
+                      article.status?.starred == 0
+                          ? article.status?.starred = 1
+                          : article.status?.starred = 0;
                       context.read<ArticleBloc>().add(ArticleStarred(article));
                       context
                           .read<FavoriteBloc>()
@@ -85,7 +79,7 @@ class ArticleTile extends StatelessWidget {
                 ],
               ),
             ),
-            if (article.read == 0) ...[
+            if (article.status?.read == 0) ...[
               const Positioned(
                   left: 10,
                   top: 16,

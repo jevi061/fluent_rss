@@ -7,6 +7,7 @@ import 'package:fluent_rss/business/event/app_event.dart';
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/event/feed_event.dart';
 import 'package:fluent_rss/data/providers/article_status_provider.dart';
+import 'package:fluent_rss/data/providers/category_provider.dart';
 import 'package:fluent_rss/data/providers/channel_provider.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
 import 'package:fluent_rss/ui/screens/home_screen.dart';
@@ -19,10 +20,13 @@ import 'business/bloc/reading_bloc.dart';
 import 'business/event/favorite_event.dart';
 import 'business/event/history_event.dart';
 import 'data/providers/article_provider.dart';
+import 'data/providers/channel_status_provider.dart';
 import 'data/repository/article_repository.dart';
 
 void main() {
+  var categoryProvider = CategoryProvider();
   var channelProvider = ChannelProvider();
+  var channelStatusProvider = ChannelStatusProvider();
   var articleProvider = ArticleProvider();
   var articleStatusProvider = ArticleStatusProvider();
   var articleRepository = ArticleRepository(
@@ -30,7 +34,10 @@ void main() {
       channelProvider: channelProvider,
       articleProvider: articleProvider);
   var channelRepository = ChannelRepository(
-      channelProvider: channelProvider, articleProvider: articleProvider);
+      cagetoryProvider: categoryProvider,
+      channelProvider: channelProvider,
+      channelStatusProvider: channelStatusProvider,
+      articleProvider: articleProvider);
   var app = MultiBlocProvider(
     providers: [
       BlocProvider<ChannelBloc>(

@@ -20,14 +20,13 @@ class FeedParser {
       var now = DateTime.now();
       var pubDate = element.pubDate ?? now;
       var article = Article(
-          channel: link,
-          link: element.link ?? "",
-          uuid: element.guid ?? "",
-          title: element.title ?? "",
-          subtitle: element.description ?? "",
-          published: pubDate.millisecondsSinceEpoch,
-          starred: 0,
-          read: 0);
+        channel: link,
+        link: element.link ?? "",
+        uuid: element.guid ?? "",
+        title: element.title ?? "",
+        subtitle: element.description ?? "",
+        published: pubDate.millisecondsSinceEpoch,
+      );
       articles.add(article);
     });
     return articles;
@@ -46,14 +45,13 @@ class FeedParser {
     feed.items?.forEach((element) {
       var pubDate = element.updated ?? DateTime.now();
       var article = Article(
-          channel: link,
-          link: element.links?.first.href ?? "",
-          uuid: element.id ?? "",
-          title: element.title ?? "",
-          subtitle: element.summary ?? "",
-          published: pubDate.millisecondsSinceEpoch,
-          starred: 0,
-          read: 0);
+        channel: link,
+        link: element.links?.first.href ?? "",
+        uuid: element.id ?? "",
+        title: element.title ?? "",
+        subtitle: element.summary ?? "",
+        published: pubDate.millisecondsSinceEpoch,
+      );
       articles.add(article);
     });
     return articles;
@@ -79,10 +77,7 @@ class FeedParser {
           type: FeedConstants.RSS,
           version: '0',
           iconUrl: iconUrl,
-          lastCheck: lastCheck,
-          directory: '',
-          unreadCount: 0,
-          totalCount: 0);
+          categoryId: 1);
     } catch (e) {
       AppLogger.instance.d('parse channel rss way:${e.toString()}');
     }
@@ -95,10 +90,7 @@ class FeedParser {
           type: FeedConstants.Atom,
           version: '0',
           iconUrl: iconUrl,
-          lastCheck: lastCheck,
-          directory: '',
-          unreadCount: 0,
-          totalCount: 0);
+          categoryId: 1);
     } catch (e) {
       AppLogger.instance.d('parse channel atom way:${e.toString()}');
     }
@@ -109,14 +101,13 @@ class FeedParser {
     feed.items?.forEach((element) {
       var pubDate = element.updated ?? DateTime.now();
       var article = Article(
-          channel: link,
-          link: element.links?.first.href ?? "",
-          uuid: element.id ?? "",
-          title: element.title ?? "",
-          subtitle: element.summary ?? "",
-          published: pubDate.millisecondsSinceEpoch,
-          starred: 0,
-          read: 0);
+        channel: link,
+        link: element.links?.first.href ?? "",
+        uuid: element.id ?? "",
+        title: element.title ?? "",
+        subtitle: element.summary ?? "",
+        published: pubDate.millisecondsSinceEpoch,
+      );
       articles.add(article);
     });
     return articles;

@@ -44,7 +44,7 @@ class _ReadScreenState extends State<ReadingScreen> {
                 });
               },
               onPageFinished: (url) {
-                if (state.article?.read == 0) {
+                if (state.article?.status?.read == 0) {
                   context.read<ChannelBloc>().add(ChannelStatusChanged());
                 }
                 setState(() {
@@ -83,9 +83,9 @@ class _ReadScreenState extends State<ReadingScreen> {
                   icon: Icon(Icons.refresh)),
               IconButton(
                   onPressed: () {
-                    state.article?.starred == 0
-                        ? state.article?.starred = 1
-                        : state.article?.starred = 0;
+                    state.article?.status?.starred == 0
+                        ? state.article?.status?.starred = 1
+                        : state.article?.status?.starred = 0;
                     context
                         .read<ArticleBloc>()
                         .add(ArticleStarred(state.article!));
@@ -94,7 +94,7 @@ class _ReadScreenState extends State<ReadingScreen> {
                         .add(FavoriteUpdated(article: state.article!));
                     setState(() {});
                   },
-                  icon: state.article?.starred == 0
+                  icon: state.article?.status?.starred == 0
                       ? Icon(Icons.star_border)
                       : Icon(Icons.star)),
               IconButton(

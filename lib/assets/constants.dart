@@ -10,6 +10,7 @@ class DatabaseConstants {
 }
 
 class TableNameConstants {
+  static const String category = "category";
   static const String article = "article";
   static const String articleStatus = "articleStatus";
   static const String channel = "channel";
@@ -17,6 +18,10 @@ class TableNameConstants {
 }
 
 class TableDefinitionConstants {
+  static const String categoryTable = """ create table if not exists category(
+            id integer primary key,
+            name text
+            ) """;
   static const String channelTable = """create table if not exists channel(
             link text primary key,
             title text,
@@ -24,12 +29,14 @@ class TableDefinitionConstants {
             type text,
             version text,
             iconUrl text,
-            lastCheck integer,
-            directory text
+            channelStatusId integer,
+            categoryId integer,
+            foreign key (categoryId) references category (id) 
+          ON DELETE CASCADE
           ) """;
   static const String channelStatusTable =
       """ create table if not exists channelStatus(
-          channelLink text primary key,
+          channelLink text prikary key,
           lastCheck integer,
           unreadCount integer,
           totalCount integer,

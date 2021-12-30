@@ -31,9 +31,10 @@ class ArticleScreen extends StatelessWidget {
                     )),
           ),
           onRefresh: () async {
-            context
-                .read<ArticleBloc>()
-                .add(ArticleChannelRefreshed(channel: channel));
+            final channelBloc = BlocProvider.of<ChannelBloc>(context)
+              ..add(PartialChannelRefreshStarted([channel]));
+            await channelBloc.stream.firstWhere(
+                (element) => element is PartialChannelRefreshedState);
           },
         ),
       );

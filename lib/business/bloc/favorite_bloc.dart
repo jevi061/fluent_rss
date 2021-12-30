@@ -14,8 +14,8 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   }
   Future<void> _onFavoriteUpdated(
       FavoriteUpdated event, Emitter<FavoriteState> emitter) async {
-    await articleRepository.updateStarStatus(
-        event.article.uuid, event.article.starred);
+    await articleRepository.updateArticleStarStatus(
+        event.article.uuid, event.article.status?.starred ?? 0);
     var list = await articleRepository.queryByStar(1);
     emitter(FavoriteState.ready(articles: list));
   }

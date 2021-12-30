@@ -17,6 +17,12 @@ class ChannelRefreshedState extends ChannelState {
   List<Object?> get props => [channel];
 }
 
+class PartialChannelRefreshedState extends ChannelState {
+  PartialChannelRefreshedState();
+  @override
+  List<Object?> get props => [];
+}
+
 class ChannelRefreshingState extends ChannelState {
   final double progress;
   ChannelRefreshingState({required this.progress});

@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
-import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/repository/article_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
@@ -24,6 +22,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     on<ChannelUpdated>(_onChannelUpdated);
     on<ChannelOpened>(_onChannelOpened);
     on<PartialChannelRefreshStarted>(_onPartialChannelRefreshStarted);
+    on<PartialChannelRefreshFinished>(_onPartialChannelRefreshFished);
     on<ChannelRefreshStarted>(_onChannelRefreshStarted);
     on<ChannelRefreshFinished>(_onChannelRefreshFinished);
     on<ChannelDeleted>(_onChannelDeleted);
@@ -62,7 +61,14 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       AppLogger.instance.d("partial refresh progress is :$percent");
       return ChannelRefreshingState(progress: percent);
     });
-    add(ChannelRefreshFinished());
+    add(PartialChannelRefreshFinished());
+  }
+
+  Future<void> _onPartialChannelRefreshFished(
+      PartialChannelRefreshFinished event,
+      Emitter<ChannelState> emitter) async {
+    emitter(PartialChannelRefreshedState());
+    AppLogger.instance.d("particle channel refresh finished-----");
   }
 
   Future<void> _onChannelRefreshStarted(
@@ -85,7 +91,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
 
   void _onChannelDeleted(
       ChannelDeleted event, Emitter<ChannelState> emitter) async {
-    await channelRepository.removeChannel(event.channel.link);
+    await channelRepository.deleteChannelByLink(event.channel.link);
     List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
   }

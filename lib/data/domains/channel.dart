@@ -1,3 +1,6 @@
+import 'package:fluent_rss/data/domains/category.dart';
+import 'package:fluent_rss/data/domains/channel_status.dart';
+
 class Channel {
   // channel link as primary key to avoid duplicate insert operation.
   String link;
@@ -6,21 +9,18 @@ class Channel {
   String type;
   String version;
   String iconUrl;
-  String directory;
-  int lastCheck;
-  int unreadCount;
-  int totalCount;
-  Channel(
-      {required this.title,
-      required this.link,
-      required this.description,
-      required this.type,
-      required this.version,
-      required this.iconUrl,
-      required this.lastCheck,
-      required this.directory,
-      required this.unreadCount,
-      required this.totalCount});
+  int categoryId;
+  ChannelStatus? status;
+  Channel({
+    required this.title,
+    required this.link,
+    required this.description,
+    required this.type,
+    required this.version,
+    required this.iconUrl,
+    required this.categoryId,
+    this.status,
+  });
   Map<String, dynamic> toMap() {
     return {
       'link': link,
@@ -29,10 +29,7 @@ class Channel {
       'type': type,
       'version': version,
       'iconUrl': iconUrl,
-      'lastCheck': lastCheck,
-      'directory': directory,
-      'unreadCount': unreadCount,
-      'totalCount': totalCount
+      'categoryId': categoryId,
     };
   }
 
@@ -42,9 +39,6 @@ class Channel {
         description = data['description'] ?? "",
         type = data['type'] ?? "",
         version = data['version'] ?? "",
-        iconUrl = data['iconUrl'] ?? "",
-        lastCheck = data['lastCheck'] ?? 0,
-        directory = data['directory'],
-        unreadCount = data['unreadCount'] ?? 0,
-        totalCount = data['totalCount'] ?? 0;
+        categoryId = data["categoryId"],
+        iconUrl = data['iconUrl'] ?? "";
 }

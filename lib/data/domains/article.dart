@@ -8,17 +8,15 @@ class Article {
   String title;
   int published;
   String subtitle;
-  int read;
-  int starred;
-  Article(
-      {required this.uuid,
-      required this.channel,
-      required this.title,
-      required this.link,
-      required this.published,
-      required this.subtitle,
-      required this.read,
-      required this.starred});
+  ArticleStatus? status;
+  Article({
+    required this.uuid,
+    required this.channel,
+    required this.title,
+    required this.link,
+    required this.published,
+    required this.subtitle,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -28,8 +26,6 @@ class Article {
       'title': title,
       'subtitle': subtitle,
       'published': published,
-      'starred': starred,
-      'read': read
     };
   }
 
@@ -39,7 +35,5 @@ class Article {
         title = data['title'],
         link = data['link'],
         subtitle = data['subtitle'],
-        published = data['published'],
-        starred = data['starred'],
-        read = data['read'];
+        published = data['published'];
 }
