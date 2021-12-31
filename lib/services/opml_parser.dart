@@ -24,18 +24,17 @@ class OPMLParser {
           type: e.type ?? "",
           version: e.version ?? "",
           iconUrl: path.join(e.htmlUrl ?? '', FeedConstants.iconName),
-          categoryId: 1,
         ));
       } else {
         e.nesteditems?.forEach((nested) {
           channels.add(Channel(
-              title: nested.title ?? "",
-              link: nested.xmlUrl ?? "",
-              description: nested.description ?? "",
-              type: nested.type ?? "",
-              version: nested.version ?? "",
-              iconUrl: path.join(nested.htmlUrl ?? '', FeedConstants.iconName),
-              categoryId: 1));
+            title: nested.title ?? "",
+            link: nested.xmlUrl ?? "",
+            description: nested.description ?? "",
+            type: nested.type ?? "",
+            version: nested.version ?? "",
+            iconUrl: path.join(nested.htmlUrl ?? '', FeedConstants.iconName),
+          ));
         });
       }
     });

@@ -1,4 +1,6 @@
+import 'package:collection/collection.dart';
 import 'package:fluent_rss/data/domains/article.dart';
+import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/providers/article_provider.dart';
 import 'package:fluent_rss/data/providers/category_provider.dart';
@@ -10,12 +12,10 @@ import 'package:fluent_rss/services/feed_parser.dart';
 class ChannelRepository {
   ChannelProvider channelProvider;
   ChannelStatusProvider channelStatusProvider;
-  CategoryProvider cagetoryProvider;
   ArticleProvider articleProvider;
   ChannelRepository(
       {required this.channelProvider,
       required this.articleProvider,
-      required this.cagetoryProvider,
       required this.channelStatusProvider});
 
   Future<void> addChannel(Channel channel) async {

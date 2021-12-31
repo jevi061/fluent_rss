@@ -69,26 +69,26 @@ class FeedParser {
     try {
       var feed = RssFeed.parse(response.data);
       return Channel(
-          title: feed.title ?? '',
-          link: link,
-          description: feed.description ?? '',
-          type: FeedConstants.RSS,
-          version: '0',
-          iconUrl: iconUrl,
-          categoryId: 1);
+        title: feed.title ?? '',
+        link: link,
+        description: feed.description ?? '',
+        type: FeedConstants.RSS,
+        version: '0',
+        iconUrl: iconUrl,
+      );
     } catch (e) {
       AppLogger.instance.d('parse channel rss way:${e.toString()}');
     }
     try {
       var feed = AtomFeed.parse(response.data);
       return Channel(
-          title: feed.title ?? '',
-          link: link,
-          description: feed.subtitle ?? '',
-          type: FeedConstants.Atom,
-          version: '0',
-          iconUrl: iconUrl,
-          categoryId: 1);
+        title: feed.title ?? '',
+        link: link,
+        description: feed.subtitle ?? '',
+        type: FeedConstants.Atom,
+        version: '0',
+        iconUrl: iconUrl,
+      );
     } catch (e) {
       AppLogger.instance.d('parse channel atom way:${e.toString()}');
     }

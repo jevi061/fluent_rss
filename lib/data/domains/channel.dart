@@ -9,7 +9,7 @@ class Channel {
   String type;
   String version;
   String iconUrl;
-  int categoryId;
+  int? categoryId;
   ChannelStatus? status;
   Channel({
     required this.title,
@@ -18,7 +18,7 @@ class Channel {
     required this.type,
     required this.version,
     required this.iconUrl,
-    required this.categoryId,
+    this.categoryId,
     this.status,
   });
   Map<String, dynamic> toMap() {
@@ -29,7 +29,7 @@ class Channel {
       'type': type,
       'version': version,
       'iconUrl': iconUrl,
-      'categoryId': categoryId,
+      'categoryId': categoryId ?? 0,
     };
   }
 

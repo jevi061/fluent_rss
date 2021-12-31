@@ -34,7 +34,6 @@ void main() {
       channelProvider: channelProvider,
       articleProvider: articleProvider);
   var channelRepository = ChannelRepository(
-      cagetoryProvider: categoryProvider,
       channelProvider: channelProvider,
       channelStatusProvider: channelStatusProvider,
       articleProvider: articleProvider);

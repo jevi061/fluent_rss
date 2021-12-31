@@ -58,6 +58,23 @@ class ChannelProvider {
     return list?.first == null ? null : Channel.fromMap(list!.first);
   }
 
+  Future<List<Channel>> queryByCategoryId(int categoryId) async {
+    Database? db = await dbProvider.database;
+    var list = await db?.query(TableNameConstants.channel,
+        columns: [
+          "link",
+          "title",
+          "description",
+          "type",
+          "version",
+          "iconUrl",
+          "categoryId"
+        ],
+        where: "categoryId = ?",
+        whereArgs: [categoryId]);
+    return list?.map((e) => Channel.fromMap(e)).toList() ?? [];
+  }
+
   Future<void> deleteByLink(String link) async {
     Database? db = await dbProvider.database;
     await db?.delete(TableNameConstants.channel,

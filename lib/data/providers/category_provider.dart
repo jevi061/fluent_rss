@@ -6,9 +6,9 @@ import 'package:sqflite/sqflite.dart';
 class CategoryProvider {
   final DatabaseProvider dbProvider = DatabaseProvider.dbProvider;
 
-  Future<void> insert(Category category) async {
+  Future<int?> insert(Category category) async {
     Database? db = await dbProvider.database;
-    await db?.insert(TableNameConstants.category, category.toMap(),
+    return await db?.insert(TableNameConstants.category, category.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore);
   }
 
@@ -40,5 +40,11 @@ class CategoryProvider {
       return null;
     }
     return Category.fromMap(list.first);
+  }
+
+  Future<void> deleteCategory(int id) async {
+    Database? db = await dbProvider.database;
+    await db
+        ?.delete(TableNameConstants.category, where: "id = ?", whereArgs: [id]);
   }
 }
