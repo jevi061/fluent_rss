@@ -34,7 +34,6 @@ class FeedParser {
 
   Future<List<Article>> parseAtom(String link) async {
     List<Article> articles = [];
-    Uri rssUri = Uri.parse(link);
     Response<dynamic> response;
     try {
       response = await Dio(dioOptions).get(link);
@@ -67,7 +66,6 @@ class FeedParser {
     }
     Uri uri = Uri.parse(link);
     var iconUrl = path.join(uri.origin, FeedConstants.iconName);
-    var lastCheck = DateTime.now().millisecondsSinceEpoch;
     try {
       var feed = RssFeed.parse(response.data);
       return Channel(
@@ -115,7 +113,6 @@ class FeedParser {
 
   static Future<List<Article>> parseArticles(String link) async {
     List<Article> articles = [];
-    Uri rssUri = Uri.parse(link);
     Response<dynamic> response;
     try {
       response = await Dio(dioOptions).get(link);
