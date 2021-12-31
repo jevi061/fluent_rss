@@ -16,8 +16,8 @@ class ChannelTile extends StatelessWidget {
   ChannelTile({Key? key, required this.channel}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var lastCheck =
-        DateTime.fromMillisecondsSinceEpoch(channel.status?.lastCheck ?? 0);
+    var lastCheck = DateTime.fromMillisecondsSinceEpoch(
+        channel.status?.lastCheck ?? DateTime.now().millisecondsSinceEpoch);
     return Slidable(
         key: Key(channel.link),
         // The end action pane is the one at the right or the bottom side.
@@ -41,14 +41,11 @@ class ChannelTile extends StatelessWidget {
             backgroundImage: CachedNetworkImageProvider(channel.iconUrl),
           ),
           title: Text(channel.title),
-          subtitle: Row(
-            children: [
-              Text('category'),
-              Text("last check:${timeago.format(lastCheck)}")
-            ],
-          ),
-          trailing: Text(
-              '${channel.status?.unreadCount}/${channel.status?.totalCount}'),
+          subtitle: Text("last check:${timeago.format(lastCheck)}"),
+          trailing: channel.status == null
+              ? SizedBox.shrink()
+              : Text(
+                  '${channel.status?.unreadCount}/${channel.status?.totalCount}'),
           onTap: () {
             context
                 .read<ArticleBloc>()
