@@ -15,10 +15,16 @@ class ArticleRepository {
 
   Future<void> addArticle(Article article) async {
     await articleProvider.insert(article);
+    await articleStatusProvider
+        .insert(ArticleStatus(articleId: article.uuid, read: 0, starred: 0));
   }
 
   Future<void> addArticles(List<Article> articles) async {
+    var status = articles
+        .map((e) => ArticleStatus(articleId: e.uuid, read: 0, starred: 0))
+        .toList();
     await articleProvider.batchInsert(articles);
+    await articleStatusProvider.batchInsert(status);
   }
 
   Future<List<Article>> queryByLink(String link) async {
