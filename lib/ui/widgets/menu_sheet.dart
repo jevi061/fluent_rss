@@ -59,7 +59,7 @@ class MenuSheet extends StatelessWidget {
                               }
                               var path = result?.files.first.path;
                               var parser = OPMLParser();
-                              List<Channel> parsedChannels =
+                              List<Object> parsedChannels =
                                   await parser.parseURL(path!);
                               channelBloc.add(ChannelImported(parsedChannels));
                             },

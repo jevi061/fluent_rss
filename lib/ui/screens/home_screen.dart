@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'article_screen.dart';
+import 'category_screen.dart';
 import 'channel_screen.dart';
 import 'favorite_screen.dart';
 import 'feed_screen.dart';
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (BuildContext context) {
               switch (settings.name) {
                 case '/':
-                  return ChannelScreen();
+                  return CategoryScreen();
                 case '/articles':
                   return ArticleScreen();
                 case '/reading':
@@ -46,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       home: Scaffold(
           body: IndexedStack(
             children: [
-              ChannelScreen(),
+              CategoryScreen(),
               FeedScreen(),
               FavoriteScreen(),
               HistoryScreen()

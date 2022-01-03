@@ -1,14 +1,17 @@
 import 'package:fluent_rss/business/bloc/add_channel_bloc.dart';
 import 'package:fluent_rss/business/bloc/app_bloc.dart';
 import 'package:fluent_rss/business/bloc/article_bloc.dart';
+import 'package:fluent_rss/business/bloc/category_bloc.dart';
 import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/bloc/feed_bloc.dart';
 import 'package:fluent_rss/business/event/app_event.dart';
+import 'package:fluent_rss/business/event/category_event.dart';
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/event/feed_event.dart';
 import 'package:fluent_rss/data/providers/article_status_provider.dart';
 import 'package:fluent_rss/data/providers/category_provider.dart';
 import 'package:fluent_rss/data/providers/channel_provider.dart';
+import 'package:fluent_rss/data/repository/category_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
 import 'package:fluent_rss/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -37,11 +40,14 @@ void main() {
       channelProvider: channelProvider,
       channelStatusProvider: channelStatusProvider,
       articleProvider: articleProvider);
+  var categoryRepository = CategoryRepository(
+      categoryProvider: categoryProvider, channelProvider: channelProvider);
   var app = MultiBlocProvider(
     providers: [
       BlocProvider<ChannelBloc>(
           lazy: false,
           create: (BuildContext context) => ChannelBloc(
+              categoryRepository: categoryRepository,
               channelRepository: channelRepository,
               articleRepository: articleRepository)
             ..add(ChannelStarted())),
@@ -70,6 +76,10 @@ void main() {
           create: (BuildContext context) =>
               FeedBloc(articleRepository: articleRepository)
                 ..add(AllFeedsStarted())),
+      BlocProvider(
+          create: (BuildContext context) =>
+              CategoryBloc(categoryRepository: categoryRepository)
+                ..add(CategoryStarted()))
     ],
     child: HomeScreen(),
   );

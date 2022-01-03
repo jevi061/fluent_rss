@@ -13,6 +13,13 @@ class CategoryAdded extends CategoryEvent {
   List<Object?> get props => [];
 }
 
+class CreateCategoryActionExecuted extends CategoryEvent {
+  String category;
+  CreateCategoryActionExecuted(this.category);
+  @override
+  List<Object?> get props => [category];
+}
+
 class CategoryDeleted extends CategoryEvent {
   @override
   List<Object?> get props => [];

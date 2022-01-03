@@ -48,17 +48,27 @@ class ChannelRepository {
     await channelStatusProvider.updateReadStatus(channel.link);
   }
 
+  Future<void> syncChannels(List<Channel> channels) async {
+    for (var item in channels) {
+      await syncChannel(item);
+    }
+  }
+
   // Future<void> refreshChannels(List<Channel> channels) async {
   //   for (var channel in channels) {
   //     await refreshChannel(channel);
   //   }
   // }
-
-  Stream<double> refreshChannelsWithProgress(List<Channel> channels) async* {
+// here Object represents Channel|ChannelGroup
+  Stream<double> refreshChannelsWithProgress(List<Object> channels) async* {
     int index = 0;
     yield 0.02;
-    for (var channel in channels) {
-      await syncChannel(channel);
+    for (var item in channels) {
+      if (item is Channel) {
+        await syncChannel(item);
+      } else {
+        await syncChannels(item as List<Channel>);
+      }
       index = index + 1;
       var percent = index / channels.length;
       yield percent;

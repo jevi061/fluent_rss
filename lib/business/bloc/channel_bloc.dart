@@ -4,8 +4,11 @@ import 'dart:typed_data';
 
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
+import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
+import 'package:fluent_rss/data/domains/channel_group.dart';
 import 'package:fluent_rss/data/repository/article_repository.dart';
+import 'package:fluent_rss/data/repository/category_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
 import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/services/opml_builder.dart';
@@ -15,8 +18,11 @@ import 'package:file_saver/file_saver.dart';
 class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
   ChannelRepository channelRepository;
   ArticleRepository articleRepository;
+  CategoryRepository categoryRepository;
   ChannelBloc(
-      {required this.channelRepository, required this.articleRepository})
+      {required this.channelRepository,
+      required this.articleRepository,
+      required this.categoryRepository})
       : super(ChannelReadyState(channels: [])) {
     on<ChannelStarted>(_onChannelStarted);
     on<ChannelUpdated>(_onChannelUpdated);
@@ -106,7 +112,18 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
 
   void _onChannelImported(
       ChannelImported event, Emitter<ChannelState> emitter) async {
-    await channelRepository.addChannels(event.channels);
+    // add channels
+    var unCategorizedChannels = event.channels.whereType<Channel>().toList();
+    await channelRepository.addChannels(unCategorizedChannels);
+    // add channelGroups
+    var channelGroups = event.channels.whereType<ChannelGroup>().toList();
+    for (var item in channelGroups) {
+      var categoryId = await categoryRepository.addCategory(item.category);
+      item.channels.forEach((element) {
+        element.categoryId = categoryId;
+      });
+      await channelRepository.addChannels(item.channels);
+    }
     List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
     add(PartialChannelRefreshStarted(event.channels));

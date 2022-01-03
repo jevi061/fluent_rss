@@ -2,19 +2,23 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fluent_rss/assets/constants.dart';
+import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
+import 'package:fluent_rss/data/domains/channel_group.dart';
 import 'package:opmlparser/opmlparser.dart';
 import 'package:path/path.dart' as path;
 
+// parse opml file for channel or channel group
 class OPMLParser {
-  Future<List<Channel>> parseURL(String path) async {
+  Future<List<Object>> parseURL(String path) async {
     var content = await File(path).readAsBytes();
     return parse(utf8.decode(content));
   }
 
-  List<Channel> parse(String xml) {
+// here Object represents Channel|ChannelGroup
+  List<Object> parse(String xml) {
     Opml opml = Opml.parse(xml);
-    List<Channel> channels = [];
+    List<Object> channels = [];
     opml.items?.forEach((e) {
       if (e.nesteditems?.isEmpty ?? true) {
         channels.add(Channel(
@@ -26,8 +30,10 @@ class OPMLParser {
           iconUrl: path.join(e.htmlUrl ?? '', FeedConstants.iconName),
         ));
       } else {
+        Category category = Category(name: e.title ?? "");
+        List<Channel> categorizedChannels = [];
         e.nesteditems?.forEach((nested) {
-          channels.add(Channel(
+          categorizedChannels.add(Channel(
             title: nested.title ?? "",
             link: nested.xmlUrl ?? "",
             description: nested.description ?? "",
@@ -36,6 +42,8 @@ class OPMLParser {
             iconUrl: path.join(nested.htmlUrl ?? '', FeedConstants.iconName),
           ));
         });
+        channels.add(
+            ChannelGroup(category: category, channels: categorizedChannels));
       }
     });
 

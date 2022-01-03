@@ -33,7 +33,8 @@ class ChannelStatusChanged extends ChannelEvent {
 }
 
 class PartialChannelRefreshStarted extends ChannelEvent {
-  final List<Channel> channels;
+  // here Object represents Channel|ChannelGroup
+  final List<Object> channels;
   PartialChannelRefreshStarted(this.channels);
   @override
   List<Object?> get props => [channels];
@@ -72,7 +73,8 @@ class ChannelAdded extends ChannelEvent {
 }
 
 class ChannelImported extends ChannelEvent {
-  List<Channel> channels;
+  // here Object represents Channel|ChannelGroup
+  List<Object> channels;
   ChannelImported(this.channels);
   @override
   List<Object?> get props => [channels];
