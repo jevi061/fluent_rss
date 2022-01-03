@@ -5,6 +5,7 @@ import 'package:fluent_rss/business/state/article_state.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/repository/article_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
@@ -36,7 +37,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
 
   Future<void> _onArticleStarred(
       ArticleStarred event, Emitter<ArticleState> emitter) async {
-    articleRepository.updateArticleStarStatus(
+    await articleRepository.updateArticleStarStatus(
         event.article.uuid, event.article.status?.starred ?? 0);
     List<Article> articles =
         await articleRepository.queryByLink(event.article.channel);

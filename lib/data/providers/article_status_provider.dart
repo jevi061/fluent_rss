@@ -50,12 +50,18 @@ class ArticleStatusProvider {
     Map<String, dynamic> data = {'read': read};
     await db?.update(TableNameConstants.articleStatus, data,
         where: 'articleId = ?', whereArgs: [articleId]);
+    await db?.rawInsert('''insert or replace into articleStatus 
+    (articleId,read,starred) 
+    values(?,?,0)''', [articleId, read]);
   }
 
   Future<void> updateStarStatus(String articleId, int starred) async {
     Database? db = await dbProvider.database;
-    Map<String, dynamic> data = {'starred': starred};
-    await db?.update(TableNameConstants.articleStatus, data,
-        where: 'articleId = ?', whereArgs: [articleId]);
+    var data = {"starred": 1};
+    await db?.insert(TableNameConstants.articleStatus, data,
+        conflictAlgorithm: ConflictAlgorithm.ignore);
+    await db?.rawInsert('''insert or replace into articleStatus 
+    (articleId,read,starred) 
+    values(?,0,?)''', [articleId, starred]);
   }
 }
