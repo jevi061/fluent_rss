@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:fluent_rss/data/domains/article.dart';
+import 'package:fluent_rss/data/domains/category.dart';
 
 abstract class CategoryEvent extends Equatable {}
 
@@ -20,7 +20,9 @@ class CreateCategoryActionExecuted extends CategoryEvent {
   List<Object?> get props => [category];
 }
 
-class CategoryDeleted extends CategoryEvent {
+class DeleteCategoryActionTriggered extends CategoryEvent {
+  Category category;
+  DeleteCategoryActionTriggered(this.category);
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [category];
 }
