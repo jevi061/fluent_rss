@@ -44,11 +44,13 @@ class CategoryScreen extends StatelessWidget {
                             var item = state.all[index];
                             if (item is Category) {
                               return Slidable(
-                                child: ExpansionTile(
-                                  title: Text(item.name),
-                                  children: [
-                                    ChannelPanel(categoryId: item.id!),
-                                  ],
+                                child: Card(
+                                  child: ExpansionTile(
+                                    title: Text(item.name),
+                                    children: [
+                                      ChannelPanel(categoryId: item.id!),
+                                    ],
+                                  ),
                                 ),
                                 endActionPane: ActionPane(
                                   motion: ScrollMotion(),
