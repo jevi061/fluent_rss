@@ -74,4 +74,17 @@ class ChannelRepository {
   Future<void> decreaseUnread(String channel) async {
     await channelProvider.decreaseUnread(channel);
   }
+
+  Future<List<Channel>> getChannelsByCategory(int categoryId) async {
+    // fetch channel core data
+    List<Channel> channels =
+        await channelProvider.queryByCategoryId(categoryId);
+    // fetch channel status
+    for (var ch in channels) {
+      var channelStatus =
+          await channelStatusProvider.queryChannelStatusByLink(ch.link);
+      ch.status = channelStatus;
+    }
+    return channels;
+  }
 }

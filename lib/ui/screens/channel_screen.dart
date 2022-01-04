@@ -1,5 +1,6 @@
 import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
+import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/ui/widgets/channel_delegate.dart';
 import 'package:fluent_rss/ui/widgets/channel_tile.dart';
 import 'package:fluent_rss/ui/widgets/export_snacker.dart';
@@ -16,9 +17,10 @@ class ChannelScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Category category = ModalRoute.of(context)?.settings.arguments as Category;
     return Scaffold(
         appBar: AppBar(
-            title: const Text("Channels"),
+            title: Text(category.name),
             actions: [RefreshButton(), MenuSheet()]),
         floatingActionButton: FloatingActionButton(
           onPressed: () {

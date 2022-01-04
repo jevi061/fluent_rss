@@ -92,3 +92,10 @@ class ChannelsExportFinished extends ChannelEvent {
   @override
   List<Object?> get props => [path];
 }
+
+class ChannelRequested extends ChannelEvent {
+  final int categoryId;
+  ChannelRequested(this.categoryId);
+  @override
+  List<Object?> get props => [categoryId];
+}
