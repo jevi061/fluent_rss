@@ -20,19 +20,26 @@ class AppRouter {
   static Route<dynamic> controller(RouteSettings settings) {
     switch (settings.name) {
       case homeScreen:
-        return MaterialPageRoute(builder: (context) => HomeScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (context) => HomeScreen());
       case channelScreen:
-        return MaterialPageRoute(builder: (context) => ChannelScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (context) => ChannelScreen());
       case articleScreen:
-        return MaterialPageRoute(builder: (context) => ArticleScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (context) => ArticleScreen());
       case readScreen:
-        return MaterialPageRoute(builder: (context) => ReadingScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (context) => ReadingScreen());
       case feedScreen:
-        return MaterialPageRoute(builder: (context) => FeedScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (context) => FeedScreen());
       case historyScreen:
-        return MaterialPageRoute(builder: (context) => HistoryScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (context) => HistoryScreen());
       case favoriteScreen:
-        return MaterialPageRoute(builder: (context) => FavoriteScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (context) => FavoriteScreen());
       default:
         return MaterialPageRoute(
             builder: (context) => Text("something went wrong"));

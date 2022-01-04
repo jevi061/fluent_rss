@@ -5,6 +5,7 @@ import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/state/article_state.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/ui/widgets/article_tile.dart';
 import 'package:fluent_rss/ui/widgets/channel_tile.dart';
 import 'package:flutter/cupertino.dart';
