@@ -22,6 +22,9 @@ class DatabaseProvider {
       db.execute('PRAGMA foreign_keys = ON');
     }, onCreate: (db, version) {
       db.execute(TableDefinitionConstants.categoryTable);
+      // create default `all` category
+      db.insert(TableNameConstants.category, {"name": "all"},
+          conflictAlgorithm: sql.ConflictAlgorithm.ignore);
       db.execute(TableDefinitionConstants.channelTable);
       db.execute(TableDefinitionConstants.channelStatusTable);
       db.execute(TableDefinitionConstants.articleTable);

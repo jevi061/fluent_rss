@@ -28,6 +28,7 @@ class OPMLParser {
           type: e.type ?? "",
           version: e.version ?? "",
           iconUrl: path.join(e.htmlUrl ?? '', FeedConstants.iconName),
+          categoryId: 1,
         ));
       } else {
         Category category = Category(name: e.title ?? "");

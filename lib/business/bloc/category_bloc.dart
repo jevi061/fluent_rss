@@ -16,7 +16,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   }
   Future<void> _onCategoryStarted(
       CategoryStarted event, Emitter<CategoryState> emitter) async {
-    var all = await categoryRepository.getAll();
+    var all = await categoryRepository.getCategories();
     emitter(CategoryReadyState.ready(all: all));
   }
 
@@ -24,7 +24,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       CreateCategoryActionExecuted event,
       Emitter<CategoryState> emitter) async {
     await categoryRepository.addCategory(Category(name: event.category));
-    var all = await categoryRepository.getAll();
+    var all = await categoryRepository.getCategories();
     emitter(CategoryReadyState.ready(all: all));
   }
 
@@ -33,7 +33,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       Emitter<CategoryState> emitter) async {
     if (event.category.id != null) {
       await categoryRepository.deleteCategory(event.category.id!);
-      var all = await categoryRepository.getAll();
+      var all = await categoryRepository.getCategories();
       emitter(CategoryReadyState.ready(all: all));
     }
   }

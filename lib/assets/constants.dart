@@ -30,7 +30,8 @@ class TableDefinitionConstants {
             version text,
             iconUrl text,
             channelStatusId integer,
-            categoryId integer 
+            categoryId integer ,
+            foreign key (categoryId) references category (id) 
           ) """;
   static const String channelStatusTable =
       """ create table if not exists channelStatus(

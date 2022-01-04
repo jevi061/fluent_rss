@@ -1,12 +1,8 @@
-import 'package:collection/collection.dart';
 import 'package:fluent_rss/data/domains/article.dart';
-import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/providers/article_provider.dart';
-import 'package:fluent_rss/data/providers/category_provider.dart';
 import 'package:fluent_rss/data/providers/channel_provider.dart';
 import 'package:fluent_rss/data/providers/channel_status_provider.dart';
-import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/services/feed_parser.dart';
 
 class ChannelRepository {
