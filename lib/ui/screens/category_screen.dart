@@ -1,6 +1,7 @@
 import 'package:fluent_rss/business/bloc/category_bloc.dart';
 import 'package:fluent_rss/business/event/category_event.dart';
 import 'package:fluent_rss/business/state/category_state.dart';
+import 'package:fluent_rss/ui/widgets/category_tile.dart';
 import 'package:fluent_rss/ui/widgets/channel_delegate.dart';
 import 'package:fluent_rss/ui/widgets/category_panel.dart';
 import 'package:fluent_rss/ui/widgets/create_category_action.dart';
@@ -32,34 +33,7 @@ class CategoryScreen extends StatelessWidget {
                   child: ListView.builder(
                       itemCount: state.all.length,
                       itemBuilder: (context, index) {
-                        var item = state.all[index];
-
-                        return Slidable(
-                          child: Card(
-                            child: ExpansionTile(
-                              title: Text(item.name),
-                              children: [
-                                CategoryPanel(category: item),
-                              ],
-                            ),
-                          ),
-                          endActionPane: ActionPane(
-                            motion: ScrollMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: (BuildContext context) {
-                                  context
-                                      .read<CategoryBloc>()
-                                      .add(DeleteCategoryActionTriggered(item));
-                                },
-                                backgroundColor: Colors.red,
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete,
-                                label: 'Delete',
-                              ),
-                            ],
-                          ),
-                        );
+                        return CategoryTile(category: state.all[index]);
                       }));
             }
             return Text("something went wrong");
