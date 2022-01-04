@@ -40,7 +40,8 @@ class CategoryTile extends StatelessWidget {
           title: Text(category.name),
           trailing: const Icon(Icons.arrow_forward),
           onTap: () {
-            Navigator.of(context).pushNamed(AppRouter.channelScreen);
+            Navigator.of(context)
+                .pushNamed(AppRouter.channelScreen, arguments: category);
           },
         )));
   }

@@ -18,7 +18,7 @@ class ChannelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: const Text("Fluent RSS"),
+            title: const Text("Channels"),
             actions: [RefreshButton(), MenuSheet()]),
         floatingActionButton: FloatingActionButton(
           onPressed: () {

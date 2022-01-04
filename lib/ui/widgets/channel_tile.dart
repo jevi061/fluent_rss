@@ -3,7 +3,7 @@ import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/event/article_event.dart';
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fluent_rss/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -50,7 +50,8 @@ class ChannelTile extends StatelessWidget {
             context
                 .read<ArticleBloc>()
                 .add(ArticleRequested(channelLink: channel.link));
-            Navigator.of(context).pushNamed('/articles', arguments: channel);
+            Navigator.of(context)
+                .pushNamed(AppRouter.articleScreen, arguments: channel);
           },
         )));
   }
