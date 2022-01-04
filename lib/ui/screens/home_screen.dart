@@ -1,4 +1,4 @@
-import 'package:fluent_rss/theme/global_theme.dart';
+import 'package:fluent_rss/theme/app_theme.dart';
 import 'package:fluent_rss/ui/screens/history_screen.dart';
 import 'package:fluent_rss/ui/screens/reading_screen.dart';
 import 'package:flutter/cupertino.dart';
