@@ -1,14 +1,15 @@
 import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
+import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/ui/widgets/channel_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ChannelPanel extends StatelessWidget {
-  int categoryId;
+class CategoryPanel extends StatelessWidget {
+  Category category;
 
-  ChannelPanel({Key? key, required this.categoryId}) : super(key: key);
+  CategoryPanel({Key? key, required this.category}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChannelBloc, ChannelState>(
@@ -19,7 +20,7 @@ class ChannelPanel extends StatelessWidget {
               return Text("No channels in this category");
             }
             var list = state.channels
-                .where((element) => element.categoryId == categoryId)
+                .where((element) => element.categoryId == category.id)
                 .toList();
             return ListView.builder(
                 shrinkWrap: true,

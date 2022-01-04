@@ -2,7 +2,7 @@ import 'package:fluent_rss/business/bloc/category_bloc.dart';
 import 'package:fluent_rss/business/event/category_event.dart';
 import 'package:fluent_rss/business/state/category_state.dart';
 import 'package:fluent_rss/ui/widgets/channel_delegate.dart';
-import 'package:fluent_rss/ui/widgets/channel_panel.dart';
+import 'package:fluent_rss/ui/widgets/category_panel.dart';
 import 'package:fluent_rss/ui/widgets/create_category_action.dart';
 import 'package:fluent_rss/ui/widgets/menu_sheet.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class CategoryScreen extends StatelessWidget {
                             child: ExpansionTile(
                               title: Text(item.name),
                               children: [
-                                ChannelPanel(categoryId: item.id!),
+                                CategoryPanel(category: item),
                               ],
                             ),
                           ),
