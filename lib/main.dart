@@ -13,6 +13,8 @@ import 'package:fluent_rss/data/providers/category_provider.dart';
 import 'package:fluent_rss/data/providers/channel_provider.dart';
 import 'package:fluent_rss/data/repository/category_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
+import 'package:fluent_rss/router/app_router.dart';
+import 'package:fluent_rss/theme/app_theme.dart';
 import 'package:fluent_rss/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -81,7 +83,12 @@ void main() {
               CategoryBloc(categoryRepository: categoryRepository)
                 ..add(CategoryStarted()))
     ],
-    child: HomeScreen(),
+    child: MaterialApp(
+      theme: GlobalTheme.light,
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: AppRouter.controller,
+      initialRoute: AppRouter.homeScreen,
+    ),
   );
   runApp(app);
 }
