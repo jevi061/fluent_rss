@@ -6,7 +6,7 @@ A RSS feed aggregator with fluent reading experience.
 
 ![home page](docs/images/home.png)
 ## Features
-- RSS/Atom feeds aggregation
+- Aggregate RSS/Atom feeds 
 - Import/Export OPML from/based on feeds
 - Star articles and record read history
 
