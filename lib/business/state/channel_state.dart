@@ -17,8 +17,14 @@ class ChannelRefreshedState extends ChannelState {
   List<Object?> get props => [channel];
 }
 
-class PartialChannelRefreshedState extends ChannelState {
-  PartialChannelRefreshedState();
+class AllChannelsRefreshedState extends ChannelState {
+  AllChannelsRefreshedState();
+  @override
+  List<Object?> get props => [];
+}
+
+class PartialChannelsRefreshedState extends ChannelState {
+  PartialChannelsRefreshedState();
   @override
   List<Object?> get props => [];
 }

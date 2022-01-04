@@ -29,7 +29,8 @@ class RefreshButton extends StatelessWidget {
       }
       return IconButton(
           onPressed: () {
-            BlocProvider.of<ChannelBloc>(context).add(ChannelRefreshStarted());
+            BlocProvider.of<ChannelBloc>(context)
+                .add(AllChannelsRefreshStarted());
           },
           icon: const Icon(Icons.refresh));
     });

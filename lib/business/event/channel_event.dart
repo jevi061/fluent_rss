@@ -32,24 +32,37 @@ class ChannelStatusChanged extends ChannelEvent {
   List<Object?> get props => [];
 }
 
-class PartialChannelRefreshStarted extends ChannelEvent {
+class PartialChannelsRefreshStarted extends ChannelEvent {
   // here Object represents Channel|ChannelGroup
   final List<Object> channels;
-  PartialChannelRefreshStarted(this.channels);
+  PartialChannelsRefreshStarted(this.channels);
   @override
   List<Object?> get props => [channels];
 }
 
-class PartialChannelRefreshFinished extends ChannelEvent {
-  PartialChannelRefreshFinished();
+class PartialChannelsRefreshFinished extends ChannelEvent {
+  PartialChannelsRefreshFinished();
+  @override
+  List<Object?> get props => [];
+}
+
+class AllChannelsRefreshStarted extends ChannelEvent {
+  AllChannelsRefreshStarted();
+  @override
+  List<Object?> get props => [];
+}
+
+class AllChannelsRefreshFinished extends ChannelEvent {
+  AllChannelsRefreshFinished();
   @override
   List<Object?> get props => [];
 }
 
 class ChannelRefreshStarted extends ChannelEvent {
-  ChannelRefreshStarted();
+  final Channel channel;
+  ChannelRefreshStarted(this.channel);
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [channel];
 }
 
 class ChannelRefreshFinished extends ChannelEvent {

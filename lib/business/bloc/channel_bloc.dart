@@ -27,10 +27,11 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     on<ChannelStarted>(_onChannelStarted);
     on<ChannelUpdated>(_onChannelUpdated);
     on<ChannelOpened>(_onChannelOpened);
-    on<PartialChannelRefreshStarted>(_onPartialChannelRefreshStarted);
-    on<PartialChannelRefreshFinished>(_onPartialChannelRefreshFished);
     on<ChannelRefreshStarted>(_onChannelRefreshStarted);
-    on<ChannelRefreshFinished>(_onChannelRefreshFinished);
+    on<PartialChannelsRefreshStarted>(_onPartialChannelsRefreshStarted);
+    on<PartialChannelsRefreshFinished>(_onPartialChannelsRefreshFished);
+    on<AllChannelsRefreshStarted>(_onAllChannelsRefreshStarted);
+    on<AllChannelsRefreshFinished>(_onAllChannelsRefreshFinished);
     on<ChannelDeleted>(_onChannelDeleted);
     on<ChannelAdded>(_onChannelAdded);
     on<ChannelImported>(_onChannelImported);
@@ -60,26 +61,33 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
 
   void _onChannelOpened(
       ChannelOpened event, Emitter<ChannelState> emitter) async {}
-  Future<void> _onPartialChannelRefreshStarted(
-      PartialChannelRefreshStarted event, Emitter<ChannelState> emitter) async {
+  Future<void> _onChannelRefreshStarted(
+      ChannelRefreshStarted event, Emitter<ChannelState> emitter) async {
+    await channelRepository.syncChannel(event.channel);
+    emitter(ChannelRefreshedState(event.channel));
+  }
+
+  Future<void> _onPartialChannelsRefreshStarted(
+      PartialChannelsRefreshStarted event,
+      Emitter<ChannelState> emitter) async {
     await emitter
         .forEach(channelRepository.refreshChannelsWithProgress(event.channels),
             onData: (double percent) {
       AppLogger.instance.d("partial refresh progress is :$percent");
       return ChannelRefreshingState(progress: percent);
     });
-    add(PartialChannelRefreshFinished());
+    add(PartialChannelsRefreshFinished());
   }
 
-  Future<void> _onPartialChannelRefreshFished(
-      PartialChannelRefreshFinished event,
+  Future<void> _onPartialChannelsRefreshFished(
+      PartialChannelsRefreshFinished event,
       Emitter<ChannelState> emitter) async {
-    emitter(PartialChannelRefreshedState());
+    emitter(PartialChannelsRefreshedState());
     AppLogger.instance.d("particle channel refresh finished-----");
   }
 
-  Future<void> _onChannelRefreshStarted(
-      ChannelRefreshStarted event, Emitter<ChannelState> emitter) async {
+  Future<void> _onAllChannelsRefreshStarted(
+      AllChannelsRefreshStarted event, Emitter<ChannelState> emitter) async {
     List<Channel> channels = await channelRepository.fetchChannels();
     await emitter
         .forEach(channelRepository.refreshChannelsWithProgress(channels),
@@ -87,11 +95,11 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       AppLogger.instance.d("full refresh progress is :$percent");
       return ChannelRefreshingState(progress: percent);
     });
-    add(ChannelRefreshFinished());
+    add(AllChannelsRefreshFinished());
   }
 
-  Future<void> _onChannelRefreshFinished(
-      ChannelRefreshFinished event, Emitter<ChannelState> emitter) async {
+  Future<void> _onAllChannelsRefreshFinished(
+      AllChannelsRefreshFinished event, Emitter<ChannelState> emitter) async {
     List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
   }
@@ -108,7 +116,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     await channelRepository.addChannel(event.channel);
     List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
-    add(PartialChannelRefreshStarted([event.channel]));
+    add(PartialChannelsRefreshStarted([event.channel]));
   }
 
   void _onChannelImported(
@@ -127,7 +135,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     }
     List<Channel> channels = await channelRepository.fetchChannels();
     emitter(ChannelReadyState(channels: channels));
-    add(PartialChannelRefreshStarted(event.channels));
+    add(PartialChannelsRefreshStarted(event.channels));
   }
 
   void _onChannelsExportStarted(
