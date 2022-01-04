@@ -4,6 +4,7 @@ import 'package:fluent_rss/business/event/article_event.dart';
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
+import 'package:fluent_rss/router/app_router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +40,7 @@ class CategoryTile extends StatelessWidget {
           title: Text(category.name),
           trailing: const Icon(Icons.arrow_forward),
           onTap: () {
-            Navigator.of(context).pushNamed('/articles');
+            Navigator.of(context).pushNamed(AppRouter.channelScreen);
           },
         )));
   }

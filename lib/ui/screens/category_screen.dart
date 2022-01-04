@@ -19,12 +19,6 @@ class CategoryScreen extends StatelessWidget {
         appBar: AppBar(
             title: const Text("Fluent RSS"),
             actions: [CreateCategoryAction(), MenuSheet()]),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showSearch(context: context, delegate: ChannelSearchDelegate([]));
-          },
-          child: const Icon(Icons.search),
-        ),
         body: BlocBuilder<CategoryBloc, CategoryState>(
           builder: (context, state) {
             if (state is CategoryReadyState) {

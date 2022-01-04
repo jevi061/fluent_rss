@@ -1,5 +1,6 @@
 import 'package:fluent_rss/ui/screens/article_screen.dart';
 import 'package:fluent_rss/ui/screens/category_screen.dart';
+import 'package:fluent_rss/ui/screens/channel_screen.dart';
 import 'package:fluent_rss/ui/screens/favorite_screen.dart';
 import 'package:fluent_rss/ui/screens/feed_screen.dart';
 import 'package:fluent_rss/ui/screens/history_screen.dart';
@@ -20,6 +21,8 @@ class AppRouter {
     switch (settings.name) {
       case homeScreen:
         return MaterialPageRoute(builder: (context) => HomeScreen());
+      case channelScreen:
+        return MaterialPageRoute(builder: (context) => ChannelScreen());
       case articleScreen:
         return MaterialPageRoute(builder: (context) => ArticleScreen());
       case readScreen:
