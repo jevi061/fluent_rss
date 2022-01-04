@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int selectedIndex = 0;
+  int selectedIndex = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.feed), label: "channel"),
+            BottomNavigationBarItem(icon: Icon(Icons.feed), label: "category"),
             BottomNavigationBarItem(icon: Icon(Icons.today), label: "feeds"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.bookmark), label: "favorites"),
