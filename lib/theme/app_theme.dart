@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class GlobalTheme {
+class AppTheme {
   static ThemeData get light {
     return ThemeData.light().copyWith(
         iconTheme: IconThemeData(color: Color(0xff7540ee)),

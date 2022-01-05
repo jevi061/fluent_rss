@@ -84,7 +84,7 @@ void main() {
                 ..add(CategoryStarted()))
     ],
     child: MaterialApp(
-      theme: GlobalTheme.light,
+      theme: AppTheme.light,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: AppRouter.controller,
       initialRoute: AppRouter.homeScreen,
