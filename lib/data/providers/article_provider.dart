@@ -1,10 +1,6 @@
 import 'package:fluent_rss/assets/constants.dart';
 import 'package:fluent_rss/data/domains/article.dart';
-import 'package:fluent_rss/data/domains/article_status.dart';
 import 'package:fluent_rss/data/providers/database_provider.dart';
-import 'package:fluent_rss/services/app_logger.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:logger/logger.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ArticleProvider {

@@ -1,5 +1,4 @@
 import 'package:fluent_rss/ui/screens/article_screen.dart';
-import 'package:fluent_rss/ui/screens/category_screen.dart';
 import 'package:fluent_rss/ui/screens/channel_screen.dart';
 import 'package:fluent_rss/ui/screens/favorite_screen.dart';
 import 'package:fluent_rss/ui/screens/feed_screen.dart';

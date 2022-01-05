@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:file_saver/file_saver.dart';
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/business/state/channel_state.dart';
-import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/domains/channel_group.dart';
 import 'package:fluent_rss/data/repository/article_repository.dart';
@@ -13,7 +13,6 @@ import 'package:fluent_rss/data/repository/channel_repository.dart';
 import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/services/opml_builder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:file_saver/file_saver.dart';
 
 class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
   ChannelRepository channelRepository;

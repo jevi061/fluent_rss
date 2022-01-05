@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:fluent_rss/business/event/favorite_event.dart';
 import 'package:fluent_rss/business/event/feed_event.dart';
-import 'package:fluent_rss/business/state/favorite_state.dart';
 import 'package:fluent_rss/business/state/feed_state.dart';
 import 'package:fluent_rss/data/repository/article_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

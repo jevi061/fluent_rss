@@ -4,8 +4,6 @@ import 'package:fluent_rss/business/bloc/channel_bloc.dart';
 import 'package:fluent_rss/business/event/add_channel_event.dart';
 import 'package:fluent_rss/business/event/channel_event.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
-import 'package:fluent_rss/services/app_logger.dart';
-import 'package:fluent_rss/services/feed_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
