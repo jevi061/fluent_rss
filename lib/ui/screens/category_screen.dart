@@ -27,7 +27,10 @@ class CategoryScreen extends StatelessWidget {
                   child: ListView.builder(
                       itemCount: state.all.length,
                       itemBuilder: (context, index) {
-                        return CategoryTile(category: state.all[index]);
+                        return ExpansionTile(
+                          title: Text(state.all[index].name),
+                          children: [CategoryPanel(category: state.all[index])],
+                        );
                       }));
             }
             return Text("something went wrong");

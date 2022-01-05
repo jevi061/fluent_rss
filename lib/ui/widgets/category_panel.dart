@@ -19,9 +19,13 @@ class CategoryPanel extends StatelessWidget {
             if (state.channels.isEmpty) {
               return Text("No channels in this category");
             }
-            var list = state.channels
-                .where((element) => element.categoryId == category.id)
-                .toList();
+            var list = state.channels;
+            if (category.id != 1) {
+              list = list
+                  .where((element) => element.categoryId == category.id)
+                  .toList();
+            }
+
             return ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
