@@ -36,8 +36,9 @@ class AddChannelScreen extends StatelessWidget {
                   suffixIcon: IconButton(
                     icon: Icon(Icons.search),
                     onPressed: () async {
-                      BlocProvider.of<AddChannelBloc>(context)
-                          .add(ChannelSubmited(urlController.text));
+                      BlocProvider.of<AddChannelBloc>(context).add(
+                          ChannelSubmited(
+                              channelLink: urlController.text, categoryId: 1));
                     },
                   ))),
           ParsedChannelWidget(),
