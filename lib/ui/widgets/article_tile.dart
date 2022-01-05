@@ -9,6 +9,7 @@ import 'package:fluent_rss/business/event/feed_event.dart';
 import 'package:fluent_rss/business/event/history_event.dart';
 import 'package:fluent_rss/business/event/reading_event.dart';
 import 'package:fluent_rss/data/domains/article.dart';
+import 'package:fluent_rss/router/app_router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +29,7 @@ class ArticleTile extends StatelessWidget {
           context.read<ReadingBloc>().add(ReadingStarted(article: article));
           context.read<HistoryBloc>().add(HistoryUpdated(article: article));
           context.read<FeedBloc>().add(FeedsStateChanged());
-          Navigator.of(context).pushNamed('/reading');
+          Navigator.of(context).pushNamed(AppRouter.readScreen);
         },
         child: Stack(
           children: [
