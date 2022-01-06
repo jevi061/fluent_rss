@@ -41,7 +41,8 @@ void main() {
   var channelRepository = ChannelRepository(
       channelProvider: channelProvider,
       channelStatusProvider: channelStatusProvider,
-      articleProvider: articleProvider);
+      articleProvider: articleProvider,
+      articleStatusProvider: articleStatusProvider);
   var categoryRepository = CategoryRepository(
       categoryProvider: categoryProvider, channelProvider: channelProvider);
   var app = MultiBlocProvider(

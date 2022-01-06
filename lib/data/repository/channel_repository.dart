@@ -1,6 +1,8 @@
 import 'package:fluent_rss/data/domains/article.dart';
+import 'package:fluent_rss/data/domains/article_status.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/providers/article_provider.dart';
+import 'package:fluent_rss/data/providers/article_status_provider.dart';
 import 'package:fluent_rss/data/providers/channel_provider.dart';
 import 'package:fluent_rss/data/providers/channel_status_provider.dart';
 import 'package:fluent_rss/services/feed_parser.dart';
@@ -9,10 +11,12 @@ class ChannelRepository {
   ChannelProvider channelProvider;
   ChannelStatusProvider channelStatusProvider;
   ArticleProvider articleProvider;
+  ArticleStatusProvider articleStatusProvider;
   ChannelRepository(
       {required this.channelProvider,
       required this.articleProvider,
-      required this.channelStatusProvider});
+      required this.channelStatusProvider,
+      required this.articleStatusProvider});
 
   Future<void> addChannel(Channel channel) async {
     await channelProvider.insert(channel);
@@ -41,6 +45,10 @@ class ChannelRepository {
   Future<void> syncChannel(Channel channel) async {
     List<Article> parsedArticles = await FeedParser.parseArticles(channel.link);
     await articleProvider.batchInsert(parsedArticles);
+    var status = parsedArticles
+        .map((e) => ArticleStatus(articleId: e.uuid, read: 0, starred: 0))
+        .toList();
+    await articleStatusProvider.batchInsert(status);
     await channelStatusProvider.updateReadStatus(channel.link);
   }
 

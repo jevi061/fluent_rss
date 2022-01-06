@@ -17,8 +17,6 @@ class ArticleRepository {
     await articleProvider.insert(article);
     await articleStatusProvider
         .insert(ArticleStatus(articleId: article.uuid, read: 0, starred: 0));
-    await articleStatusProvider
-        .insert(ArticleStatus(articleId: article.uuid, read: 0, starred: 0));
   }
 
   Future<void> addArticles(List<Article> articles) async {
