@@ -32,6 +32,7 @@ class TableDefinitionConstants {
             channelStatusId integer,
             categoryId integer ,
             foreign key (categoryId) references category (id) 
+            ON DELETE CASCADE
           ) """;
   static const String channelStatusTable =
       """ create table if not exists channelStatus(

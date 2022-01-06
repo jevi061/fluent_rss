@@ -27,9 +27,31 @@ class CategoryScreen extends StatelessWidget {
                   child: ListView.builder(
                       itemCount: state.all.length,
                       itemBuilder: (context, index) {
-                        return ExpansionTile(
-                          title: Text(state.all[index].name),
-                          children: [CategoryPanel(category: state.all[index])],
+                        return Slidable(
+                          key: Key(state.all[index].id.toString()),
+                          // The end action pane is the one at the right or the bottom side.
+                          endActionPane: ActionPane(
+                            motion: ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: (BuildContext context) {
+                                  context.read<CategoryBloc>().add(
+                                      DeleteCategoryActionTriggered(
+                                          state.all[index]));
+                                },
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'delete',
+                              ),
+                            ],
+                          ),
+                          child: ExpansionTile(
+                            title: Text(state.all[index].name),
+                            children: [
+                              CategoryPanel(category: state.all[index])
+                            ],
+                          ),
                         );
                       }));
             }
