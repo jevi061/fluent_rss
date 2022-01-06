@@ -17,6 +17,8 @@ class ArticleRepository {
     await articleProvider.insert(article);
     await articleStatusProvider
         .insert(ArticleStatus(articleId: article.uuid, read: 0, starred: 0));
+    await articleStatusProvider
+        .insert(ArticleStatus(articleId: article.uuid, read: 0, starred: 0));
   }
 
   Future<void> addArticles(List<Article> articles) async {
@@ -30,9 +32,9 @@ class ArticleRepository {
   Future<List<Article>> queryByLink(String link) async {
     var articles = await articleProvider.queryByChannelLink(link);
     for (var article in articles) {
-      var articleStatus =
-          await articleStatusProvider.queryByArticleId(article.uuid);
-      article.status = articleStatus;
+      var status = await articleStatusProvider.queryByArticleId(article.uuid);
+      article.status =
+          status ?? ArticleStatus(read: 0, starred: 0, articleId: article.uuid);
     }
     return articles;
   }
@@ -40,9 +42,9 @@ class ArticleRepository {
   Future<List<Article>> queryTimeAfter(int timestamp) async {
     var articles = await articleProvider.queryTimeAfter(timestamp);
     for (var article in articles) {
-      var articleStatus =
-          await articleStatusProvider.queryByArticleId(article.uuid);
-      article.status = articleStatus;
+      var status = await articleStatusProvider.queryByArticleId(article.uuid);
+      article.status =
+          status ?? ArticleStatus(read: 0, starred: 0, articleId: article.uuid);
     }
     return articles;
   }

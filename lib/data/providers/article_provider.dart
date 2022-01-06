@@ -14,10 +14,13 @@ class ArticleProvider {
     'subtitle'
   ];
 
-  Future<void> insert(Article article) async {
+  Future<int> insert(Article article) async {
     Database? db = await dbProvider.database;
-    await db?.insert(TableNameConstants.article, article.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.ignore);
+    if (db != null) {
+      return await db.insert(TableNameConstants.article, article.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.ignore);
+    }
+    return 0;
   }
 
   Future<void> batchInsert(List<Article> articles) async {
