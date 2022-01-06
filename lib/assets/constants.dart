@@ -19,7 +19,7 @@ class TableNameConstants {
 
 class TableDefinitionConstants {
   static const String categoryTable = """ create table if not exists category(
-            id integer primary key,
+            id integer primary key autoincrement,
             name text
             ) """;
   static const String channelTable = """create table if not exists channel(
