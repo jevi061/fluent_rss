@@ -44,7 +44,10 @@ class ArticleProvider {
   Future<List<Article>> queryByChannelLink(String link) async {
     Database? db = await dbProvider.database;
     var list = await db?.query(TableNameConstants.article,
-        columns: articleColums, where: "channel = ?", whereArgs: [link]);
+        columns: articleColums,
+        where: "channel = ?",
+        whereArgs: [link],
+        orderBy: "published desc");
     if (list == null) {
       return [];
     }
@@ -54,7 +57,10 @@ class ArticleProvider {
   Future<List<Article>> queryTimeAfter(int timestamp) async {
     Database? db = await dbProvider.database;
     var list = await db?.query(TableNameConstants.article,
-        columns: articleColums, where: "published > ?", whereArgs: [timestamp]);
+        columns: articleColums,
+        where: "published > ?",
+        whereArgs: [timestamp],
+        orderBy: "published desc");
     if (list == null) {
       return [];
     }
