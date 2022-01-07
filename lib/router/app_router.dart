@@ -41,7 +41,7 @@ class AppRouter {
             settings: settings, builder: (context) => FavoriteScreen());
       default:
         return MaterialPageRoute(
-            builder: (context) => Text("something went wrong"));
+            builder: (context) => const Center(child: Text("404")));
     }
   }
 }
