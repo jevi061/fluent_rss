@@ -20,38 +20,20 @@ class CategoryScreen extends StatelessWidget {
             title: const Text("Fluent RSS"),
             actions: [CreateCategoryAction(), MenuSheet()]),
         body: BlocBuilder<CategoryBloc, CategoryState>(
+          buildWhen: (previous, current) => current is CategoryReadyState,
           builder: (context, state) {
             if (state is CategoryReadyState) {
               return Scrollbar(
                   controller: ScrollController(),
                   child: ListView.builder(
-                      itemCount: state.all.length,
+                      itemCount: state.all.length + 1,
                       itemBuilder: (context, index) {
-                        return Slidable(
-                          key: Key(state.all[index].id.toString()),
-                          // The end action pane is the one at the right or the bottom side.
-                          endActionPane: ActionPane(
-                            motion: ScrollMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: (BuildContext context) {
-                                  context.read<CategoryBloc>().add(
-                                      DeleteCategoryActionTriggered(
-                                          state.all[index]));
-                                },
-                                backgroundColor: Colors.red,
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete,
-                                label: 'delete',
-                              ),
-                            ],
-                          ),
-                          child: ExpansionTile(
-                            title: Text(state.all[index].name),
-                            children: [
-                              CategoryPanel(category: state.all[index])
-                            ],
-                          ),
+                        if (index == 0) {
+                          return TextField();
+                        }
+                        index = index - 1;
+                        return CategoryTile(
+                          category: state.all[index],
                         );
                       }));
             }
