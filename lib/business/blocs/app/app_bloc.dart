@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:fluent_rss/business/event/app_event.dart';
-import 'package:fluent_rss/business/state/app_state.dart';
+import 'package:fluent_rss/business/blocs/app/app_event.dart';
+import 'package:fluent_rss/business/blocs/app/app_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 

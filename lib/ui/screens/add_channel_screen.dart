@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:fluent_rss/business/bloc/add_channel_bloc.dart';
-import 'package:fluent_rss/business/bloc/channel_bloc.dart';
-import 'package:fluent_rss/business/event/add_channel_event.dart';
-import 'package:fluent_rss/business/event/channel_event.dart';
-import 'package:fluent_rss/business/state/add_channel_state.dart';
+import 'package:fluent_rss/business/blocs/channel/add_channel_bloc.dart';
+import 'package:fluent_rss/business/blocs/channel/channel_bloc.dart';
+import 'package:fluent_rss/business/blocs/channel/add_channel_event.dart';
+import 'package:fluent_rss/business/blocs/channel/channel_event.dart';
+import 'package:fluent_rss/business/blocs/channel/add_channel_state.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/services/feed_parser.dart';
 import 'package:fluent_rss/ui/widgets/feed_field.dart';

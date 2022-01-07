@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fluent_rss/business/bloc/add_channel_bloc.dart';
-import 'package:fluent_rss/business/bloc/channel_bloc.dart';
-import 'package:fluent_rss/business/event/add_channel_event.dart';
-import 'package:fluent_rss/business/event/channel_event.dart';
+import 'package:fluent_rss/business/blocs/channel/add_channel_bloc.dart';
+import 'package:fluent_rss/business/blocs/channel/channel_bloc.dart';
+import 'package:fluent_rss/business/blocs/channel/add_channel_event.dart';
+import 'package:fluent_rss/business/blocs/channel/channel_event.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

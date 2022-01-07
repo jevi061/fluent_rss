@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:fluent_rss/business/event/category_event.dart';
-import 'package:fluent_rss/business/state/category_state.dart';
+import 'package:fluent_rss/business/blocs/category/category_event.dart';
+import 'package:fluent_rss/business/blocs/category/category_state.dart';
 import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/data/repository/category_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

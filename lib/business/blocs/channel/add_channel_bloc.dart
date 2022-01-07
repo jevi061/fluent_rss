@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:fluent_rss/business/event/add_channel_event.dart';
-import 'package:fluent_rss/business/state/add_channel_state.dart';
+import 'package:fluent_rss/business/blocs/channel/add_channel_event.dart';
+import 'package:fluent_rss/business/blocs/channel/add_channel_state.dart';
 import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/services/feed_parser.dart';
 

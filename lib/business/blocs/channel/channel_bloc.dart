@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:file_saver/file_saver.dart';
-import 'package:fluent_rss/business/event/channel_event.dart';
-import 'package:fluent_rss/business/state/channel_state.dart';
+import 'package:fluent_rss/business/blocs/channel/channel_event.dart';
+import 'package:fluent_rss/business/blocs/channel/channel_state.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/domains/channel_group.dart';
 import 'package:fluent_rss/data/repository/article_repository.dart';

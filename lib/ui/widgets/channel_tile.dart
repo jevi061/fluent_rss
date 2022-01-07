@@ -1,7 +1,7 @@
-import 'package:fluent_rss/business/bloc/article_bloc.dart';
-import 'package:fluent_rss/business/bloc/channel_bloc.dart';
-import 'package:fluent_rss/business/event/article_event.dart';
-import 'package:fluent_rss/business/event/channel_event.dart';
+import 'package:fluent_rss/business/blocs/article/article_bloc.dart';
+import 'package:fluent_rss/business/blocs/channel/channel_bloc.dart';
+import 'package:fluent_rss/business/blocs/article/article_event.dart';
+import 'package:fluent_rss/business/blocs/channel/channel_event.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/router/app_router.dart';
 import 'package:flutter/material.dart';

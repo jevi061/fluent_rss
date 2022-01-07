@@ -1,6 +1,6 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:fluent_rss/business/bloc/channel_bloc.dart';
-import 'package:fluent_rss/business/event/channel_event.dart';
+import 'package:fluent_rss/business/blocs/channel/channel_bloc.dart';
+import 'package:fluent_rss/business/blocs/channel/channel_event.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/services/opml_parser.dart';
 import 'package:fluent_rss/ui/screens/add_channel_screen.dart';

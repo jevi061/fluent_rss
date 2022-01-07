@@ -1,6 +1,6 @@
-import 'package:fluent_rss/business/bloc/category_bloc.dart';
-import 'package:fluent_rss/business/event/category_event.dart';
-import 'package:fluent_rss/business/state/category_state.dart';
+import 'package:fluent_rss/business/blocs/category/category_bloc.dart';
+import 'package:fluent_rss/business/blocs/category/category_event.dart';
+import 'package:fluent_rss/business/blocs/category/category_state.dart';
 import 'package:fluent_rss/ui/widgets/category_tile.dart';
 import 'package:fluent_rss/ui/widgets/channel_delegate.dart';
 import 'package:fluent_rss/ui/widgets/category_panel.dart';

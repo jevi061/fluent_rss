@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:fluent_rss/business/event/article_event.dart';
-import 'package:fluent_rss/business/state/article_state.dart';
+import 'package:fluent_rss/business/blocs/article/article_event.dart';
+import 'package:fluent_rss/business/blocs/article/article_state.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/repository/article_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';

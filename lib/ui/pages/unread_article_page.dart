@@ -1,5 +1,5 @@
-import 'package:fluent_rss/business/bloc/feed_bloc.dart';
-import 'package:fluent_rss/business/state/feed_state.dart';
+import 'package:fluent_rss/business/blocs/feed/feed_bloc.dart';
+import 'package:fluent_rss/business/blocs/feed/feed_state.dart';
 import 'package:fluent_rss/ui/widgets/article_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
