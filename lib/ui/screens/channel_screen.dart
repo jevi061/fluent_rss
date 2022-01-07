@@ -1,6 +1,8 @@
 import 'package:fluent_rss/business/blocs/channel/channel_bloc.dart';
+import 'package:fluent_rss/business/blocs/channel/channel_event.dart';
 import 'package:fluent_rss/business/blocs/channel/channel_state.dart';
 import 'package:fluent_rss/data/domains/category.dart';
+import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/ui/widgets/channel_delegate.dart';
 import 'package:fluent_rss/ui/widgets/channel_tile.dart';
@@ -20,8 +22,8 @@ class ChannelScreen extends StatefulWidget {
 }
 
 class _ChannelScreenState extends State<ChannelScreen> {
-  Set<int> selectedItem = {};
-  bool isSelecting = false;
+  List<Channel> _selectedChannels = [];
+  bool _isSelecting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
           IconButton(
               onPressed: () {
                 setState(() {
-                  isSelecting = !isSelecting;
+                  _isSelecting = !_isSelecting;
                 });
               },
               icon: Icon(Icons.mode_edit)),
@@ -44,13 +46,21 @@ class _ChannelScreenState extends State<ChannelScreen> {
           },
           child: const Icon(Icons.search),
         ),
-        bottomNavigationBar: isSelecting
+        bottomNavigationBar: _isSelecting
             ? BottomAppBar(
                 child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(onPressed: () {}, child: Text("move")),
-                  TextButton(onPressed: () {}, child: Text("delete"))
+                  TextButton(
+                      onPressed: () {
+                        BlocProvider.of<ChannelBloc>(context).add(
+                            ChannelBatchDeleteRequested(_selectedChannels));
+                        setState(() {
+                          _isSelecting = false;
+                        });
+                      },
+                      child: Text("delete"))
                 ],
               ))
             : null,
@@ -68,11 +78,13 @@ class _ChannelScreenState extends State<ChannelScreen> {
                           itemCount: state.channels.length,
                           itemBuilder: (context, index) {
                             return MultiSelectItem(
-                                isSelecting: isSelecting,
+                                isSelecting: _isSelecting,
                                 onSelect: (bool selected) {
                                   selected
-                                      ? selectedItem.add(index)
-                                      : selectedItem.remove(index);
+                                      ? _selectedChannels
+                                          .add(state.channels[index])
+                                      : _selectedChannels
+                                          .remove(state.channels[index]);
                                 },
                                 child: ChannelTile(
                                   channel: state.channels[index],

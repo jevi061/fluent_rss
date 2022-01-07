@@ -78,6 +78,13 @@ class ChannelDeleted extends ChannelEvent {
   List<Object?> get props => [channel];
 }
 
+class ChannelBatchDeleteRequested extends ChannelEvent {
+  List<Channel> channels;
+  ChannelBatchDeleteRequested(this.channels);
+  @override
+  List<Object?> get props => [channels];
+}
+
 class ChannelAdded extends ChannelEvent {
   Channel channel;
   ChannelAdded(this.channel);
