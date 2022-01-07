@@ -11,8 +11,8 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ChannelTile extends StatelessWidget {
-  Channel channel;
-  ChannelTile({Key? key, required this.channel}) : super(key: key);
+  final Channel channel;
+  const ChannelTile({Key? key, required this.channel}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var lastCheck = DateTime.fromMillisecondsSinceEpoch(
@@ -21,7 +21,7 @@ class ChannelTile extends StatelessWidget {
         key: Key(channel.link),
         // The end action pane is the one at the right or the bottom side.
         endActionPane: ActionPane(
-          motion: ScrollMotion(),
+          motion: const ScrollMotion(),
           children: [
             SlidableAction(
               onPressed: (BuildContext context) {
@@ -42,7 +42,7 @@ class ChannelTile extends StatelessWidget {
           title: Text(channel.title),
           subtitle: Text("last check:${timeago.format(lastCheck)}"),
           trailing: channel.status == null
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : Text(
                   '${channel.status?.unreadCount}/${channel.status?.totalCount}'),
           onTap: () {
