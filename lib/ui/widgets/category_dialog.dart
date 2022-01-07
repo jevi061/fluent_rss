@@ -27,7 +27,7 @@ class CategoryDialog extends StatelessWidget {
           onPressed: () {
             if (tfController.text.isNotEmpty) {
               BlocProvider.of<CategoryBloc>(context)
-                  .add(CreateCategoryActionExecuted(tfController.text));
+                  .add(CategoryCreateActionExecuted(tfController.text));
             }
             Navigator.pop(context);
           },

@@ -13,16 +13,16 @@ class CategoryAdded extends CategoryEvent {
   List<Object?> get props => [];
 }
 
-class CreateCategoryActionExecuted extends CategoryEvent {
-  String category;
-  CreateCategoryActionExecuted(this.category);
+class CategoryCreateActionExecuted extends CategoryEvent {
+  final String category;
+  CategoryCreateActionExecuted(this.category);
   @override
   List<Object?> get props => [category];
 }
 
-class DeleteCategoryActionTriggered extends CategoryEvent {
-  Category category;
-  DeleteCategoryActionTriggered(this.category);
+class CategoryDeleteActionTriggered extends CategoryEvent {
+  final Category category;
+  CategoryDeleteActionTriggered(this.category);
   @override
   List<Object?> get props => [category];
 }

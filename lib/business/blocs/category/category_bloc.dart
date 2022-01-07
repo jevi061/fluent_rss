@@ -11,8 +11,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   CategoryBloc({required this.categoryRepository})
       : super(CategoryReadyState.ready(all: [])) {
     on<CategoryStarted>(_onCategoryStarted);
-    on<CreateCategoryActionExecuted>(_onCreateCategoryActionExecuted);
-    on<DeleteCategoryActionTriggered>(_onDeleteCategoryActionTrigged);
+    on<CategoryCreateActionExecuted>(_onCreateCategoryActionExecuted);
+    on<CategoryDeleteActionTriggered>(_onDeleteCategoryActionTrigged);
   }
   Future<void> _onCategoryStarted(
       CategoryStarted event, Emitter<CategoryState> emitter) async {
@@ -21,7 +21,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   }
 
   Future<void> _onCreateCategoryActionExecuted(
-      CreateCategoryActionExecuted event,
+      CategoryCreateActionExecuted event,
       Emitter<CategoryState> emitter) async {
     await categoryRepository.addCategory(Category(name: event.category));
     var all = await categoryRepository.getCategories();
@@ -29,7 +29,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   }
 
   Future<void> _onDeleteCategoryActionTrigged(
-      DeleteCategoryActionTriggered event,
+      CategoryDeleteActionTriggered event,
       Emitter<CategoryState> emitter) async {
     if (event.category.id != null) {
       await categoryRepository.deleteCategory(event.category.id!);

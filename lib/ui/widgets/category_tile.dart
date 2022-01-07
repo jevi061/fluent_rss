@@ -1,3 +1,5 @@
+import 'package:fluent_rss/business/blocs/category/category_bloc.dart';
+import 'package:fluent_rss/business/blocs/category/category_event.dart';
 import 'package:fluent_rss/business/blocs/channel/channel_bloc.dart';
 import 'package:fluent_rss/business/blocs/channel/channel_event.dart';
 import 'package:fluent_rss/data/domains/category.dart';
@@ -20,7 +22,9 @@ class CategoryTile extends StatelessWidget {
           children: [
             SlidableAction(
               onPressed: (BuildContext context) {
-                // context.read<ChannelBloc>().add(ChannelDeleted(channel));
+                context
+                    .read<CategoryBloc>()
+                    .add(CategoryDeleteActionTriggered(category));
               },
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
