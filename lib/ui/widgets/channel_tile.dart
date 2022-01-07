@@ -34,8 +34,7 @@ class ChannelTile extends StatelessWidget {
             ),
           ],
         ),
-        child: Card(
-            child: ListTile(
+        child: ListTile(
           leading: CircleAvatar(
             backgroundImage: CachedNetworkImageProvider(channel.iconUrl),
           ),
@@ -52,6 +51,6 @@ class ChannelTile extends StatelessWidget {
             Navigator.of(context)
                 .pushNamed(AppRouter.articleScreen, arguments: channel);
           },
-        )));
+        ));
   }
 }
