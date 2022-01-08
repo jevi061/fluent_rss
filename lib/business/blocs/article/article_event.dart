@@ -55,3 +55,9 @@ class ArticleRead extends ArticleEvent {
   @override
   List<Object?> get props => [];
 }
+
+class ArticleStatusChanged extends ArticleEvent {
+  ArticleStatusChanged();
+  @override
+  List<Object?> get props => [];
+}

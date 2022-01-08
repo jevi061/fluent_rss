@@ -20,12 +20,15 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     // on<ArticleChannelRefreshFinished>(_onArticleChannelRefreshFinished);
     on<ArticleStarred>(_onArticleStarred);
     on<ArticleRead>(_onArticleRead);
+    on<ArticleStatusChanged>(_onArticleStatusChanged);
   }
 
   Future<void> _onArticleStarted(
       ArticleEvent event, Emitter<ArticleState> emitter) async {
     //await articleRepository.refreshAllArticles();
   }
+  Future<void> _onArticleStatusChanged(
+      ArticleStatusChanged event, Emitter<ArticleState> emitter) async {}
 
   Future<void> _onArticleRequested(
       ArticleRequested event, Emitter<ArticleState> emitter) async {

@@ -14,3 +14,9 @@ class UnreadFeedLoadTriggered extends UnreadFeedEvent {
   @override
   List<Object?> get props => [];
 }
+
+class UnreadFeedOutdated extends UnreadFeedEvent {
+  UnreadFeedOutdated();
+  @override
+  List<Object?> get props => [];
+}

@@ -14,3 +14,9 @@ class AllFeedLoadTriggered extends AllFeedEvent {
   @override
   List<Object?> get props => [];
 }
+
+class AllFeedOutdated extends AllFeedEvent {
+  AllFeedOutdated();
+  @override
+  List<Object?> get props => [];
+}

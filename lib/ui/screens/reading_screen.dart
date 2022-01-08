@@ -97,6 +97,7 @@ class _ReadScreenState extends State<ReadingScreen> {
                         .read<FavoriteBloc>()
                         .add(FavoriteUpdated(article: state.article!));
                     setState(() {});
+                    context.read<ArticleBloc>().add(ArticleStatusChanged());
                   },
                   icon: state.article?.status?.starred == 0
                       ? Icon(Icons.star_border)

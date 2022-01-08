@@ -28,6 +28,7 @@ class ArticleTile extends StatelessWidget {
           context.read<ArticleBloc>().add(ArticleRead(article));
           context.read<ReadingBloc>().add(ReadingStarted(article: article));
           context.read<HistoryBloc>().add(HistoryUpdated(article: article));
+          context.read<ArticleBloc>().add(ArticleStatusChanged());
           Navigator.of(context).pushNamed(AppRouter.readScreen);
         },
         child: Stack(
@@ -73,6 +74,7 @@ class ArticleTile extends StatelessWidget {
                       context
                           .read<HistoryBloc>()
                           .add(HistoryUpdated(article: article));
+                      context.read<ArticleBloc>().add(ArticleStatusChanged());
                     },
                   )
                 ],

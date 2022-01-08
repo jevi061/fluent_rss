@@ -14,3 +14,9 @@ class TodayFeedLoadTriggered extends TodayFeedEvent {
   @override
   List<Object?> get props => [];
 }
+
+class TodayFeedOutdated extends TodayFeedEvent {
+  TodayFeedOutdated();
+  @override
+  List<Object?> get props => [];
+}

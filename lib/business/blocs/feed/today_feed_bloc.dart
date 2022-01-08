@@ -11,6 +11,7 @@ class TodayFeedBloc extends Bloc<TodayFeedEvent, TodayFeedState> {
   TodayFeedBloc({required this.articleRepository}) : super(TodayFeedState([])) {
     on<TodayFeedStarted>(_onTodayFeedStarted);
     on<TodayFeedLoadTriggered>(_onTodayFeedLoadTriggered);
+    on<TodayFeedOutdated>(_onTodayFeedOutdated);
   }
   Future<void> _onTodayFeedStarted(
       TodayFeedStarted event, Emitter<TodayFeedState> emitter) async {
@@ -28,5 +29,14 @@ class TodayFeedBloc extends Bloc<TodayFeedEvent, TodayFeedState> {
     var today = await articleRepository.queryPageTimeAfter(
         date.millisecondsSinceEpoch, state.articles.length, limit);
     emitter(TodayFeedState(List.of(state.articles)..addAll(today)));
+  }
+
+  Future<void> _onTodayFeedOutdated(
+      TodayFeedOutdated event, Emitter<TodayFeedState> emitter) async {
+    DateTime now = DateTime.now();
+    DateTime date = DateTime(now.year, now.month, now.day);
+    var today = await articleRepository.queryPageTimeAfter(
+        date.millisecondsSinceEpoch, 0, state.articles.length);
+    emitter(TodayFeedState(today));
   }
 }

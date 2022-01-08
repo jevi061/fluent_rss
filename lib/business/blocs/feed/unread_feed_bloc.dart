@@ -12,6 +12,7 @@ class UnreadFeedBloc extends Bloc<UnreadFeedEvent, UnreadFeedState> {
       : super(UnreadFeedState([])) {
     on<UnreadFeedStarted>(_onUnreadFeedStarted);
     on<UnreadFeedLoadTriggered>(_onUnreadFeedLoadTriggered);
+    on<UnreadFeedOutdated>(_onUnreadFeedOutdated);
   }
 
   Future<void> _onUnreadFeedStarted(
@@ -25,5 +26,12 @@ class UnreadFeedBloc extends Bloc<UnreadFeedEvent, UnreadFeedState> {
     var all = await articleRepository.queryPageByRead(
         0, state.articles.length, limit);
     emitter(UnreadFeedState(List.of(state.articles)..addAll(all)));
+  }
+
+  Future<void> _onUnreadFeedOutdated(
+      UnreadFeedOutdated event, Emitter<UnreadFeedState> emitter) async {
+    var unread =
+        await articleRepository.queryPageByRead(0, 0, state.articles.length);
+    emitter(UnreadFeedState(unread));
   }
 }

@@ -1,3 +1,6 @@
+import 'package:fluent_rss/business/blocs/article/article_bloc.dart';
+import 'package:fluent_rss/business/blocs/article/article_event.dart';
+import 'package:fluent_rss/business/blocs/article/article_state.dart';
 import 'package:fluent_rss/business/blocs/feed/all_feed_bloc.dart';
 import 'package:fluent_rss/business/blocs/feed/all_feed_event.dart';
 import 'package:fluent_rss/business/blocs/feed/all_feed_state.dart';
@@ -46,15 +49,23 @@ class _AllArticlePageState extends State<AllArticlePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AllFeedBloc, AllFeedState>(builder: (context, state) {
-      return Scrollbar(
-          controller: ScrollController(),
-          child: ListView.builder(
-              controller: _scrollController,
-              itemCount: state.articles.length,
-              itemBuilder: (context, index) => ArticleTile(
-                    article: state.articles[index],
-                  )));
-    });
+    return BlocListener<ArticleBloc, ArticleState>(
+      listenWhen: (previous, current) => current is ArticleStatusChanged,
+      listener: (context, state) {
+        if (state is ArticleStatusChanged) {
+          BlocProvider.of<AllFeedBloc>(context).add(AllFeedOutdated());
+        }
+      },
+      child: BlocBuilder<AllFeedBloc, AllFeedState>(builder: (context, state) {
+        return Scrollbar(
+            controller: ScrollController(),
+            child: ListView.builder(
+                controller: _scrollController,
+                itemCount: state.articles.length,
+                itemBuilder: (context, index) => ArticleTile(
+                      article: state.articles[index],
+                    )));
+      }),
+    );
   }
 }

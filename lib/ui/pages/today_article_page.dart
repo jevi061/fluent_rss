@@ -1,3 +1,5 @@
+import 'package:fluent_rss/business/blocs/article/article_bloc.dart';
+import 'package:fluent_rss/business/blocs/article/article_state.dart';
 import 'package:fluent_rss/business/blocs/feed/all_feed_bloc.dart';
 import 'package:fluent_rss/business/blocs/feed/all_feed_state.dart';
 import 'package:fluent_rss/business/blocs/feed/today_feed_bloc.dart';
@@ -46,16 +48,19 @@ class _TodayArticlePageState extends State<TodayArticlePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TodayFeedBloc, TodayFeedState>(
-        builder: (context, state) {
-      return Scrollbar(
-          controller: ScrollController(),
-          child: ListView.builder(
-              controller: _scrollController,
-              itemCount: state.articles.length,
-              itemBuilder: (context, index) => ArticleTile(
-                    article: state.articles[index],
-                  )));
-    });
+    return BlocListener<ArticleBloc, ArticleState>(
+      listener: (context, state) {},
+      child:
+          BlocBuilder<TodayFeedBloc, TodayFeedState>(builder: (context, state) {
+        return Scrollbar(
+            controller: ScrollController(),
+            child: ListView.builder(
+                controller: _scrollController,
+                itemCount: state.articles.length,
+                itemBuilder: (context, index) => ArticleTile(
+                      article: state.articles[index],
+                    )));
+      }),
+    );
   }
 }
