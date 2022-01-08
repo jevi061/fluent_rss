@@ -1,11 +1,11 @@
 import 'package:fluent_rss/business/blocs/article/article_bloc.dart';
 import 'package:fluent_rss/business/blocs/favorite/favorite_bloc.dart';
-import 'package:fluent_rss/business/blocs/feed/feed_bloc.dart';
+import 'package:fluent_rss/business/blocs/feed/all_feed_bloc.dart';
 import 'package:fluent_rss/business/blocs/history/history_bloc.dart';
 import 'package:fluent_rss/business/blocs/read/reading_bloc.dart';
 import 'package:fluent_rss/business/blocs/article/article_event.dart';
 import 'package:fluent_rss/business/blocs/favorite/favorite_event.dart';
-import 'package:fluent_rss/business/blocs/feed/feed_event.dart';
+import 'package:fluent_rss/business/blocs/feed/all_feed_event.dart';
 import 'package:fluent_rss/business/blocs/history/history_event.dart';
 import 'package:fluent_rss/business/blocs/read/reading_event.dart';
 import 'package:fluent_rss/data/domains/article.dart';
@@ -28,7 +28,6 @@ class ArticleTile extends StatelessWidget {
           context.read<ArticleBloc>().add(ArticleRead(article));
           context.read<ReadingBloc>().add(ReadingStarted(article: article));
           context.read<HistoryBloc>().add(HistoryUpdated(article: article));
-          context.read<FeedBloc>().add(FeedsStateChanged());
           Navigator.of(context).pushNamed(AppRouter.readScreen);
         },
         child: Stack(
@@ -74,7 +73,6 @@ class ArticleTile extends StatelessWidget {
                       context
                           .read<HistoryBloc>()
                           .add(HistoryUpdated(article: article));
-                      context.read<FeedBloc>().add(FeedsStateChanged());
                     },
                   )
                 ],

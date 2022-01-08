@@ -47,6 +47,17 @@ class ArticleRepository {
     return articles;
   }
 
+  Future<List<Article>> queryPageTimeAfter(
+      int timestamp, int start, int limit) async {
+    var articles = await articleProvider.queryTimeAfter(timestamp);
+    for (var article in articles) {
+      var status = await articleStatusProvider.queryByArticleId(article.uuid);
+      article.status =
+          status ?? ArticleStatus(read: 0, starred: 0, articleId: article.uuid);
+    }
+    return articles;
+  }
+
   Future<void> updateArticleStarStatus(String articleId, int star) async {
     await articleStatusProvider.updateStarStatus(articleId, star);
   }
@@ -68,6 +79,19 @@ class ArticleRepository {
     return readArticles;
   }
 
+  Future<List<Article>> queryPageByRead(int read, int start, int limit) async {
+    var articles = await queryPage(start, limit);
+    var readArticles =
+        articles.where((element) => element.status?.read == read).toList();
+    // associate article status
+    for (var article in readArticles) {
+      var status = await articleStatusProvider.queryByArticleId(article.link);
+      article.status =
+          status ?? ArticleStatus(read: 0, starred: 0, articleId: article.uuid);
+    }
+    return readArticles;
+  }
+
   Future<List<Article>> queryByStar(int starred) async {
     var articles = await queryAll();
     var starredArticles = articles
@@ -78,6 +102,17 @@ class ArticleRepository {
 
   Future<List<Article>> queryAll() async {
     var articles = await articleProvider.queryAll();
+    // associate article status
+    for (var article in articles) {
+      var status = await articleStatusProvider.queryByArticleId(article.link);
+      article.status =
+          status ?? ArticleStatus(read: 0, starred: 0, articleId: article.uuid);
+    }
+    return articles;
+  }
+
+  Future<List<Article>> queryPage(int start, int limit) async {
+    var articles = await articleProvider.queryPage(start, limit);
     // associate article status
     for (var article in articles) {
       var status = await articleStatusProvider.queryByArticleId(article.link);

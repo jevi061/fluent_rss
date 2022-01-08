@@ -1,16 +1,16 @@
 import 'package:equatable/equatable.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 
-abstract class FeedEvent extends Equatable {}
+abstract class AllFeedEvent extends Equatable {}
 
-class AllFeedsStarted extends FeedEvent {
-  AllFeedsStarted();
+class AllFeedStarted extends AllFeedEvent {
+  AllFeedStarted();
   @override
   List<Object?> get props => [];
 }
 
-class FeedsStateChanged extends FeedEvent {
-  FeedsStateChanged();
+class AllFeedLoadTriggered extends AllFeedEvent {
+  AllFeedLoadTriggered();
   @override
   List<Object?> get props => [];
 }

@@ -1,6 +1,7 @@
 import 'package:fluent_rss/assets/constants.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/providers/database_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ArticleProvider {
@@ -41,6 +42,14 @@ class ArticleProvider {
     return list?.map((e) => Article.fromMap(e)).toList() ?? [];
   }
 
+  Future<List<Article>> queryPage(int start, int limit) async {
+    Database? db = await dbProvider.database;
+    // query article core data
+    var list = await db?.query(TableNameConstants.article,
+        columns: articleColums, limit: limit, offset: start);
+    return list?.map((e) => Article.fromMap(e)).toList() ?? [];
+  }
+
   Future<List<Article>> queryByChannelLink(String link) async {
     Database? db = await dbProvider.database;
     var list = await db?.query(TableNameConstants.article,
@@ -61,6 +70,22 @@ class ArticleProvider {
         where: "published > ?",
         whereArgs: [timestamp],
         orderBy: "published desc");
+    if (list == null) {
+      return [];
+    }
+    return list.map((e) => Article.fromMap(e)).toList();
+  }
+
+  Future<List<Article>> queryPageTimeAfter(
+      int timestamp, int start, int limit) async {
+    Database? db = await dbProvider.database;
+    var list = await db?.query(TableNameConstants.article,
+        columns: articleColums,
+        where: "published > ?",
+        whereArgs: [timestamp],
+        orderBy: "published desc",
+        limit: limit,
+        offset: start);
     if (list == null) {
       return [];
     }

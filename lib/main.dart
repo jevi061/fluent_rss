@@ -3,11 +3,11 @@ import 'package:fluent_rss/business/blocs/app/app_bloc.dart';
 import 'package:fluent_rss/business/blocs/article/article_bloc.dart';
 import 'package:fluent_rss/business/blocs/category/category_bloc.dart';
 import 'package:fluent_rss/business/blocs/channel/channel_bloc.dart';
-import 'package:fluent_rss/business/blocs/feed/feed_bloc.dart';
+import 'package:fluent_rss/business/blocs/feed/all_feed_bloc.dart';
 import 'package:fluent_rss/business/blocs/app/app_event.dart';
 import 'package:fluent_rss/business/blocs/category/category_event.dart';
 import 'package:fluent_rss/business/blocs/channel/channel_event.dart';
-import 'package:fluent_rss/business/blocs/feed/feed_event.dart';
+import 'package:fluent_rss/business/blocs/feed/all_feed_event.dart';
 import 'package:fluent_rss/data/providers/article_status_provider.dart';
 import 'package:fluent_rss/data/providers/category_provider.dart';
 import 'package:fluent_rss/data/providers/channel_provider.dart';
@@ -20,6 +20,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'business/blocs/favorite/favorite_bloc.dart';
+import 'business/blocs/feed/today_feed_bloc.dart';
+import 'business/blocs/feed/today_feed_event.dart';
+import 'business/blocs/feed/unread_feed_bloc.dart';
+import 'business/blocs/feed/unread_feed_event.dart';
 import 'business/blocs/history/history_bloc.dart';
 import 'business/blocs/read/reading_bloc.dart';
 import 'business/blocs/favorite/favorite_event.dart';
@@ -77,8 +81,16 @@ void main() {
       BlocProvider(create: (BuildContext context) => AddChannelBloc()),
       BlocProvider(
           create: (BuildContext context) =>
-              FeedBloc(articleRepository: articleRepository)
-                ..add(AllFeedsStarted())),
+              AllFeedBloc(articleRepository: articleRepository)
+                ..add(AllFeedStarted())),
+      BlocProvider(
+          create: (BuildContext context) =>
+              UnreadFeedBloc(articleRepository: articleRepository)
+                ..add(UnreadFeedStarted())),
+      BlocProvider(
+          create: (BuildContext context) =>
+              TodayFeedBloc(articleRepository: articleRepository)
+                ..add(TodayFeedStarted())),
       BlocProvider(
           create: (BuildContext context) =>
               CategoryBloc(categoryRepository: categoryRepository)
