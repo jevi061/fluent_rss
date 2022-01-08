@@ -75,8 +75,11 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
 
   Future<void> _onArticleRead(
       ArticleRead event, Emitter<ArticleState> emitter) async {
-    await articleRepository.updateArticleReadStatus(event.article.uuid, 1);
-    await channelRepository.decreaseUnread(event.article.channel);
+    if (event.previousRead == 0) {
+      await articleRepository.updateArticleReadStatus(event.article.uuid, 1);
+      await channelRepository.decreaseUnread(event.article.channel);
+      add(ArticleStatusChanged());
+    }
     List<Article> articles =
         await articleRepository.queryByLink(event.article.channel);
     emitter(ArticleState.ready(articles: articles));

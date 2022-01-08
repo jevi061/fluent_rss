@@ -3,9 +3,8 @@ import 'package:fluent_rss/data/domains/article.dart';
 
 abstract class HistoryEvent extends Equatable {}
 
-class HistoryUpdated extends HistoryEvent {
-  Article article;
-  HistoryUpdated({required this.article});
+class HistoryOutdated extends HistoryEvent {
+  HistoryOutdated();
   @override
   List<Object?> get props => [];
 }

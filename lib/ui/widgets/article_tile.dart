@@ -25,10 +25,9 @@ class ArticleTile extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          context.read<ArticleBloc>().add(ArticleRead(article));
+          context.read<ArticleBloc>().add(ArticleRead(
+              article: article, previousRead: article.status?.read ?? 0));
           context.read<ReadingBloc>().add(ReadingStarted(article: article));
-          context.read<HistoryBloc>().add(HistoryUpdated(article: article));
-          context.read<ArticleBloc>().add(ArticleStatusChanged());
           Navigator.of(context).pushNamed(AppRouter.readScreen);
         },
         child: Stack(
@@ -67,9 +66,6 @@ class ArticleTile extends StatelessWidget {
                       var currentStar = article.status?.starred == 0 ? 1 : 0;
                       context.read<ArticleBloc>().add(ArticleStarTriggered(
                           article: article, currentStar: currentStar));
-                      context
-                          .read<HistoryBloc>()
-                          .add(HistoryUpdated(article: article));
                     },
                   )
                 ],

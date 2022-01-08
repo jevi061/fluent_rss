@@ -9,11 +9,11 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   ArticleRepository articleRepository;
   HistoryBloc({required this.articleRepository})
       : super(HistoryState.ready(articles: [])) {
-    on<HistoryUpdated>(_onHistoryUpdated);
+    on<HistoryOutdated>(_onHistoryUpdated);
     on<HistoryStarted>(_onHistoryStarted);
   }
   Future<void> _onHistoryUpdated(
-      HistoryUpdated event, Emitter<HistoryState> emitter) async {
+      HistoryOutdated event, Emitter<HistoryState> emitter) async {
     var list = await articleRepository.queryByRead(1);
     emitter(HistoryState.ready(articles: list));
   }

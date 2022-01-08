@@ -51,8 +51,9 @@ class ArticleStarTriggered extends ArticleEvent {
 }
 
 class ArticleRead extends ArticleEvent {
+  int previousRead;
   Article article;
-  ArticleRead(this.article);
+  ArticleRead({required this.article, required this.previousRead});
   @override
   List<Object?> get props => [];
 }
