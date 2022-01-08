@@ -13,6 +13,7 @@ import 'package:fluent_rss/data/providers/category_provider.dart';
 import 'package:fluent_rss/data/providers/channel_provider.dart';
 import 'package:fluent_rss/data/repository/category_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
+import 'package:fluent_rss/data/repository/history_repository.dart';
 import 'package:fluent_rss/router/app_router.dart';
 import 'package:fluent_rss/theme/app_theme.dart';
 import 'package:fluent_rss/ui/screens/home_screen.dart';
@@ -33,75 +34,105 @@ import 'data/providers/channel_status_provider.dart';
 import 'data/repository/article_repository.dart';
 
 void main() {
+  var repositoryProviders = makeRepositoryProviders();
+  var blocProviders = makeBlocProviders();
+  var app = MultiRepositoryProvider(
+      providers: repositoryProviders,
+      child: MultiBlocProvider(
+        providers: blocProviders,
+        child: MaterialApp(
+          theme: AppTheme.light,
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: AppRouter.controller,
+          initialRoute: AppRouter.homeScreen,
+        ),
+      ));
+  runApp(app);
+}
+
+List<RepositoryProvider> makeRepositoryProviders() {
   var categoryProvider = CategoryProvider();
   var channelProvider = ChannelProvider();
   var channelStatusProvider = ChannelStatusProvider();
   var articleProvider = ArticleProvider();
   var articleStatusProvider = ArticleStatusProvider();
-  var articleRepository = ArticleRepository(
-      articleStatusProvider: articleStatusProvider,
-      channelProvider: channelProvider,
-      articleProvider: articleProvider);
-  var channelRepository = ChannelRepository(
-      channelProvider: channelProvider,
-      channelStatusProvider: channelStatusProvider,
-      articleProvider: articleProvider,
-      articleStatusProvider: articleStatusProvider);
-  var categoryRepository = CategoryRepository(
-      categoryProvider: categoryProvider, channelProvider: channelProvider);
-  var app = MultiBlocProvider(
-    providers: [
-      BlocProvider<ChannelBloc>(
-          lazy: false,
-          create: (BuildContext context) => ChannelBloc(
-              categoryRepository: categoryRepository,
-              channelRepository: channelRepository,
-              articleRepository: articleRepository)
-            ..add(ChannelStarted())),
-      BlocProvider<ArticleBloc>(
-          lazy: false,
-          create: (BuildContext context) => ArticleBloc(
-              channelRepository: channelRepository,
-              articleRepository: articleRepository)),
-      BlocProvider<HistoryBloc>(
-          lazy: false,
-          create: (BuildContext context) =>
-              HistoryBloc(articleRepository: articleRepository)
-                ..add(HistoryStarted())),
-      BlocProvider<FavoriteBloc>(
-          lazy: false,
-          create: (BuildContext context) =>
-              FavoriteBloc(articleRepository: articleRepository)
-                ..add(FavoriteStarted())),
-      BlocProvider<ReadingBloc>(
-          lazy: false, create: (BuildContext context) => ReadingBloc()),
-      BlocProvider<AppBloc>(
-          lazy: false,
-          create: (BuildContext context) => AppBloc()..add(AppStarted())),
-      BlocProvider(create: (BuildContext context) => AddChannelBloc()),
-      BlocProvider(
-          create: (BuildContext context) =>
-              AllFeedBloc(articleRepository: articleRepository)
-                ..add(AllFeedStarted())),
-      BlocProvider(
-          create: (BuildContext context) =>
-              UnreadFeedBloc(articleRepository: articleRepository)
-                ..add(UnreadFeedStarted())),
-      BlocProvider(
-          create: (BuildContext context) =>
-              TodayFeedBloc(articleRepository: articleRepository)
-                ..add(TodayFeedStarted())),
-      BlocProvider(
-          create: (BuildContext context) =>
-              CategoryBloc(categoryRepository: categoryRepository)
-                ..add(CategoryStarted()))
-    ],
-    child: MaterialApp(
-      theme: AppTheme.light,
-      debugShowCheckedModeBanner: false,
-      onGenerateRoute: AppRouter.controller,
-      initialRoute: AppRouter.homeScreen,
+  return [
+    RepositoryProvider<ArticleRepository>(
+      create: (context) => ArticleRepository(
+          articleProvider: articleProvider,
+          channelProvider: channelProvider,
+          articleStatusProvider: articleStatusProvider),
     ),
-  );
-  runApp(app);
+    RepositoryProvider<ChannelRepository>(
+      create: (context) => ChannelRepository(
+          channelProvider: channelProvider,
+          articleProvider: articleProvider,
+          channelStatusProvider: channelStatusProvider,
+          articleStatusProvider: articleStatusProvider),
+    ),
+    RepositoryProvider<CategoryRepository>(
+      create: (context) => CategoryRepository(
+          categoryProvider: categoryProvider, channelProvider: channelProvider),
+    ),
+  ];
+}
+
+List<BlocProvider> makeBlocProviders() {
+  return [
+    BlocProvider<ChannelBloc>(
+        lazy: false,
+        create: (BuildContext context) => ChannelBloc(
+            categoryRepository:
+                RepositoryProvider.of<CategoryRepository>(context),
+            channelRepository:
+                RepositoryProvider.of<ChannelRepository>(context),
+            articleRepository:
+                RepositoryProvider.of<ArticleRepository>(context))
+          ..add(ChannelStarted())),
+    BlocProvider<ArticleBloc>(
+        lazy: false,
+        create: (BuildContext context) => ArticleBloc(
+            channelRepository:
+                RepositoryProvider.of<ChannelRepository>(context),
+            articleRepository:
+                RepositoryProvider.of<ArticleRepository>(context))),
+    BlocProvider<HistoryBloc>(
+        lazy: false,
+        create: (BuildContext context) => HistoryBloc(
+            articleRepository:
+                RepositoryProvider.of<ArticleRepository>(context))
+          ..add(HistoryStarted())),
+    BlocProvider<FavoriteBloc>(
+        lazy: false,
+        create: (BuildContext context) => FavoriteBloc(
+            articleRepository:
+                RepositoryProvider.of<ArticleRepository>(context))
+          ..add(FavoriteStarted())),
+    BlocProvider<ReadingBloc>(
+        lazy: false, create: (BuildContext context) => ReadingBloc()),
+    BlocProvider<AppBloc>(
+        lazy: false,
+        create: (BuildContext context) => AppBloc()..add(AppStarted())),
+    BlocProvider(create: (BuildContext context) => AddChannelBloc()),
+    BlocProvider<AllFeedBloc>(
+        create: (BuildContext context) => AllFeedBloc(
+            articleRepository:
+                RepositoryProvider.of<ArticleRepository>(context))
+          ..add(AllFeedStarted())),
+    BlocProvider<UnreadFeedBloc>(
+        create: (BuildContext context) => UnreadFeedBloc(
+            articleRepository:
+                RepositoryProvider.of<ArticleRepository>(context))
+          ..add(UnreadFeedStarted())),
+    BlocProvider<TodayFeedBloc>(
+        create: (BuildContext context) => TodayFeedBloc(
+            articleRepository:
+                RepositoryProvider.of<ArticleRepository>(context))
+          ..add(TodayFeedStarted())),
+    BlocProvider<CategoryBloc>(
+        create: (BuildContext context) => CategoryBloc(
+            categoryRepository:
+                RepositoryProvider.of<CategoryRepository>(context))
+          ..add(CategoryStarted()))
+  ];
 }

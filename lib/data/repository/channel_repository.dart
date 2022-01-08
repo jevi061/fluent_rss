@@ -102,4 +102,15 @@ class ChannelRepository {
       await channelProvider.changeCategory(ch, categoryId);
     }
   }
+
+  Future<List<Channel>> searchChannels(String query) async {
+    var channels = await channelProvider.searchChannels(query);
+    // fetch channel status
+    for (var ch in channels) {
+      var channelStatus =
+          await channelStatusProvider.queryChannelStatusByLink(ch.link);
+      ch.status = channelStatus;
+    }
+    return channels;
+  }
 }

@@ -6,6 +6,7 @@ import 'package:fluent_rss/business/blocs/channel/channel_event.dart';
 import 'package:fluent_rss/business/blocs/channel/channel_state.dart';
 import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
+import 'package:fluent_rss/data/repository/channel_repository.dart';
 import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/ui/widgets/category_select_panel.dart';
 import 'package:fluent_rss/ui/widgets/channel_delegate.dart';
@@ -48,7 +49,11 @@ class _ChannelScreenState extends State<ChannelScreen> {
         ]),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            showSearch(context: context, delegate: ChannelSearchDelegate([]));
+            var channelRepository =
+                RepositoryProvider.of<ChannelRepository>(context);
+            showSearch(
+                context: context,
+                delegate: ChannelSearchDelegate(channelRepository));
           },
           child: const Icon(Icons.search),
         ),

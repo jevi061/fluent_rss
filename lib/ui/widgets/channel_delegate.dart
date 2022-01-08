@@ -1,10 +1,12 @@
 import 'package:fluent_rss/data/domains/channel.dart';
+import 'package:fluent_rss/data/repository/channel_repository.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/ui/widgets/channel_tile.dart';
 import 'package:flutter/material.dart';
 
 class ChannelSearchDelegate extends SearchDelegate {
-  List<Channel> channels;
-  ChannelSearchDelegate(this.channels);
+  ChannelRepository repository;
+  ChannelSearchDelegate(this.repository);
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [];
@@ -17,23 +19,39 @@ class ChannelSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    var results = channels.where((ch) => ch.title.contains(query)).toList();
-    return Scrollbar(
-        child: ListView.builder(
-            itemCount: results.length,
-            itemBuilder: (context, index) {
-              return ChannelTile(channel: results[index]);
-            }));
+    return FutureBuilder<List<Channel>>(
+        future: repository.searchChannels(query),
+        builder: (context, snap) {
+          if (snap.hasData) {
+            return Scrollbar(
+                child: ListView.builder(
+                    itemCount: snap.data?.length,
+                    itemBuilder: (context, index) {
+                      return ChannelTile(channel: snap.data![index]);
+                    }));
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var suggestions = channels.where((ch) => ch.title.contains(query)).toList();
-    return Scrollbar(
-        child: ListView.builder(
-            itemCount: suggestions.length,
-            itemBuilder: (context, index) {
-              return ChannelTile(channel: suggestions[index]);
-            }));
+    return FutureBuilder<List<Channel>>(
+        future: repository.searchChannels(query),
+        builder: (context, snap) {
+          if (snap.hasData) {
+            return Scrollbar(
+                child: ListView.builder(
+                    itemCount: snap.data?.length,
+                    itemBuilder: (context, index) {
+                      return ChannelTile(channel: snap.data![index]);
+                    }));
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
   }
 }

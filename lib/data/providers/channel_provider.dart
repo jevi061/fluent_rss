@@ -1,6 +1,7 @@
 import 'package:fluent_rss/assets/constants.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/providers/database_provider.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ChannelProvider {
@@ -93,5 +94,25 @@ class ChannelProvider {
     Database? db = await dbProvider.database;
     await db?.update(TableNameConstants.channel, {"categoryId": categoryId},
         where: "link=?", whereArgs: [channel.link]);
+  }
+
+  Future<List<Channel>> searchChannels(String query) async {
+    AppLogger.instance.d("query:$query");
+    Database? db = await dbProvider.database;
+    var list = await db?.query(
+      TableNameConstants.channel,
+      columns: [
+        "link",
+        "title",
+        "description",
+        "type",
+        "version",
+        "iconUrl",
+        "categoryId"
+      ],
+      where: 'title like ?',
+      whereArgs: ['\%$query\%'],
+    );
+    return list?.map((e) => Channel.fromMap(e)).toList() ?? [];
   }
 }
