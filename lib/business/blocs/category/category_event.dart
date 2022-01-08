@@ -31,3 +31,8 @@ class CategoryListRequested extends CategoryEvent {
   @override
   List<Object?> get props => [];
 }
+
+class CategoryOutdated extends CategoryEvent {
+  @override
+  List<Object?> get props => [];
+}

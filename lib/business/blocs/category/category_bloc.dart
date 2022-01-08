@@ -14,6 +14,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<CategoryCreateActionExecuted>(_onCreateCategoryActionExecuted);
     on<CategoryDeleteActionTriggered>(_onDeleteCategoryActionTrigged);
     on<CategoryListRequested>(_onCategoryListRequested);
+    on<CategoryOutdated>(_onCategoryOutdated);
   }
   Future<void> _onCategoryStarted(
       CategoryStarted event, Emitter<CategoryState> emitter) async {
@@ -43,5 +44,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       var all = await categoryRepository.getCategories();
       emitter(CategoryReadyState.ready(all: all));
     }
+  }
+
+  Future<void> _onCategoryOutdated(
+      CategoryOutdated event, Emitter<CategoryState> emitter) async {
+    var all = await categoryRepository.getCategories();
+    emitter(CategoryReadyState.ready(all: all));
   }
 }
