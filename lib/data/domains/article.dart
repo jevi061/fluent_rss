@@ -30,10 +30,10 @@ class Article {
   }
 
   Article.fromMap(Map<String, dynamic> data)
-      : uuid = data['uuid'],
-        channel = data['channel'],
+      : uuid = data['uuid'] ?? '',
+        channel = data['channel'] ?? "",
         title = data['title'] ?? "no title",
         link = data['link'] ?? "",
         subtitle = data['subtitle'] ?? "",
-        published = data['published'];
+        published = data['published'] ?? 0;
 }

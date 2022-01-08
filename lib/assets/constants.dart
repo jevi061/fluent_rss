@@ -45,7 +45,7 @@ class TableDefinitionConstants {
           )
       """;
   static const String articleTable = """create table if not exists article(
-        uuid text primary key,
+        uuid text primary key not null,
         link text ,
         channel text ,
         title text,
