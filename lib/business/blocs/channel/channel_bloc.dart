@@ -178,8 +178,9 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
   Future<void> _onChannelChangeCategoryRequested(
       ChannelChangeCategoryRequested event,
       Emitter<ChannelState> emitter) async {
-    AppLogger.instance.d(
-        "change channels category,new categoryId:${event.currentCategory.id}");
+    if (event.previousCategory.id == event.currentCategory.id) {
+      return;
+    }
     await channelRepository.changeChannelsCategory(
         event.channels, event.currentCategory.id!);
     List<Channel> channels = await channelRepository
