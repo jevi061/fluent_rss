@@ -55,9 +55,9 @@ class ArticleStatusProvider {
   Future<void> updateStarStatus(String articleId, int starred) async {
     Database? db = await dbProvider.database;
     var data = {"starred": starred};
-    await db?.update(TableNameConstants.articleStatus, data,
+    int? affected = await db?.update(TableNameConstants.articleStatus, data,
         where: "articleId = ?",
         whereArgs: [articleId],
-        conflictAlgorithm: ConflictAlgorithm.ignore);
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }

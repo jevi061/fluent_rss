@@ -1,10 +1,12 @@
 import 'package:fluent_rss/business/blocs/article/article_bloc.dart';
+import 'package:fluent_rss/business/blocs/article/article_event.dart';
 import 'package:fluent_rss/business/blocs/article/article_state.dart';
 import 'package:fluent_rss/business/blocs/feed/all_feed_bloc.dart';
 import 'package:fluent_rss/business/blocs/feed/all_feed_state.dart';
 import 'package:fluent_rss/business/blocs/feed/today_feed_bloc.dart';
 import 'package:fluent_rss/business/blocs/feed/today_feed_event.dart';
 import 'package:fluent_rss/business/blocs/feed/today_feed_state.dart';
+import 'package:fluent_rss/data/domains/article_status.dart';
 import 'package:fluent_rss/ui/widgets/article_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +51,12 @@ class _TodayArticlePageState extends State<TodayArticlePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ArticleBloc, ArticleState>(
-      listener: (context, state) {},
+      listenWhen: (previous, current) => current is ArticleStatusChangedState,
+      listener: (context, state) {
+        if (state is ArticleStatusChangedState) {
+          BlocProvider.of<TodayFeedBloc>(context).add(TodayFeedOutdated());
+        }
+      },
       child:
           BlocBuilder<TodayFeedBloc, TodayFeedState>(builder: (context, state) {
         return Scrollbar(

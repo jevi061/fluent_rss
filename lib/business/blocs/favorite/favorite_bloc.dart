@@ -9,13 +9,11 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   ArticleRepository articleRepository;
   FavoriteBloc({required this.articleRepository})
       : super(FavoriteState.ready(articles: [])) {
-    on<FavoriteUpdated>(_onFavoriteUpdated);
+    on<FavoriteOutdated>(_onFavoriteOutdated);
     on<FavoriteStarted>(_onFavoriteStarted);
   }
-  Future<void> _onFavoriteUpdated(
-      FavoriteUpdated event, Emitter<FavoriteState> emitter) async {
-    await articleRepository.updateArticleStarStatus(
-        event.article.uuid, event.article.status?.starred ?? 0);
+  Future<void> _onFavoriteOutdated(
+      FavoriteOutdated event, Emitter<FavoriteState> emitter) async {
     var list = await articleRepository.queryByStar(1);
     emitter(FavoriteState.ready(articles: list));
   }

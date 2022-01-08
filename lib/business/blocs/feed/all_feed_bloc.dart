@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fluent_rss/business/blocs/feed/all_feed_event.dart';
 import 'package:fluent_rss/business/blocs/feed/all_feed_state.dart';
 import 'package:fluent_rss/data/repository/article_repository.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AllFeedBloc extends Bloc<AllFeedEvent, AllFeedState> {

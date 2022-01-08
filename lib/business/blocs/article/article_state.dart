@@ -8,3 +8,7 @@ class ArticleState extends Equatable {
   @override
   List<Object?> get props => [articles];
 }
+
+class ArticleStatusChangedState extends ArticleState {
+  ArticleStatusChangedState() : super.ready(articles: []);
+}

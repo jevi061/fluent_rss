@@ -4,6 +4,7 @@ import 'package:fluent_rss/business/blocs/article/article_state.dart';
 import 'package:fluent_rss/business/blocs/feed/all_feed_bloc.dart';
 import 'package:fluent_rss/business/blocs/feed/all_feed_event.dart';
 import 'package:fluent_rss/business/blocs/feed/all_feed_state.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/ui/widgets/article_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,9 +51,9 @@ class _AllArticlePageState extends State<AllArticlePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ArticleBloc, ArticleState>(
-      listenWhen: (previous, current) => current is ArticleStatusChanged,
+      listenWhen: (previous, current) => current is ArticleStatusChangedState,
       listener: (context, state) {
-        if (state is ArticleStatusChanged) {
+        if (state is ArticleStatusChangedState) {
           BlocProvider.of<AllFeedBloc>(context).add(AllFeedOutdated());
         }
       },

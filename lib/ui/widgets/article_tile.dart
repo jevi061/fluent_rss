@@ -64,17 +64,12 @@ class ArticleTile extends StatelessWidget {
                           )
                         : const Icon(Icons.star),
                     onPressed: () {
-                      article.status?.starred == 0
-                          ? article.status?.starred = 1
-                          : article.status?.starred = 0;
-                      context.read<ArticleBloc>().add(ArticleStarred(article));
-                      context
-                          .read<FavoriteBloc>()
-                          .add(FavoriteUpdated(article: article));
+                      var currentStar = article.status?.starred == 0 ? 1 : 0;
+                      context.read<ArticleBloc>().add(ArticleStarTriggered(
+                          article: article, currentStar: currentStar));
                       context
                           .read<HistoryBloc>()
                           .add(HistoryUpdated(article: article));
-                      context.read<ArticleBloc>().add(ArticleStatusChanged());
                     },
                   )
                 ],

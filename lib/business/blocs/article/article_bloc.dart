@@ -5,6 +5,7 @@ import 'package:fluent_rss/business/blocs/article/article_state.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/repository/article_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
+import 'package:fluent_rss/services/app_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
@@ -18,7 +19,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     on<ArticleChannelUpdated>(_onArticleStarted);
     // on<ArticleChannelRefreshStarted>(_onArticleChannelRefreshStarted);
     // on<ArticleChannelRefreshFinished>(_onArticleChannelRefreshFinished);
-    on<ArticleStarred>(_onArticleStarred);
+    on<ArticleStarTriggered>(_onArticleStarTriggered);
     on<ArticleRead>(_onArticleRead);
     on<ArticleStatusChanged>(_onArticleStatusChanged);
   }
@@ -28,7 +29,9 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     //await articleRepository.refreshAllArticles();
   }
   Future<void> _onArticleStatusChanged(
-      ArticleStatusChanged event, Emitter<ArticleState> emitter) async {}
+      ArticleStatusChanged event, Emitter<ArticleState> emitter) async {
+    emitter(ArticleStatusChangedState());
+  }
 
   Future<void> _onArticleRequested(
       ArticleRequested event, Emitter<ArticleState> emitter) async {
@@ -37,12 +40,14 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     emitter(ArticleState.ready(articles: articles));
   }
 
-  Future<void> _onArticleStarred(
-      ArticleStarred event, Emitter<ArticleState> emitter) async {
+  Future<void> _onArticleStarTriggered(
+      ArticleStarTriggered event, Emitter<ArticleState> emitter) async {
     await articleRepository.updateArticleStarStatus(
-        event.article.uuid, event.article.status?.starred ?? 0);
+        event.article.uuid, event.currentStar);
     List<Article> articles =
         await articleRepository.queryByLink(event.article.channel);
+    // post a new event
+    add(ArticleStatusChanged());
     emitter(ArticleState.ready(articles: articles));
   }
 

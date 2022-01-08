@@ -3,9 +3,8 @@ import 'package:fluent_rss/data/domains/article.dart';
 
 abstract class FavoriteEvent extends Equatable {}
 
-class FavoriteUpdated extends FavoriteEvent {
-  Article article;
-  FavoriteUpdated({required this.article});
+class FavoriteOutdated extends FavoriteEvent {
+  FavoriteOutdated();
   @override
   List<Object?> get props => [];
 }

@@ -87,17 +87,11 @@ class _ReadScreenState extends State<ReadingScreen> {
                   icon: Icon(Icons.refresh)),
               IconButton(
                   onPressed: () {
-                    state.article?.status?.starred == 0
-                        ? state.article?.status?.starred = 1
-                        : state.article?.status?.starred = 0;
-                    context
-                        .read<ArticleBloc>()
-                        .add(ArticleStarred(state.article!));
-                    context
-                        .read<FavoriteBloc>()
-                        .add(FavoriteUpdated(article: state.article!));
+                    var currentStar =
+                        state.article?.status?.starred == 0 ? 1 : 0;
+                    context.read<ArticleBloc>().add(ArticleStarTriggered(
+                        article: state.article!, currentStar: currentStar));
                     setState(() {});
-                    context.read<ArticleBloc>().add(ArticleStatusChanged());
                   },
                   icon: state.article?.status?.starred == 0
                       ? Icon(Icons.star_border)

@@ -42,9 +42,10 @@ class ArticleChannelRefreshed extends ArticleEvent {
   List<Object?> get props => [channel];
 }
 
-class ArticleStarred extends ArticleEvent {
-  Article article;
-  ArticleStarred(this.article);
+class ArticleStarTriggered extends ArticleEvent {
+  final Article article;
+  final int currentStar;
+  ArticleStarTriggered({required this.article, required this.currentStar});
   @override
   List<Object?> get props => [];
 }
