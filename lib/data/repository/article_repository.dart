@@ -73,12 +73,6 @@ class ArticleRepository {
     var starredArticles = articles
         .where((element) => element.status?.starred == starred)
         .toList();
-    // associate article status
-    for (var article in starredArticles) {
-      var status = await articleStatusProvider.queryByArticleId(article.link);
-      article.status =
-          status ?? ArticleStatus(read: 0, starred: 0, articleId: article.uuid);
-    }
     return starredArticles;
   }
 
