@@ -109,7 +109,8 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     for (var channel in event.channels) {
       await channelRepository.deleteChannelByLink(channel.link);
     }
-    List<Channel> channels = await channelRepository.fetchChannels();
+    List<Channel> channels =
+        await channelRepository.getChannelsByCategory(event.category.id ?? 0);
     emitter(ChannelReadyState(channels: channels));
   }
 

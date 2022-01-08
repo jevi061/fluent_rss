@@ -22,9 +22,8 @@ class ChannelScreen extends StatefulWidget {
 }
 
 class _ChannelScreenState extends State<ChannelScreen> {
-  List<Channel> _selectedChannels = [];
-  bool _isSelecting = false;
-
+  final MultiSelectController _controller = MultiSelectController();
+  List<Channel> _channels = [];
   @override
   Widget build(BuildContext context) {
     Category category = ModalRoute.of(context)?.settings.arguments as Category;
@@ -34,7 +33,10 @@ class _ChannelScreenState extends State<ChannelScreen> {
           IconButton(
               onPressed: () {
                 setState(() {
-                  _isSelecting = !_isSelecting;
+                  _controller.isSelecting = !_controller.isSelecting;
+                  var shouldSelecting = _controller.isSelecting;
+                  _controller.set(_channels.length);
+                  _controller.isSelecting = shouldSelecting;
                 });
               },
               icon: Icon(Icons.mode_edit)),
@@ -46,7 +48,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
           },
           child: const Icon(Icons.search),
         ),
-        bottomNavigationBar: _isSelecting
+        bottomNavigationBar: _controller.isSelecting
             ? BottomAppBar(
                 child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -54,10 +56,16 @@ class _ChannelScreenState extends State<ChannelScreen> {
                   TextButton(onPressed: () {}, child: Text("move")),
                   TextButton(
                       onPressed: () {
+                        List<Channel> selectedChannels = [];
+                        for (var i in _controller.selectedIndexes) {
+                          selectedChannels.add(_channels[i]);
+                        }
                         BlocProvider.of<ChannelBloc>(context).add(
-                            ChannelBatchDeleteRequested(_selectedChannels));
+                            ChannelBatchDeleteRequested(
+                                channels: selectedChannels,
+                                category: category));
                         setState(() {
-                          _isSelecting = false;
+                          _controller.isSelecting = false;
                         });
                       },
                       child: Text("delete"))
@@ -68,6 +76,7 @@ class _ChannelScreenState extends State<ChannelScreen> {
           buildWhen: (previous, current) => current is ChannelReadyState,
           builder: (context, state) {
             if (state is ChannelReadyState) {
+              _channels = state.channels;
               return state.channels.isEmpty
                   ? const Center(
                       child: Text('Add or import channel from top menu'),
@@ -78,13 +87,11 @@ class _ChannelScreenState extends State<ChannelScreen> {
                           itemCount: state.channels.length,
                           itemBuilder: (context, index) {
                             return MultiSelectItem(
-                                isSelecting: _isSelecting,
-                                onSelect: (bool selected) {
-                                  selected
-                                      ? _selectedChannels
-                                          .add(state.channels[index])
-                                      : _selectedChannels
-                                          .remove(state.channels[index]);
+                                key: GlobalKey(
+                                    debugLabel: state.channels[index].link),
+                                isSelecting: _controller.isSelecting,
+                                onSelect: () {
+                                  _controller.toggle(index);
                                 },
                                 child: ChannelTile(
                                   channel: state.channels[index],

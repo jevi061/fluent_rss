@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 
 abstract class ChannelEvent extends Equatable {}
@@ -79,10 +80,11 @@ class ChannelDeleted extends ChannelEvent {
 }
 
 class ChannelBatchDeleteRequested extends ChannelEvent {
+  Category category;
   List<Channel> channels;
-  ChannelBatchDeleteRequested(this.channels);
+  ChannelBatchDeleteRequested({required this.channels, required this.category});
   @override
-  List<Object?> get props => [channels];
+  List<Object?> get props => [category, channels];
 }
 
 class ChannelAdded extends ChannelEvent {
