@@ -54,6 +54,10 @@ class _ReadScreenState extends State<ReadingScreen> {
               onWebViewCreated: (controller) {
                 _controller = controller;
               },
+              onWebResourceError: (error) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(error.description)));
+              },
             ),
             loadProgress == 100
                 ? Stack()
