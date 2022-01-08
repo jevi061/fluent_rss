@@ -121,3 +121,15 @@ class ChannelRequested extends ChannelEvent {
   @override
   List<Object?> get props => [categoryId];
 }
+
+class ChannelChangeCategoryRequested extends ChannelEvent {
+  final Category previousCategory;
+  final Category currentCategory;
+  final List<Channel> channels;
+  ChannelChangeCategoryRequested(
+      {required this.previousCategory,
+      required this.currentCategory,
+      required this.channels});
+  @override
+  List<Object?> get props => [previousCategory, currentCategory, channels];
+}

@@ -88,4 +88,10 @@ class ChannelProvider {
       where channelLink = ?
     """, [link]);
   }
+
+  Future<void> changeCategory(Channel channel, int categoryId) async {
+    Database? db = await dbProvider.database;
+    await db?.update(TableNameConstants.channel, {"categoryId": categoryId},
+        where: "link=?", whereArgs: [channel.link]);
+  }
 }

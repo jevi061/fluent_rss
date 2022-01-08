@@ -26,3 +26,8 @@ class CategoryDeleteActionTriggered extends CategoryEvent {
   @override
   List<Object?> get props => [category];
 }
+
+class CategoryListRequested extends CategoryEvent {
+  @override
+  List<Object?> get props => [];
+}

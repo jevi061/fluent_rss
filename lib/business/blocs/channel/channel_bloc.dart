@@ -39,6 +39,7 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
     on<ChannelsExportStarted>(_onChannelsExportStarted);
     on<ChannelsExportFinished>(_onChannelsExportFinished);
     on<ChannelRequested>(_onChannelRequested);
+    on<ChannelChangeCategoryRequested>(_onChannelChangeCategoryRequested);
   }
 
   Future<void> _onChannelStarted(
@@ -171,6 +172,18 @@ class ChannelBloc extends Bloc<ChannelEvent, ChannelState> {
       ChannelRequested event, Emitter<ChannelState> emitter) async {
     List<Channel> channels =
         await channelRepository.getChannelsByCategory(event.categoryId);
+    emitter(ChannelReadyState(channels: channels));
+  }
+
+  Future<void> _onChannelChangeCategoryRequested(
+      ChannelChangeCategoryRequested event,
+      Emitter<ChannelState> emitter) async {
+    AppLogger.instance.d(
+        "change channels category,new categoryId:${event.currentCategory.id}");
+    await channelRepository.changeChannelsCategory(
+        event.channels, event.currentCategory.id!);
+    List<Channel> channels = await channelRepository
+        .getChannelsByCategory(event.previousCategory.id ?? 0);
     emitter(ChannelReadyState(channels: channels));
   }
 }

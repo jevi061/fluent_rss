@@ -1,9 +1,13 @@
+import 'package:fluent_rss/business/blocs/category/category_bloc.dart';
+import 'package:fluent_rss/business/blocs/category/category_event.dart';
+import 'package:fluent_rss/business/blocs/category/category_state.dart';
 import 'package:fluent_rss/business/blocs/channel/channel_bloc.dart';
 import 'package:fluent_rss/business/blocs/channel/channel_event.dart';
 import 'package:fluent_rss/business/blocs/channel/channel_state.dart';
 import 'package:fluent_rss/data/domains/category.dart';
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/services/app_logger.dart';
+import 'package:fluent_rss/ui/widgets/category_select_panel.dart';
 import 'package:fluent_rss/ui/widgets/channel_delegate.dart';
 import 'package:fluent_rss/ui/widgets/channel_tile.dart';
 import 'package:fluent_rss/ui/widgets/menu_sheet.dart';
@@ -53,7 +57,35 @@ class _ChannelScreenState extends State<ChannelScreen> {
                 child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextButton(onPressed: () {}, child: Text("move")),
+                  TextButton(
+                      onPressed: () {
+                        BlocProvider.of<CategoryBloc>(context)
+                            .add(CategoryListRequested());
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => BlocProvider.value(
+                            value: BlocProvider.of<CategoryBloc>(context),
+                            child: CategorySelectPanel(
+                              onSelect: (Category c) {
+                                List<Channel> selectedChannels = [];
+                                for (var i in _controller.selectedIndexes) {
+                                  selectedChannels.add(_channels[i]);
+                                }
+                                BlocProvider.of<ChannelBloc>(context).add(
+                                    ChannelChangeCategoryRequested(
+                                        previousCategory: category,
+                                        currentCategory: c,
+                                        channels: selectedChannels));
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  _controller.isSelecting = false;
+                                });
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text("move")),
                   TextButton(
                       onPressed: () {
                         List<Channel> selectedChannels = [];

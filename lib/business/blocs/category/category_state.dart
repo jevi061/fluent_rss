@@ -9,3 +9,10 @@ class CategoryReadyState extends CategoryState {
   @override
   List<Object?> get props => [all];
 }
+
+class CategoryListResponsedState extends CategoryState {
+  final List<Category> all;
+  CategoryListResponsedState.ready({required this.all});
+  @override
+  List<Object?> get props => [all];
+}

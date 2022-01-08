@@ -95,4 +95,11 @@ class ChannelRepository {
     }
     return channels;
   }
+
+  Future<void> changeChannelsCategory(
+      List<Channel> channels, int categoryId) async {
+    for (var ch in channels) {
+      await channelProvider.changeCategory(ch, categoryId);
+    }
+  }
 }

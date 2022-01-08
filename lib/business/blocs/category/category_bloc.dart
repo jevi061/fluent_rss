@@ -13,11 +13,18 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<CategoryStarted>(_onCategoryStarted);
     on<CategoryCreateActionExecuted>(_onCreateCategoryActionExecuted);
     on<CategoryDeleteActionTriggered>(_onDeleteCategoryActionTrigged);
+    on<CategoryListRequested>(_onCategoryListRequested);
   }
   Future<void> _onCategoryStarted(
       CategoryStarted event, Emitter<CategoryState> emitter) async {
     var all = await categoryRepository.getCategories();
     emitter(CategoryReadyState.ready(all: all));
+  }
+
+  Future<void> _onCategoryListRequested(
+      CategoryListRequested event, Emitter<CategoryState> emitter) async {
+    var all = await categoryRepository.getCategories();
+    emitter(CategoryListResponsedState.ready(all: all));
   }
 
   Future<void> _onCreateCategoryActionExecuted(
