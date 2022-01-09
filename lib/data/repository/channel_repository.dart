@@ -115,7 +115,7 @@ class ChannelRepository {
   }
 
   Future<List<String>> searchChannelTitles(String query) async {
-    var titles = await channelProvider.searchChannelTitles(query);
-    return titles;
+    var channels = await channelProvider.searchChannelPrefix(query);
+    return channels.map((e) => e.title).toList();
   }
 }
