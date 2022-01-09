@@ -76,7 +76,6 @@ class ArticleTile extends StatelessWidget {
                   top: 16,
                   child: Icon(
                     Icons.circle,
-                    color: Colors.blue,
                     size: 10,
                   ))
             ]
