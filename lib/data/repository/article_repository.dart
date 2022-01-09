@@ -121,4 +121,20 @@ class ArticleRepository {
     }
     return articles;
   }
+
+  Future<List<Article>> searchArticles(String query) async {
+    var articles = await articleProvider.searchArticles(query);
+    // associate article status
+    for (var article in articles) {
+      var status = await articleStatusProvider.queryByArticleId(article.link);
+      article.status =
+          status ?? ArticleStatus(read: 0, starred: 0, articleId: article.uuid);
+    }
+    return articles;
+  }
+
+  Future<List<String>> searchArticleTitles(String query) async {
+    var articles = await articleProvider.searchArticlesPrefix(query);
+    return articles.map((e) => e.title).toList();
+  }
 }

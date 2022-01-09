@@ -111,4 +111,23 @@ class ArticleProvider {
         where s.starred = ?
         order by a.published desc''', [starred]);
   }
+
+  Future<List<Article>> searchArticles(String query) async {
+    Database? db = await dbProvider.database;
+    // query article core data
+    var list = await db?.query(TableNameConstants.article,
+        columns: articleColums, where: "title like ?", whereArgs: ["%$query%"]);
+    return list?.map((e) => Article.fromMap(e)).toList() ?? [];
+  }
+
+  Future<List<Article>> searchArticlesPrefix(String query) async {
+    if (query.isEmpty) {
+      return [];
+    }
+    Database? db = await dbProvider.database;
+    // query article core data
+    var list = await db?.query(TableNameConstants.article,
+        columns: articleColums, where: "title like ?", whereArgs: ["$query%"]);
+    return list?.map((e) => Article.fromMap(e)).toList() ?? [];
+  }
 }
