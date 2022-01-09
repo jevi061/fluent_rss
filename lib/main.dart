@@ -113,7 +113,7 @@ List<BlocProvider> makeBlocProviders() {
     BlocProvider<AppBloc>(
         lazy: false,
         create: (BuildContext context) => AppBloc()..add(AppStarted())),
-    BlocProvider(create: (BuildContext context) => AddChannelBloc()),
+    BlocProvider<AddChannelBloc>(create: (BuildContext context) => AddChannelBloc()),
     BlocProvider<AllFeedBloc>(
         create: (BuildContext context) => AllFeedBloc(
             articleRepository:
