@@ -113,4 +113,9 @@ class ChannelRepository {
     }
     return channels;
   }
+
+  Future<List<String>> searchChannelTitles(String query) async {
+    var titles = await channelProvider.searchChannelTitles(query);
+    return titles;
+  }
 }

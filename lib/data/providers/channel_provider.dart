@@ -111,8 +111,22 @@ class ChannelProvider {
         "categoryId"
       ],
       where: 'title like ?',
-      whereArgs: ['\%$query\%'],
+      whereArgs: ['%$query%'],
     );
     return list?.map((e) => Channel.fromMap(e)).toList() ?? [];
+  }
+
+  Future<List<String>> searchChannelTitles(String query) async {
+    AppLogger.instance.d("query:$query");
+    Database? db = await dbProvider.database;
+    var list = await db?.query(
+      TableNameConstants.channel,
+      columns: [
+        "title",
+      ],
+      where: 'title like ?',
+      whereArgs: ['$query%'],
+    );
+    return list?.map((e) => e["title"] as String).toList() ?? [];
   }
 }

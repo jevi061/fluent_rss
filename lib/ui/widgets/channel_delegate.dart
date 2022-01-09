@@ -30,7 +30,7 @@ class ChannelSearchDelegate extends SearchDelegate {
                       return ChannelTile(channel: snap.data![index]);
                     }));
           }
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         });
@@ -38,18 +38,24 @@ class ChannelSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return FutureBuilder<List<Channel>>(
-        future: repository.searchChannels(query),
+    return FutureBuilder<List<String>>(
+        future: repository.searchChannelTitles(query),
         builder: (context, snap) {
           if (snap.hasData) {
             return Scrollbar(
                 child: ListView.builder(
                     itemCount: snap.data?.length,
                     itemBuilder: (context, index) {
-                      return ChannelTile(channel: snap.data![index]);
+                      return ListTile(
+                        title: Text(snap.data?[index] ?? ""),
+                        onTap: () {
+                          query = snap.data?[index] ?? "";
+                          showResults(context);
+                        },
+                      );
                     }));
           }
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         });
