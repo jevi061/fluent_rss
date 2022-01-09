@@ -5,7 +5,6 @@ import 'package:fluent_rss/business/blocs/article/article_state.dart';
 import 'package:fluent_rss/data/domains/article.dart';
 import 'package:fluent_rss/data/repository/article_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
-import 'package:fluent_rss/services/app_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
@@ -30,7 +29,8 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
   }
   Future<void> _onArticleStatusChanged(
       ArticleStatusChanged event, Emitter<ArticleState> emitter) async {
-    emitter(ArticleStatusChangedState());
+    var article = await articleRepository.queryById(event.article.uuid);
+    emitter(ArticleStatusChangedState(article!));
   }
 
   Future<void> _onArticleRequested(
@@ -47,7 +47,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     List<Article> articles =
         await articleRepository.queryByLink(event.article.channel);
     // post a new event
-    add(ArticleStatusChanged());
+    add(ArticleStatusChanged(event.article));
     emitter(ArticleState.ready(articles: articles));
   }
 
@@ -78,7 +78,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     if (event.previousRead == 0) {
       await articleRepository.updateArticleReadStatus(event.article.uuid, 1);
       await channelRepository.decreaseUnread(event.article.channel);
-      add(ArticleStatusChanged());
+      add(ArticleStatusChanged(event.article));
     }
     List<Article> articles =
         await articleRepository.queryByLink(event.article.channel);

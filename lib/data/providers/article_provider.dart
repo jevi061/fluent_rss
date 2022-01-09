@@ -63,6 +63,20 @@ class ArticleProvider {
     return list.map((e) => Article.fromMap(e)).toList();
   }
 
+  Future<Article?> queryById(String id) async {
+    Database? db = await dbProvider.database;
+    var list = await db?.query(
+      TableNameConstants.article,
+      columns: articleColums,
+      where: "uuid = ?",
+      whereArgs: [id],
+    );
+    if (list == null) {
+      return null;
+    }
+    return list.map((e) => Article.fromMap(e)).toList().first;
+  }
+
   Future<List<Article>> queryTimeAfter(int timestamp) async {
     Database? db = await dbProvider.database;
     var list = await db?.query(TableNameConstants.article,

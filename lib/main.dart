@@ -97,7 +97,10 @@ List<BlocProvider> makeBlocProviders() {
                 RepositoryProvider.of<ArticleRepository>(context))
           ..add(FavoriteStarted())),
     BlocProvider<ReadingBloc>(
-        lazy: false, create: (BuildContext context) => ReadingBloc()),
+        lazy: false,
+        create: (BuildContext context) => ReadingBloc(
+            articleRepository:
+                RepositoryProvider.of<ArticleRepository>(context))),
     BlocProvider<AppBloc>(
         lazy: false,
         create: (BuildContext context) => AppBloc()..add(AppStarted())),

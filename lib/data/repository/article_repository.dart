@@ -37,6 +37,16 @@ class ArticleRepository {
     return articles;
   }
 
+  Future<Article?> queryById(String id) async {
+    var article = await articleProvider.queryById(id);
+    if (article != null) {
+      var status = await articleStatusProvider.queryByArticleId(article.uuid);
+      article.status =
+          status ?? ArticleStatus(read: 0, starred: 0, articleId: article.uuid);
+    }
+    return article;
+  }
+
   Future<List<Article>> queryTimeAfter(int timestamp) async {
     var articles = await articleProvider.queryTimeAfter(timestamp);
     for (var article in articles) {

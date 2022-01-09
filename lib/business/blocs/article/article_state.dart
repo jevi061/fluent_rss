@@ -10,5 +10,6 @@ class ArticleState extends Equatable {
 }
 
 class ArticleStatusChangedState extends ArticleState {
-  ArticleStatusChangedState() : super.ready(articles: []);
+  Article article;
+  ArticleStatusChangedState(this.article) : super.ready(articles: []);
 }
