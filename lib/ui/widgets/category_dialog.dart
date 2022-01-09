@@ -11,7 +11,7 @@ class CategoryDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Input category name below"),
+      title: const Text("create category"),
       content: TextField(
         autofocus: true,
         controller: tfController,

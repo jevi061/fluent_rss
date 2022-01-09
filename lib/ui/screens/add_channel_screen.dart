@@ -22,7 +22,7 @@ class AddChannelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Input your feed url"),
+        title: const Text("Add new feed"),
       ),
       body: Container(
         padding: EdgeInsets.all(16),
