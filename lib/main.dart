@@ -13,10 +13,8 @@ import 'package:fluent_rss/data/providers/category_provider.dart';
 import 'package:fluent_rss/data/providers/channel_provider.dart';
 import 'package:fluent_rss/data/repository/category_repository.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
-import 'package:fluent_rss/data/repository/history_repository.dart';
 import 'package:fluent_rss/router/app_router.dart';
 import 'package:fluent_rss/theme/app_theme.dart';
-import 'package:fluent_rss/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,17 +34,7 @@ import 'data/repository/article_repository.dart';
 void main() {
   var repositoryProviders = makeRepositoryProviders();
   var blocProviders = makeBlocProviders();
-  var app = MultiRepositoryProvider(
-      providers: repositoryProviders,
-      child: MultiBlocProvider(
-        providers: blocProviders,
-        child: MaterialApp(
-          theme: AppTheme.light,
-          debugShowCheckedModeBanner: false,
-          onGenerateRoute: AppRouter.controller,
-          initialRoute: AppRouter.homeScreen,
-        ),
-      ));
+  var app = makeApp(repositoryProviders, blocProviders);
   runApp(app);
 }
 
@@ -113,7 +101,8 @@ List<BlocProvider> makeBlocProviders() {
     BlocProvider<AppBloc>(
         lazy: false,
         create: (BuildContext context) => AppBloc()..add(AppStarted())),
-    BlocProvider<AddChannelBloc>(create: (BuildContext context) => AddChannelBloc()),
+    BlocProvider<AddChannelBloc>(
+        create: (BuildContext context) => AddChannelBloc()),
     BlocProvider<AllFeedBloc>(
         create: (BuildContext context) => AllFeedBloc(
             articleRepository:
@@ -135,4 +124,19 @@ List<BlocProvider> makeBlocProviders() {
                 RepositoryProvider.of<CategoryRepository>(context))
           ..add(CategoryStarted()))
   ];
+}
+
+Widget makeApp(List<RepositoryProvider> repositoryProviders,
+    List<BlocProvider> blocProviders) {
+  return MultiRepositoryProvider(
+      providers: repositoryProviders,
+      child: MultiBlocProvider(
+        providers: blocProviders,
+        child: MaterialApp(
+          theme: AppTheme.light,
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: AppRouter.controller,
+          initialRoute: AppRouter.homeScreen,
+        ),
+      ));
 }
