@@ -60,8 +60,9 @@ class _AllArticlePageState extends State<AllArticlePage> {
       child: BlocBuilder<AllFeedBloc, AllFeedState>(builder: (context, state) {
         return Scrollbar(
             controller: ScrollController(),
-            child: ListView.builder(
+            child: ListView.separated(
                 controller: _scrollController,
+                separatorBuilder: (context, index) => Divider(),
                 itemCount: state.articles.length,
                 itemBuilder: (context, index) => ArticleTile(
                       article: state.articles[index],

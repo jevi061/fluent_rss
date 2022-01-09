@@ -24,7 +24,8 @@ class HistoryScreen extends StatelessWidget {
           builder: (BuildContext context, HistoryState state) {
         return Scaffold(
             appBar: AppBar(title: Text("History")),
-            body: ListView.builder(
+            body: ListView.separated(
+                separatorBuilder: (context, index) => Divider(),
                 itemCount: state.articles.length,
                 itemBuilder: (context, index) => ArticleTile(
                       article: state.articles[index],

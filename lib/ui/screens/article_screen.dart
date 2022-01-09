@@ -23,7 +23,8 @@ class ArticleScreen extends StatelessWidget {
         body: RefreshIndicator(
           child: Scrollbar(
             controller: ScrollController(),
-            child: ListView.builder(
+            child: ListView.separated(
+                separatorBuilder: (context, index) => Divider(),
                 itemCount: state.articles.length,
                 itemBuilder: (context, index) => ArticleTile(
                       article: state.articles[index],

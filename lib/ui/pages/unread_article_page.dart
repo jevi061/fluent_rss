@@ -63,8 +63,9 @@ class _UnreadArticlePageState extends State<UnreadArticlePage> {
           builder: (context, state) {
         return Scrollbar(
             controller: ScrollController(),
-            child: ListView.builder(
+            child: ListView.separated(
                 controller: _scrollController,
+                separatorBuilder: (context, index) => Divider(),
                 itemCount: state.articles.length,
                 itemBuilder: (context, index) => ArticleTile(
                       article: state.articles[index],

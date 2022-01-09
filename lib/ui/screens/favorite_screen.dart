@@ -24,7 +24,8 @@ class FavoriteScreen extends StatelessWidget {
           builder: (BuildContext context, FavoriteState state) {
         return Scaffold(
             appBar: AppBar(title: const Text("Favorites")),
-            body: ListView.builder(
+            body: ListView.separated(
+                separatorBuilder: (context, index) => Divider(),
                 itemCount: state.articles.length,
                 itemBuilder: (context, index) => ArticleTile(
                       article: state.articles[index],

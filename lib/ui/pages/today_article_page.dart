@@ -61,8 +61,9 @@ class _TodayArticlePageState extends State<TodayArticlePage> {
           BlocBuilder<TodayFeedBloc, TodayFeedState>(builder: (context, state) {
         return Scrollbar(
             controller: ScrollController(),
-            child: ListView.builder(
+            child: ListView.separated(
                 controller: _scrollController,
+                separatorBuilder: (context, index) => Divider(),
                 itemCount: state.articles.length,
                 itemBuilder: (context, index) => ArticleTile(
                       article: state.articles[index],
