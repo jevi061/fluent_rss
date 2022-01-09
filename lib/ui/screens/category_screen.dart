@@ -38,6 +38,7 @@ class CategoryScreen extends StatelessWidget {
                           if (index == 0) {
                             return TextField(
                               decoration: const InputDecoration(
+                                hintText: "Search channels",
                                 border: OutlineInputBorder(),
                               ),
                               onTap: () {
