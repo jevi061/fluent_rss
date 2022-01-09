@@ -11,6 +11,7 @@ class CategorySearchbar extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(left: 16, right: 16, top: 16),
       child: TextField(
+        autofocus: false,
         decoration: const InputDecoration(
           hintText: "Search channels",
           border: OutlineInputBorder(),
