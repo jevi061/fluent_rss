@@ -37,6 +37,9 @@ class CategoryScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           if (index == 0) {
                             return TextField(
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
                               onTap: () {
                                 var channelRepository =
                                     RepositoryProvider.of<ChannelRepository>(
