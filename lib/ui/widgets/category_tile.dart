@@ -16,6 +16,7 @@ class CategoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Slidable(
         key: Key(category.id.toString()),
+        enabled: category.id != 1,
         // The end action pane is the one at the right or the bottom side.
         endActionPane: ActionPane(
           motion: ScrollMotion(),
