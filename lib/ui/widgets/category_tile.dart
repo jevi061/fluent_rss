@@ -15,35 +15,41 @@ class CategoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-        key: Key(category.id.toString()),
-        enabled: category.id != 1,
-        // The end action pane is the one at the right or the bottom side.
-        endActionPane: ActionPane(
-          motion: ScrollMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (BuildContext context) {
-                context
-                    .read<CategoryBloc>()
-                    .add(CategoryDeleteActionTriggered(category));
-              },
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
-              icon: Icons.delete,
-              label: 'delete',
-            ),
-          ],
+      key: Key(category.id.toString()),
+      enabled: category.id != 1,
+      // The end action pane is the one at the right or the bottom side.
+      endActionPane: ActionPane(
+        motion: ScrollMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (BuildContext context) {
+              context
+                  .read<CategoryBloc>()
+                  .add(CategoryDeleteActionTriggered(category));
+            },
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'delete',
+          ),
+        ],
+      ),
+      child: Card(
+        margin: EdgeInsets.only(top: 8, left: 16, right: 16),
+        child: SizedBox(
+          height: 70,
+          child: ListTile(
+            title: Text(category.name),
+            trailing: const Icon(Icons.arrow_forward),
+            onTap: () {
+              BlocProvider.of<ChannelBloc>(context)
+                  .add(ChannelRequested(category.id!));
+              Navigator.of(context)
+                  .pushNamed(AppRouter.channelScreen, arguments: category);
+            },
+          ),
         ),
-        child: Card(
-            child: ListTile(
-          title: Text(category.name),
-          trailing: const Icon(Icons.arrow_forward),
-          onTap: () {
-            BlocProvider.of<ChannelBloc>(context)
-                .add(ChannelRequested(category.id!));
-            Navigator.of(context)
-                .pushNamed(AppRouter.channelScreen, arguments: category);
-          },
-        )));
+      ),
+    );
   }
 }
