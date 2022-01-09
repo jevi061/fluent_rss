@@ -17,6 +17,7 @@ class ArticleTile extends StatelessWidget {
     var date = DateTime.fromMillisecondsSinceEpoch(article.published);
     var formattedDate = DateFormat.yMMMd().format(date);
     return Container(
+      // color: Colors.green,
       child: InkWell(
         onTap: () {
           context.read<ArticleBloc>().add(ArticleRead(
@@ -27,7 +28,8 @@ class ArticleTile extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+              padding:
+                  const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,42 +43,35 @@ class ArticleTile extends StatelessWidget {
                         article.title,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 18),
-                        maxLines: 2,
+                        maxLines: 1,
                       ),
                     ],
                   )),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      article.status?.starred == 0
+                          ? const Icon(
+                              Icons.star_outline,
+                            )
+                          : const Icon(Icons.star),
+                      SizedBox.shrink(),
                       Text(
                         formattedDate,
                         style: TextStyle(color: Colors.grey),
                       ),
-                      IconButton(
-                        icon: article.status?.starred == 0
-                            ? const Icon(
-                                Icons.star_outline,
-                              )
-                            : const Icon(Icons.star),
-                        onPressed: () {
-                          var currentStar =
-                              article.status?.starred == 0 ? 1 : 0;
-                          context.read<ArticleBloc>().add(ArticleStarTriggered(
-                              article: article, currentStar: currentStar));
-                        },
-                      )
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
             if (article.status?.read == 0) ...[
               const Positioned(
-                  left: 10,
+                  left: 8,
                   top: 16,
                   child: Icon(
                     Icons.circle,
-                    size: 10,
+                    size: 8,
                   ))
             ]
           ],
