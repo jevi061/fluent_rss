@@ -1,6 +1,5 @@
 import 'package:fluent_rss/data/domains/channel.dart';
 import 'package:fluent_rss/data/repository/channel_repository.dart';
-import 'package:fluent_rss/services/app_logger.dart';
 import 'package:fluent_rss/ui/widgets/channel_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +8,14 @@ class ChannelSearchDelegate extends SearchDelegate {
   ChannelSearchDelegate(this.repository);
   @override
   List<Widget>? buildActions(BuildContext context) {
-    return [];
+    return [
+      IconButton(
+        onPressed: () {
+          showResults(context);
+        },
+        icon: const Icon(Icons.search),
+      )
+    ];
   }
 
   @override
